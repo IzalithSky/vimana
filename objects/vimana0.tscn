@@ -37,12 +37,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.59701, 0.225189, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.597, 0.225, 0)
 
 [node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.520594)
 material_override = ExtResource("1_s1d72")
 mesh = SubResource("ArrayMesh_s1d72")
 skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0205942)
 shape = SubResource("BoxShape3D_s1d72")
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]

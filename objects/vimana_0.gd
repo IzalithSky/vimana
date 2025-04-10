@@ -1,43 +1,112 @@
+class_name Vimana
 extends RigidBody3D
 
 
-@onready var _camera := %Camera3D as Camera3D
-@onready var _camera_pivot := %CameraPivot as Node3D
-@onready var thrust_point_l = $ThrustPointL
-@onready var thrust_point_r = $ThrustPointR
+@export var input_sensitivity = 1.5
+@export var input_decay = 3.0
 
-@export_range(0.0, 0.01) var mouse_sensitivity = 0.005
+var roll_input = 0.0
+var pitch_input = 0.0
+var yaw_input = 0.0
+var throttle_input = 0.0
+
+@onready var _camera = %Camera3D
+@onready var _camera_pivot = %CameraPivot
+@export_range(0.0, 1.0) var mouse_sensitivity = 0.01
 @export var tilt_limit = deg_to_rad(75)
-@export var max_engine_thrust_force: float = 100
 
-var thrust_force_l: float = 0
-var thrust_force_r: float = 0
-var thrust_direction_l: Vector3 = Vector3.UP
-var thrust_direction_r: Vector3 = Vector3.UP
+@export var thrust_power = 200.0
+@export var torque_power = 20.0
+@export var spin_threshold = 1
 
-
-func _process(delta: float) -> void:
-	if Input.is_action_pressed("thrust_up"):
-		thrust_force_l = max_engine_thrust_force
-		thrust_force_r = max_engine_thrust_force
-	elif Input.is_action_pressed("thrust_down"):
-		thrust_force_l = -max_engine_thrust_force
-		thrust_force_r = -max_engine_thrust_force
-	else:
-		thrust_force_l = 0
-		thrust_force_r = 0
-
-
-func _physics_process(delta: float) -> void:
-	apply_central_force(global_transform.basis.y * (thrust_force_l + thrust_force_r))
-	
-	#apply_constant_force(thrust_direction_l * thrust_force_l, thrust_point_l.position)
-	#apply_constant_force(thrust_direction_r * thrust_force_r, thrust_point_r.position)
+@export var pitch_gain = 0.1
+@export var roll_gain = 0.1
+@export var vertical_gain = 0.1
+@export var hover_throttle = 0.5
+@export var autohover_enabled = false
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		_camera_pivot.rotation.x -= event.relative.y * mouse_sensitivity
-		# Prevent the camera from rotating too far up or down.
 		_camera_pivot.rotation.x = clampf(_camera_pivot.rotation.x, -tilt_limit, tilt_limit)
-		_camera_pivot.rotation.y += -event.relative.x * mouse_sensitivity
+		_camera_pivot.rotation.y -= event.relative.x * mouse_sensitivity
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("toggle_autohover"):
+		autohover_enabled = !autohover_enabled
+		print("Autohover toggled: ", autohover_enabled)
+
+
+func read_vehicle_inputs(delta: float) -> void:
+	if Input.is_action_pressed("roll_right"):
+		roll_input -= input_sensitivity * delta
+	elif Input.is_action_pressed("roll_left"):
+		roll_input += input_sensitivity * delta
+	else:
+		roll_input = move_toward(roll_input, 0, input_decay * delta)
+	
+	if Input.is_action_pressed("pitch_down"):
+		pitch_input -= input_sensitivity * delta
+	elif Input.is_action_pressed("pitch_up"):
+		pitch_input += input_sensitivity * delta
+	else:
+		pitch_input = move_toward(pitch_input, 0, input_decay * delta)
+	
+	if Input.is_action_pressed("yaw_right"):
+		yaw_input -= input_sensitivity * delta
+	elif Input.is_action_pressed("yaw_left"):
+		yaw_input += input_sensitivity * delta
+	else:
+		yaw_input = move_toward(yaw_input, 0, input_decay * delta)
+		
+	if Input.is_action_pressed("throttle_up"):
+		throttle_input += input_sensitivity * delta
+	elif Input.is_action_pressed("throttle_down"):
+		throttle_input -= input_sensitivity * delta
+	else:
+		throttle_input = move_toward(throttle_input, 0, input_decay * delta)
+	
+	roll_input = clamp(roll_input, -1, 1)
+	pitch_input = clamp(pitch_input, -1, 1)
+	yaw_input = clamp(yaw_input, -1, 1)
+	throttle_input = clamp(throttle_input, -1, 1)
+
+
+func apply_thrust_and_torque(delta: float) -> void:
+	var up_force = transform.basis.y * throttle_input * thrust_power
+	apply_central_force(up_force)
+	
+	var torque = Vector3.ZERO
+	torque += transform.basis.z * roll_input * torque_power  # Roll around local Z
+	torque += transform.basis.x * pitch_input * torque_power # Pitch around local X
+	torque += transform.basis.y * yaw_input * torque_power   # Yaw around local Y
+	apply_torque(torque)
+
+
+func stabilise_rotation(delta: float) -> void:
+	if not (Input.is_action_pressed("roll_right") or Input.is_action_pressed("roll_left") or
+			Input.is_action_pressed("pitch_up") or Input.is_action_pressed("pitch_down") or
+			Input.is_action_pressed("yaw_right") or Input.is_action_pressed("yaw_left")):
+		var ang_vel = get_angular_velocity()
+		var spin = ang_vel.length()
+		if spin > 0:
+			var scale = clamp(spin / spin_threshold, 0, 1)
+			var correction_torque = -ang_vel * scale * torque_power
+			apply_torque(correction_torque)
+
+
+func _physics_process(delta: float) -> void:
+	read_vehicle_inputs(delta)
+	
+	stabilise_rotation(delta)
+	
+	#print("R=%+0.2f P=%+0.2f Y=%+0.2f T=%+0.2f" % [
+		#roll_input,
+		#pitch_input,
+		#yaw_input,
+		#throttle_input
+	#])
+	
+	apply_thrust_and_torque(delta)
