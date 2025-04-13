@@ -4,39 +4,18 @@ extends RigidBody3D
 
 @export var input_sensitivity = 1.5
 @export var input_decay = 3.0
+@export var thrust_power = 200.0
+@export var torque_power = 20.0
+@export var spin_threshold = 1
+
+@onready var camera: Camera3D = $FPCameraHolder.camera
+@onready var rc_vel: RayCast3D = $rc_vel
+@onready var rc_tilt: RayCast3D = $rc_tilt
 
 var roll_input = 0.0
 var pitch_input = 0.0
 var yaw_input = 0.0
 var throttle_input = 0.0
-
-@onready var _camera = %Camera3D
-@onready var _camera_pivot = %CameraPivot
-@export_range(0.0, 1.0) var mouse_sensitivity = 0.01
-@export var tilt_limit = deg_to_rad(75)
-
-@export var thrust_power = 200.0
-@export var torque_power = 20.0
-@export var spin_threshold = 1
-
-@export var pitch_gain = 0.1
-@export var roll_gain = 0.1
-@export var vertical_gain = 0.1
-@export var hover_throttle = 0.5
-@export var autohover_enabled = false
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		_camera_pivot.rotation.x -= event.relative.y * mouse_sensitivity
-		_camera_pivot.rotation.x = clampf(_camera_pivot.rotation.x, -tilt_limit, tilt_limit)
-		_camera_pivot.rotation.y -= event.relative.x * mouse_sensitivity
-
-
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("toggle_autohover"):
-		autohover_enabled = !autohover_enabled
-		print("Autohover toggled: ", autohover_enabled)
 
 
 func read_vehicle_inputs(delta: float) -> void:
@@ -74,15 +53,58 @@ func read_vehicle_inputs(delta: float) -> void:
 	throttle_input = clamp(throttle_input, -1, 1)
 
 
-func apply_thrust_and_torque(delta: float) -> void:
-	var up_force = transform.basis.y * throttle_input * thrust_power
+func apply_throttle(throttle_value: float) -> void:
+	var up_force = transform.basis.y * throttle_value * thrust_power
 	apply_central_force(up_force)
+
+
+func apply_roll(roll_value: float) -> void:
+	var roll_torque = transform.basis.z * roll_value * torque_power
+	apply_torque(roll_torque)
+
+
+func apply_pitch(pitch_value: float) -> void:
+	var pitch_torque = transform.basis.x * pitch_value * torque_power
+	apply_torque(pitch_torque)
+
+
+func apply_yaw(yaw_value: float) -> void:
+	var yaw_torque = transform.basis.y * yaw_value * torque_power
+	apply_torque(yaw_torque)
+
+
+func get_effective_pitch_and_roll() -> Vector2:
+	var combined = Vector2(roll_input, pitch_input)
+	if combined.length() > 1:
+		combined = combined.normalized()
+	return combined
+
+
+#func apply_controls(delta: float) -> void:
+	#apply_throttle(throttle_input)
+	#apply_roll(roll_input)
+	#apply_pitch(pitch_input)
+	#apply_yaw(yaw_input)
+
+
+func apply_controls(delta: float) -> void:
+	apply_throttle(throttle_input)
+
+	var effective = get_effective_pitch_and_roll()
+	apply_roll(effective.x)
+	apply_pitch(effective.y)
+
+	apply_yaw(yaw_input)
+
+
+func apply_stabilization_torque(correction_torque: Vector3) -> void:
+	var roll_corr = correction_torque.dot(transform.basis.z) / torque_power
+	var pitch_corr = correction_torque.dot(transform.basis.x) / torque_power
+	var yaw_corr = correction_torque.dot(transform.basis.y) / torque_power
 	
-	var torque = Vector3.ZERO
-	torque += transform.basis.z * roll_input * torque_power  # Roll around local Z
-	torque += transform.basis.x * pitch_input * torque_power # Pitch around local X
-	torque += transform.basis.y * yaw_input * torque_power   # Yaw around local Y
-	apply_torque(torque)
+	apply_roll(roll_corr)
+	apply_pitch(pitch_corr)
+	apply_yaw(yaw_corr)
 
 
 func stabilise_rotation(delta: float) -> void:
@@ -94,19 +116,59 @@ func stabilise_rotation(delta: float) -> void:
 		if spin > 0:
 			var scale = clamp(spin / spin_threshold, 0, 1)
 			var correction_torque = -ang_vel * scale * torque_power
-			apply_torque(correction_torque)
+			apply_stabilization_torque(correction_torque)
+
+
+func stabilise_yaw(delta: float) -> void:
+	if not (Input.is_action_pressed("yaw_right") or Input.is_action_pressed("yaw_left")):
+		var ang_vel = get_angular_velocity()
+		var spin = ang_vel.length()
+		if spin > 0:
+			var scale = clamp(spin / spin_threshold, 0, 1)
+			var correction_torque = -ang_vel * scale * torque_power
+			var yaw_corr = correction_torque.dot(transform.basis.y) / torque_power
+			apply_yaw(yaw_corr)
+
+
+@export var Kp = 0.5
+@export var Ki = 0.01
+@export var Kd = 0.001
+
+var roll_pid_integral = 0.0
+var pitch_pid_integral = 0.0
+var roll_pid_prev_error = 0.0
+var pitch_pid_prev_error = 0.0
+
+func align_with_camera_vector(delta: float) -> void:
+	var effective_angle = camera.rotation.x
+	var camera_yaw = camera.rotation.y
+	var target_pitch = effective_angle * cos(camera_yaw)
+	var target_roll = -effective_angle * sin(camera_yaw)
+	var error_pitch = target_pitch - rotation.x
+	var error_roll = target_roll - rotation.z
+	pitch_pid_integral += error_pitch * delta
+	roll_pid_integral += error_roll * delta
+	var d_pitch = (error_pitch - pitch_pid_prev_error) / delta
+	var d_roll = (error_roll - roll_pid_prev_error) / delta
+	var output_pitch = Kp * error_pitch + Ki * pitch_pid_integral + Kd * d_pitch
+	var output_roll = Kp * error_roll + Ki * roll_pid_integral + Kd * d_roll
+	pitch_pid_prev_error = error_pitch
+	roll_pid_prev_error = error_roll
+	apply_pitch(clamp(output_pitch, -1, 1))
+	apply_roll(clamp(output_roll, -1, 1))
+
+
+func update_rcs() -> void:	
+	rc_vel.target_position = global_transform.basis.inverse() * linear_velocity
 
 
 func _physics_process(delta: float) -> void:
 	read_vehicle_inputs(delta)
-	
+
+	#stabilise_yaw(delta)
+	#align_with_camera_vector(delta)
+
 	stabilise_rotation(delta)
+	apply_controls(delta)
 	
-	#print("R=%+0.2f P=%+0.2f Y=%+0.2f T=%+0.2f" % [
-		#roll_input,
-		#pitch_input,
-		#yaw_input,
-		#throttle_input
-	#])
-	
-	apply_thrust_and_torque(delta)
+	update_rcs()

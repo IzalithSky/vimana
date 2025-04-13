@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=4 uid="uid://ck71e5phsxvxj"]
+[gd_scene load_steps=6 format=4 uid="uid://ck71e5phsxvxj"]
 
 [ext_resource type="Script" uid="uid://dyxvmhny5frid" path="res://objects/vimana_0.gd" id="1_6jxvc"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="1_s1d72"]
+[ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/fp_camera_holder.gd" id="3_0qbkc"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
 _surfaces = [{
@@ -20,15 +21,6 @@ size = Vector3(1, 1, 4)
 [node name="RigidBody3D" type="RigidBody3D"]
 mass = 8.0
 script = ExtResource("1_6jxvc")
-
-[node name="CameraPivot" type="Node3D" parent="."]
-unique_name_in_owner = true
-
-[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
-spring_length = 5.0
-
-[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
-unique_name_in_owner = true
 
 [node name="ThrustPointL" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.59701, 0.225189, 0)
@@ -82,3 +74,33 @@ height = 0.914551
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.23, 0)
 height = 0.914551
+
+[node name="rc_tilt" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.011201, -2.55826)
+rotation_order = 0
+visible = false
+collision_mask = 0
+hit_back_faces = false
+collide_with_bodies = false
+debug_shape_custom_color = Color(0, 0, 0.909804, 1)
+
+[node name="rc_vel" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.011201, -2.55826)
+collision_mask = 0
+hit_back_faces = false
+collide_with_bodies = false
+debug_shape_custom_color = Color(0.232405, 0.776955, 0.0988789, 1)
+
+[node name="FPCameraHolder" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.331581)
+script = ExtResource("3_0qbkc")
+
+[node name="Camera3D" type="Camera3D" parent="FPCameraHolder"]
+unique_name_in_owner = true
+
+[node name="RayCast3D" type="RayCast3D" parent="FPCameraHolder/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2)
+collision_mask = 0
+hit_back_faces = false
+collide_with_bodies = false
+debug_shape_custom_color = Color(0.231373, 0.776471, 0.0980392, 1)
