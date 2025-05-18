@@ -128,9 +128,10 @@ hit_back_faces = false
 collide_with_bodies = false
 debug_shape_custom_color = Color(0.232405, 0.776955, 0.0988789, 1)
 
-[node name="FPCameraHolder" type="Node3D" parent="."]
+[node name="FPCameraHolder" type="Node3D" parent="." node_paths=PackedStringArray("fps_label")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.331581)
 script = ExtResource("3_0qbkc")
+fps_label = NodePath("Camera3D/CanvasLayer/HBoxContainer/VBoxContainer/FpsLabel")
 
 [node name="Camera3D" type="Camera3D" parent="FPCameraHolder"]
 unique_name_in_owner = true
@@ -150,6 +151,41 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
 
 [node name="PointB" type="Node3D" parent="FPCameraHolder/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="FpsLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+text = "111"
+
+[node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="LegendLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+text = "W/S:s Pitch
+A/D: Roll
+Q/E: Yaw
+Shift/Space: Throttle
+Mouse: Freelook"
 
 [node name="Display" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
