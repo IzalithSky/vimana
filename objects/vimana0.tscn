@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://ck71e5phsxvxj"]
+[gd_scene load_steps=13 format=4 uid="uid://ck71e5phsxvxj"]
 
 [ext_resource type="Script" uid="uid://5nop0mdwyr3e" path="res://objects/jet.gd" id="1_0qbkc"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="1_s1d72"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/fp_camera_holder.gd" id="3_0qbkc"]
+[ext_resource type="Script" uid="uid://db5fo0njlni2v" path="res://objects/horizon.gd" id="4_nhwor"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
 _surfaces = [{
@@ -18,9 +19,43 @@ _surfaces = [{
 [sub_resource type="BoxShape3D" id="BoxShape3D_s1d72"]
 size = Vector3(1, 1, 4)
 
-[node name="RigidBody3D" type="RigidBody3D"]
-angular_damp = 4.0
+[sub_resource type="ViewportTexture" id="ViewportTexture_0qbkc"]
+viewport_path = NodePath("Display/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nhwor"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_0qbkc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_0qbkc"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_nhwor"]
+viewport_path = NodePath("Horizon/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1m05p"]
+resource_local_to_scene = true
+transparency = 1
+cull_mode = 1
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_nhwor")
+
+[sub_resource type="SphereMesh" id="SphereMesh_0qbkc"]
+radius = 2.0
+height = 4.0
+
+[node name="RigidBody3D" type="RigidBody3D" node_paths=PackedStringArray("speed_label", "throttle_label", "aoa_label", "gf_label", "horizon")]
+mass = 3.0
+angular_damp = 3.0
 script = ExtResource("1_0qbkc")
+angular_damping_strength = 80.0
+speed_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer/SpeedLabel")
+throttle_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer/ThrottleLabel")
+aoa_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer2/AoALabel")
+gf_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer2/GForceLabel")
+horizon = NodePath("Horizon")
+g_limit_pitch_enabled = false
+g_limit_throttle_enabled = false
 
 [node name="ThrustPointL" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.59701, 0.225189, 0)
@@ -36,9 +71,9 @@ mesh = SubResource("ArrayMesh_s1d72")
 skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0205942)
+transform = Transform3D(0.999993, -0.0025535, 0.00268034, 0.00255942, 0.999994, -0.00220558, -0.00267469, 0.00221243, 0.999994, 0, 0, -0.0205942)
 shape = SubResource("BoxShape3D_s1d72")
-debug_color = Color(0, 0.65098, 0.0156863, 0.862745)
+debug_color = Color(0, 0.65098, 0.0156863, 0)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
 visible = false
@@ -80,6 +115,7 @@ height = 0.914551
 [node name="rc_tilt" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.011201, -2.55826)
 rotation_order = 0
+visible = false
 collision_mask = 0
 hit_back_faces = false
 collide_with_bodies = false
@@ -100,6 +136,7 @@ script = ExtResource("3_0qbkc")
 unique_name_in_owner = true
 fov = 85.0
 near = 0.01
+far = 8000.0
 
 [node name="RayCast3D" type="RayCast3D" parent="FPCameraHolder/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2)
@@ -114,29 +151,80 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
 [node name="PointB" type="Node3D" parent="FPCameraHolder/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="Display" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+material_override = SubResource("StandardMaterial3D_nhwor")
+mesh = SubResource("QuadMesh_0qbkc")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="SubViewport" type="SubViewport" parent="Display"]
+transparent_bg = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Display/SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 alignment = 1
 
-[node name="SpeedLabel" type="Label" parent="CanvasLayer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Display/SubViewport/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 0
+alignment = 1
+
+[node name="SpeedLabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+theme_override_font_sizes/font_size = 16
 text = "111"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ThrottleLabel" type="Label" parent="CanvasLayer/VBoxContainer"]
+[node name="ThrottleLabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+theme_override_font_sizes/font_size = 16
 text = "333"
 
-[node name="AoALabel" type="Label" parent="CanvasLayer/VBoxContainer"]
+[node name="Label" type="Label" parent="Display/SubViewport/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Display/SubViewport/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+alignment = 1
+
+[node name="AoALabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+theme_override_font_sizes/font_size = 16
 text = "222"
 
-[node name="HUD" type="Control" parent="CanvasLayer"]
+[node name="GForceLabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+text = "444"
+
+[node name="Horizon" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_1m05p")
+mesh = SubResource("SphereMesh_0qbkc")
+
+[node name="SubViewport" type="SubViewport" parent="Horizon"]
+transparent_bg = true
+size = Vector2i(1024, 1024)
+
+[node name="Control" type="Control" parent="Horizon/SubViewport"]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -512.0
+offset_top = -512.0
+offset_right = 512.0
+offset_bottom = 512.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_nhwor")

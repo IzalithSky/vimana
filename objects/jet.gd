@@ -2,24 +2,24 @@ class_name Jet
 extends RigidBody3D
 
 @export var min_thrust: float = 0.0
-@export var max_thrust: float = 800.0
+@export var max_thrust: float = 1000.0
 @export var idle_thrust_percent: float = 0.5
 
 @export var input_rate: float = 128.0
-@export var input_decay: float = 512.0
+@export var input_decay: float = 2048.0
 
 @export var max_pitch: float = 64
 @export var max_yaw: float = 32
 @export var max_roll: float = 2
 
-@export var max_lift: float = 10.0
+@export var max_lift: float = 20.0
 @export var lift_zero_aoa_deg: float = -5.0
 
 @export var lift_coefficient: float = 0.1
 @export var angular_damping_strength: float = 8.0
 @export var max_aoa_deg: float = 5.7
 
-@export var drag_forward: float = 0.005
+@export var drag_forward: float = 0.01
 @export var drag_up: float = 0.1
 @export var drag_side: float = 0.05
 @export var alignment_strength: float = 1.0
@@ -27,11 +27,19 @@ extends RigidBody3D
 @export var max_speed: float = 500.0  # throttle disabled above this
 @export var control_effectiveness_speed: float = 20.0  # full control above this
 
-@onready var speed_label: Label = $CanvasLayer/VBoxContainer/SpeedLabel
-@onready var throttle_label: Label = $CanvasLayer/VBoxContainer/ThrottleLabel
-@onready var aoa_label: Label = $CanvasLayer/VBoxContainer/AoALabel
+@export var speed_label: Label
+@export var throttle_label: Label
+@export var aoa_label: Label
+@export var gf_label: Label
+@export var horizon: MeshInstance3D
+
 @onready var rc_vel: RayCast3D = $rc_vel
 @onready var rc_tilt: RayCast3D = $rc_tilt
+
+@export var warn_g_force: float = 6.0
+@export var g_limit_pitch_enabled: bool = true
+@export var g_limit_throttle_enabled: bool = true
+@export var max_g_force: float = 11.0
 
 var current_thrust: float = 0.0
 var aoa: float = 0.0
@@ -50,6 +58,11 @@ var pitch_active: bool = false
 var yaw_active: bool = false
 var roll_active: bool = false
 
+const G_BUFFER_SIZE := 10
+var _g_force_buffer: Array = []
+var _prev_velocity: Vector3 = Vector3.ZERO
+var smoothed_g: float = 0.0
+
 
 func _physics_process(delta: float) -> void:
 	compute_control_state()
@@ -60,27 +73,55 @@ func _physics_process(delta: float) -> void:
 	apply_jet_torque(delta)
 	apply_directional_alignment()
 	apply_trim_torque()
-	update_ui()
+	update_ui(delta)
 
 
-func update_ui() -> void:
+func update_ui(delta: float) -> void:
 	rc_vel.target_position = global_transform.basis.inverse() * linear_velocity
 	
 	var gravity_dir: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector").normalized()
 	rc_tilt.target_position = global_transform.basis.inverse() * gravity_dir
 	
 	var speed: float = linear_velocity.length()
-	speed_label.text = "Speed: %.1f m/s" % speed
+	var speed_knots = speed * 1.94384
+	speed_label.text = "Speed: %.1f kn" % speed_knots
 
 	var throttle_percent: float = (current_thrust / max_thrust) * 100.0
 	throttle_label.text = "Throttle: %.0f%%" % throttle_percent
 	
 	aoa_label.text = "AoA: %.1f°" % aoa_deg
 	
+	var total_accel = (linear_velocity - _prev_velocity) / delta
+	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
+	var net_accel = total_accel - gravity
+	var g_force = net_accel.length() / 9.80665
+
+	# Update buffer
+	_g_force_buffer.append(g_force)
+	if _g_force_buffer.size() > G_BUFFER_SIZE:
+		_g_force_buffer.pop_front()
+
+	# Smoothed G-force
+	smoothed_g = _g_force_buffer.reduce(func(a, b): return a + b) / _g_force_buffer.size()
+	gf_label.text = "Overload: %.2fG" % smoothed_g
+
+	if smoothed_g >= warn_g_force:
+		gf_label.add_theme_color_override("font_color", Color.RED)
+	else:
+		gf_label.add_theme_color_override("font_color", Color.LAWN_GREEN)
+
+	_prev_velocity = linear_velocity
+
+	
 	if control_effectiveness < 1.0 or abs(aoa_deg) > max_aoa_deg:
 		aoa_label.add_theme_color_override("font_color", Color.RED)
 	else:
-		aoa_label.remove_theme_color_override("font_color")
+		aoa_label.add_theme_color_override("font_color", Color.LAWN_GREEN)
+		
+	var parent_yaw = horizon.get_parent().global_transform.basis.get_euler().y
+	horizon.global_transform = Transform3D(
+		Basis(Vector3.UP, parent_yaw),
+		horizon.global_transform.origin)
 
 
 func compute_control_state() -> void:
@@ -94,6 +135,11 @@ func compute_control_state() -> void:
 
 
 func handle_throttle(delta: float) -> void:
+	if g_limit_throttle_enabled and smoothed_g >= max_g_force:
+		# Cut throttle hard
+		current_thrust = move_toward(current_thrust, 0.0, input_rate * 10.0 * delta)
+		return
+
 	var target_thrust: float = max_thrust * idle_thrust_percent
 
 	if linear_velocity.length() >= max_speed:
@@ -105,10 +151,8 @@ func handle_throttle(delta: float) -> void:
 	elif Input.is_action_pressed("throttle_down"):
 		current_thrust = max(current_thrust - input_rate * mult * delta, min_thrust)
 	else:
-		# Decay toward idle thrust
 		current_thrust = move_toward(current_thrust, target_thrust, input_rate * mult * delta)
-
-
+		
 
 func apply_thrust() -> void:
 	var forward_force: Vector3 = -transform.basis.z * current_thrust
@@ -172,11 +216,13 @@ func apply_jet_torque(delta: float) -> void:
 
 	# --- Pitch input ---
 	if Input.is_action_pressed("pitch_up"):
-		pitch_input += input_rate * delta
-		pitch_active = true
+		if not (g_limit_pitch_enabled and smoothed_g >= max_g_force):
+			pitch_input += input_rate * delta
+			pitch_active = true
 	elif Input.is_action_pressed("pitch_down"):
-		pitch_input -= input_rate * delta
-		pitch_active = true
+		if not (g_limit_pitch_enabled and smoothed_g >= max_g_force):
+			pitch_input -= input_rate * delta
+			pitch_active = true
 	else:
 		pitch_input = move_toward(pitch_input, 0.0, input_decay * delta)
 
