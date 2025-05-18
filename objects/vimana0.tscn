@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=4 uid="uid://ck71e5phsxvxj"]
 
-[ext_resource type="Script" uid="uid://dyxvmhny5frid" path="res://objects/vimana_0.gd" id="1_6jxvc"]
+[ext_resource type="Script" uid="uid://5nop0mdwyr3e" path="res://objects/jet.gd" id="1_0qbkc"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="1_s1d72"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/fp_camera_holder.gd" id="3_0qbkc"]
 
@@ -19,8 +19,8 @@ _surfaces = [{
 size = Vector3(1, 1, 4)
 
 [node name="RigidBody3D" type="RigidBody3D"]
-mass = 8.0
-script = ExtResource("1_6jxvc")
+angular_damp = 4.0
+script = ExtResource("1_0qbkc")
 
 [node name="ThrustPointL" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.59701, 0.225189, 0)
@@ -30,6 +30,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.597, 0.225, 0)
 
 [node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.520594)
+visible = false
 material_override = ExtResource("1_s1d72")
 mesh = SubResource("ArrayMesh_s1d72")
 skeleton = NodePath("../..")
@@ -78,7 +79,6 @@ height = 0.914551
 [node name="rc_tilt" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.011201, -2.55826)
 rotation_order = 0
-visible = false
 collision_mask = 0
 hit_back_faces = false
 collide_with_bodies = false
@@ -104,3 +104,36 @@ collision_mask = 0
 hit_back_faces = false
 collide_with_bodies = false
 debug_shape_custom_color = Color(0.231373, 0.776471, 0.0980392, 1)
+
+[node name="PointA" type="Node3D" parent="FPCameraHolder/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
+
+[node name="PointB" type="Node3D" parent="FPCameraHolder/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
+alignment = 1
+
+[node name="SpeedLabel" type="Label" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+text = "111"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ThrottleLabel" type="Label" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+text = "333"
+
+[node name="AoALabel" type="Label" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+text = "222"
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

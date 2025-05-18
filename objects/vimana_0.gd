@@ -1,4 +1,4 @@
-class_name Vimana
+class_name Vimana_0
 extends RigidBody3D
 
 
@@ -8,6 +8,7 @@ extends RigidBody3D
 @export var torque_power = 20.0
 @export var spin_threshold = 1
 
+@onready var camera_holder: FPCameraHolder = $FPCameraHolder
 @onready var camera: Camera3D = $FPCameraHolder.camera
 @onready var rc_vel: RayCast3D = $rc_vel
 @onready var rc_tilt: RayCast3D = $rc_tilt
@@ -131,31 +132,41 @@ func stabilise_yaw(delta: float) -> void:
 
 
 @export var Kp = 0.5
-@export var Ki = 0.01
-@export var Kd = 0.001
+@export var Ki = 0.1
+@export var Kd = 0.1
 
-var roll_pid_integral = 0.0
-var pitch_pid_integral = 0.0
-var roll_pid_prev_error = 0.0
-var pitch_pid_prev_error = 0.0
+var pitch_integral: float = 0.0
+var pitch_last_error: float = 0.0
+var roll_integral: float = 0.0
+var roll_last_error: float = 0.0
 
-func align_with_camera_vector(delta: float) -> void:
-	var effective_angle = camera.rotation.x
-	var camera_yaw = camera.rotation.y
-	var target_pitch = effective_angle * cos(camera_yaw)
-	var target_roll = -effective_angle * sin(camera_yaw)
-	var error_pitch = target_pitch - rotation.x
-	var error_roll = target_roll - rotation.z
-	pitch_pid_integral += error_pitch * delta
-	roll_pid_integral += error_roll * delta
-	var d_pitch = (error_pitch - pitch_pid_prev_error) / delta
-	var d_roll = (error_roll - roll_pid_prev_error) / delta
-	var output_pitch = Kp * error_pitch + Ki * pitch_pid_integral + Kd * d_pitch
-	var output_roll = Kp * error_roll + Ki * roll_pid_integral + Kd * d_roll
-	pitch_pid_prev_error = error_pitch
-	roll_pid_prev_error = error_roll
-	apply_pitch(clamp(output_pitch, -1, 1))
-	apply_roll(clamp(output_roll, -1, 1))
+func align_with_camera_plane(delta: float) -> void:
+	var A = camera_holder.pointA.global_transform.origin
+	var B = camera_holder.pointB.global_transform.origin
+	var C = camera.global_transform.origin
+	
+	var plane_normal = (B - A).cross(C - A).normalized()
+	
+	var normal_local = transform.basis.inverse() * plane_normal
+
+	var roll_error = -normal_local.x
+	var pitch_error = normal_local.z
+	
+	#print("%+.2f %+.2f" % [pitch_error, roll_error])
+	
+	pitch_integral += pitch_error * delta
+	var pitch_derivative = (pitch_error - pitch_last_error) / delta
+	pitch_last_error = pitch_error
+
+	roll_integral += roll_error * delta
+	var roll_derivative = (roll_error - roll_last_error) / delta
+	roll_last_error = roll_error
+
+	var pitch_output = Kp * pitch_error + Ki * pitch_integral + Kd * pitch_derivative
+	var roll_output = Kp * roll_error + Ki * roll_integral + Kd * roll_derivative
+
+	apply_pitch(pitch_output)
+	apply_roll(roll_output)
 
 
 func update_rcs() -> void:	
@@ -166,9 +177,9 @@ func _physics_process(delta: float) -> void:
 	read_vehicle_inputs(delta)
 
 	#stabilise_yaw(delta)
-	#align_with_camera_vector(delta)
+	align_with_camera_plane(delta)
 
-	stabilise_rotation(delta)
+	#stabilise_rotation(delta)
 	apply_controls(delta)
 	
 	update_rcs()
