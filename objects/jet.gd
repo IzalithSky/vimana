@@ -2,15 +2,15 @@ class_name Jet
 extends RigidBody3D
 
 @export var min_thrust: float = 0.0
-@export var max_thrust: float = 200.0
+@export var max_thrust: float = 800.0
 @export var idle_thrust_percent: float = 0.5
 
 @export var input_rate: float = 128.0
 @export var input_decay: float = 512.0
 
-@export var max_pitch: float = 32
-@export var max_yaw: float = 16
-@export var max_roll: float = 8
+@export var max_pitch: float = 64
+@export var max_yaw: float = 32
+@export var max_roll: float = 2
 
 @export var max_lift: float = 10.0
 @export var lift_zero_aoa_deg: float = -5.0

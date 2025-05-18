@@ -38,6 +38,7 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0205942)
 shape = SubResource("BoxShape3D_s1d72")
+debug_color = Color(0, 0.65098, 0.0156863, 0.862745)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
 visible = false
@@ -97,6 +98,8 @@ script = ExtResource("3_0qbkc")
 
 [node name="Camera3D" type="Camera3D" parent="FPCameraHolder"]
 unique_name_in_owner = true
+fov = 85.0
+near = 0.01
 
 [node name="RayCast3D" type="RayCast3D" parent="FPCameraHolder/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2)
