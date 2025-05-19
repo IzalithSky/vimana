@@ -32,9 +32,7 @@ extends RigidBody3D
 @export var aoa_label: Label
 @export var gf_label: Label
 @export var horizon: MeshInstance3D
-
-@onready var rc_vel: RayCast3D = $rc_vel
-@onready var rc_tilt: RayCast3D = $rc_tilt
+@export var heading: Sprite3D
 
 @export var warn_g_force: float = 6.0
 @export var g_limit_pitch_enabled: bool = true
@@ -76,12 +74,7 @@ func _physics_process(delta: float) -> void:
 	update_ui(delta)
 
 
-func update_ui(delta: float) -> void:
-	rc_vel.target_position = global_transform.basis.inverse() * linear_velocity
-	
-	var gravity_dir: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector").normalized()
-	rc_tilt.target_position = global_transform.basis.inverse() * gravity_dir
-	
+func update_ui(delta: float) -> void:	
 	var speed: float = linear_velocity.length()
 	var speed_knots = speed * 1.94384
 	speed_label.text = "Speed: %.1f kn" % speed_knots
@@ -122,6 +115,18 @@ func update_ui(delta: float) -> void:
 	horizon.global_transform = Transform3D(
 		Basis(Vector3.UP, parent_yaw),
 		horizon.global_transform.origin)
+		
+	# Update heading sprite position
+	var cam_pos: Vector3 = $FPCameraHolder.global_transform.origin
+	var heading_dir: Vector3
+
+	if linear_velocity.length() > 1e-3:
+		heading_dir = linear_velocity.normalized()
+	else:
+		heading_dir = gravity.normalized()
+
+	var offset: Vector3 = heading_dir * 1.5
+	heading.global_transform.origin = cam_pos + offset
 
 
 func compute_control_state() -> void:
@@ -136,11 +141,8 @@ func compute_control_state() -> void:
 
 func handle_throttle(delta: float) -> void:
 	if g_limit_throttle_enabled and smoothed_g >= max_g_force:
-		# Cut throttle hard
 		current_thrust = move_toward(current_thrust, 0.0, input_rate * 10.0 * delta)
 		return
-
-	var target_thrust: float = max_thrust * idle_thrust_percent
 
 	if linear_velocity.length() >= max_speed:
 		return
@@ -150,9 +152,7 @@ func handle_throttle(delta: float) -> void:
 		current_thrust = min(current_thrust + input_rate * mult * delta, max_thrust)
 	elif Input.is_action_pressed("throttle_down"):
 		current_thrust = max(current_thrust - input_rate * mult * delta, min_thrust)
-	else:
-		current_thrust = move_toward(current_thrust, target_thrust, input_rate * mult * delta)
-		
+
 
 func apply_thrust() -> void:
 	var forward_force: Vector3 = -transform.basis.z * current_thrust

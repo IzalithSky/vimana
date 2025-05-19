@@ -1,9 +1,11 @@
-[gd_scene load_steps=13 format=4 uid="uid://ck71e5phsxvxj"]
+[gd_scene load_steps=15 format=4 uid="uid://ck71e5phsxvxj"]
 
 [ext_resource type="Script" uid="uid://5nop0mdwyr3e" path="res://objects/jet.gd" id="1_0qbkc"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="1_s1d72"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/fp_camera_holder.gd" id="3_0qbkc"]
 [ext_resource type="Script" uid="uid://db5fo0njlni2v" path="res://objects/horizon.gd" id="4_nhwor"]
+[ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="5_nndtu"]
+[ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="6_g63xp"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
 _surfaces = [{
@@ -44,7 +46,7 @@ albedo_texture = SubResource("ViewportTexture_nhwor")
 radius = 2.0
 height = 4.0
 
-[node name="RigidBody3D" type="RigidBody3D" node_paths=PackedStringArray("speed_label", "throttle_label", "aoa_label", "gf_label", "horizon")]
+[node name="RigidBody3D" type="RigidBody3D" node_paths=PackedStringArray("speed_label", "throttle_label", "aoa_label", "gf_label", "horizon", "heading")]
 mass = 3.0
 angular_damp = 3.0
 script = ExtResource("1_0qbkc")
@@ -54,6 +56,7 @@ throttle_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer/Throt
 aoa_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer2/AoALabel")
 gf_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer2/GForceLabel")
 horizon = NodePath("Horizon")
+heading = NodePath("HeadingSprite3D")
 g_limit_pitch_enabled = false
 g_limit_throttle_enabled = false
 
@@ -73,7 +76,7 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.999993, -0.0025535, 0.00268034, 0.00255942, 0.999994, -0.00220558, -0.00267469, 0.00221243, 0.999994, 0, 0, -0.0205942)
 shape = SubResource("BoxShape3D_s1d72")
-debug_color = Color(0, 0.65098, 0.0156863, 0)
+debug_color = Color(0, 0.65098, 0.0156863, 0.254902)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
 visible = false
@@ -112,22 +115,6 @@ height = 0.914551
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.23, 0)
 height = 0.914551
 
-[node name="rc_tilt" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.011201, -2.55826)
-rotation_order = 0
-visible = false
-collision_mask = 0
-hit_back_faces = false
-collide_with_bodies = false
-debug_shape_custom_color = Color(0, 0, 0.909804, 1)
-
-[node name="rc_vel" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.011201, -2.55826)
-collision_mask = 0
-hit_back_faces = false
-collide_with_bodies = false
-debug_shape_custom_color = Color(0.232405, 0.776955, 0.0988789, 1)
-
 [node name="FPCameraHolder" type="Node3D" parent="." node_paths=PackedStringArray("fps_label")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.331581)
 script = ExtResource("3_0qbkc")
@@ -138,13 +125,6 @@ unique_name_in_owner = true
 fov = 85.0
 near = 0.01
 far = 8000.0
-
-[node name="RayCast3D" type="RayCast3D" parent="FPCameraHolder/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2)
-collision_mask = 0
-hit_back_faces = false
-collide_with_bodies = false
-debug_shape_custom_color = Color(0.231373, 0.776471, 0.0980392, 1)
 
 [node name="PointA" type="Node3D" parent="FPCameraHolder/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
@@ -184,7 +164,7 @@ theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
 text = "W/S:s Pitch
 A/D: Roll
 Q/E: Yaw
-Shift/Space: Throttle
+M1/M2: Throttle
 Mouse: Freelook"
 
 [node name="Display" type="MeshInstance3D" parent="."]
@@ -264,3 +244,19 @@ offset_bottom = 512.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_nhwor")
+
+[node name="NoseSprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, -1.5)
+modulate = Color(0.486275, 0.988235, 0, 1)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+texture = ExtResource("5_nndtu")
+
+[node name="HeadingSprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, -1.5)
+modulate = Color(0.486275, 0.988235, 0, 1)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+texture = ExtResource("6_g63xp")
