@@ -25,7 +25,7 @@ extends RigidBody3D
 @export var alignment_strength: float = 1.0
 
 @export var max_speed: float = 500.0  # throttle disabled above this
-@export var control_effectiveness_speed: float = 20.0  # full control above this
+@export var control_effectiveness_speed: float = 50.0  # full control above this
 
 @export var speed_label: Label
 @export var throttle_label: Label
@@ -38,6 +38,9 @@ extends RigidBody3D
 @export var g_limit_pitch_enabled: bool = true
 @export var g_limit_throttle_enabled: bool = true
 @export var max_g_force: float = 11.0
+
+@export var explosion_scene: PackedScene
+@export var explosive_speed: float = 50.0
 
 var current_thrust: float = 0.0
 var aoa: float = 0.0
@@ -60,6 +63,18 @@ const G_BUFFER_SIZE := 10
 var _g_force_buffer: Array = []
 var _prev_velocity: Vector3 = Vector3.ZERO
 var smoothed_g: float = 0.0
+
+
+func _ready() -> void:
+	self.body_entered.connect(_on_body_entered)
+
+
+func _on_body_entered(body: Node) -> void:
+	if linear_velocity.length() >= explosive_speed:
+		var explosion: Node3D = explosion_scene.instantiate()
+		get_tree().current_scene.add_child(explosion)
+		explosion.global_transform.origin = global_transform.origin
+		
 
 
 func _physics_process(delta: float) -> void:

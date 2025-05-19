@@ -1,11 +1,14 @@
-[gd_scene load_steps=15 format=4 uid="uid://ck71e5phsxvxj"]
+[gd_scene load_steps=18 format=4 uid="uid://ck71e5phsxvxj"]
 
 [ext_resource type="Script" uid="uid://5nop0mdwyr3e" path="res://objects/jet.gd" id="1_0qbkc"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="1_s1d72"]
+[ext_resource type="PackedScene" uid="uid://b10gv1tbsvpnr" path="res://objects/explosion.tscn" id="2_g63xp"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/fp_camera_holder.gd" id="3_0qbkc"]
 [ext_resource type="Script" uid="uid://db5fo0njlni2v" path="res://objects/horizon.gd" id="4_nhwor"]
 [ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="5_nndtu"]
 [ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="6_g63xp"]
+[ext_resource type="Script" uid="uid://d2nrb6pxnthli" path="res://objects/missile_launcher.gd" id="8_ql27g"]
+[ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile.tscn" id="9_67yly"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
 _surfaces = [{
@@ -48,6 +51,9 @@ height = 4.0
 
 [node name="RigidBody3D" type="RigidBody3D" node_paths=PackedStringArray("speed_label", "throttle_label", "aoa_label", "gf_label", "horizon", "heading")]
 mass = 3.0
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 5
 angular_damp = 3.0
 script = ExtResource("1_0qbkc")
 angular_damping_strength = 80.0
@@ -59,6 +65,7 @@ horizon = NodePath("Horizon")
 heading = NodePath("HeadingSprite3D")
 g_limit_pitch_enabled = false
 g_limit_throttle_enabled = false
+explosion_scene = ExtResource("2_g63xp")
 
 [node name="ThrustPointL" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.59701, 0.225189, 0)
@@ -165,6 +172,7 @@ text = "W/S:s Pitch
 A/D: Roll
 Q/E: Yaw
 M1/M2: Throttle
+M3: Missile
 Mouse: Freelook"
 
 [node name="Display" type="MeshInstance3D" parent="."]
@@ -260,3 +268,8 @@ billboard = 1
 no_depth_test = true
 fixed_size = true
 texture = ExtResource("6_g63xp")
+
+[node name="MissileLauncher" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
+script = ExtResource("8_ql27g")
+missile_scene = ExtResource("9_67yly")

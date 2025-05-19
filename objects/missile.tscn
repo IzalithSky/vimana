@@ -1,0 +1,64 @@
+[gd_scene load_steps=11 format=3 uid="uid://cmrbjs74gmqdn"]
+
+[ext_resource type="Script" uid="uid://dqfc8gb66o1wr" path="res://objects/missile.gd" id="1_vcrkf"]
+[ext_resource type="PackedScene" uid="uid://b10gv1tbsvpnr" path="res://objects/explosion.tscn" id="2_7vy2j"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
+
+[sub_resource type="Curve" id="Curve_g63xp"]
+_data = [Vector2(0, 0.516854), 0.0, 0.0, 0, 0, Vector2(0.668103, 0.988764), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ql27g"]
+curve = SubResource("Curve_g63xp")
+
+[sub_resource type="Curve" id="Curve_67yly"]
+_data = [Vector2(0, 0.550562), 0.0, 0.0, 0, 0, Vector2(0.25431, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_8qryu"]
+curve = SubResource("Curve_67yly")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yx1n8"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 1)
+spread = 5.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_8qryu")
+color = Color(0.414672, 0.495124, 0.6157, 1)
+alpha_curve = SubResource("CurveTexture_ql27g")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mk0mt"]
+transparency = 1
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_8rqf1"]
+material = SubResource("StandardMaterial3D_mk0mt")
+radial_segments = 8
+rings = 4
+
+[node name="RigidBody3D" type="RigidBody3D"]
+mass = 0.1
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_vcrkf")
+explosion_scene = ExtResource("2_7vy2j")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_g63xp")
+
+[node name="Smoke" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+amount = 32
+lifetime = 20.0
+preprocess = 0.29
+speed_scale = 25.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_yx1n8")
+draw_pass_1 = SubResource("SphereMesh_8rqf1")
