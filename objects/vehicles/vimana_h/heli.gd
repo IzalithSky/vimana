@@ -3,7 +3,7 @@ class_name Heli extends RigidBody3D
 
 @export var input_sensitivity = 1.5
 @export var input_decay = 3.0
-@export var thrust_power = 200.0
+@export var thrust_power = 300.0
 @export var torque_power = 20.0
 @export var spin_threshold = 1
 

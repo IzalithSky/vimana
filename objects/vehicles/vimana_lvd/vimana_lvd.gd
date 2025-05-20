@@ -3,7 +3,7 @@ class_name LvD extends RigidBody3D
 
 @export var input_sensitivity = 1.5
 @export var input_decay = 3.0
-@export var thrust_power = 200.0
+@export var thrust_power = 1000.0
 @export var torque_power = 20.0
 @export var spin_threshold = 1
 
@@ -59,11 +59,11 @@ func read_vehicle_inputs(delta: float) -> void:
 		yaw_input = move_toward(yaw_input, 0, input_decay * delta)
 		
 	if Input.is_action_pressed("pitch_down"):
-		throttle_input += input_sensitivity * delta
+		throttle_input += input_sensitivity * delta / 6
 	elif Input.is_action_pressed("pitch_up"):
-		throttle_input -= input_sensitivity * delta
+		throttle_input -= input_sensitivity * delta / 6
 	else:
-		throttle_input = move_toward(throttle_input, 0, input_decay * delta)
+		throttle_input = move_toward(throttle_input, 0, input_decay * 10 * delta)
 	
 	roll_input = clamp(roll_input, -1, 1)
 	pitch_input = clamp(pitch_input, -1, 1)
