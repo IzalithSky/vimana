@@ -8,15 +8,33 @@ extends RigidBody3D
 @export var torque_power = 20.0
 @export var spin_threshold = 1
 
+@export var drag_forward: float = 0.01
+@export var drag_up: float = 0.1
+@export var drag_side: float = 0.05
+@export var alignment_strength: float = 1.0
+
 @onready var camera_holder: FPCameraHolder = $FPCameraHolder
 @onready var camera: Camera3D = $FPCameraHolder.camera
-@onready var rc_vel: RayCast3D = $rc_vel
-@onready var rc_tilt: RayCast3D = $rc_tilt
+
+@export var speed_label: Label
+@export var throttle_label: Label
+@export var aoa_label: Label
+@export var gf_label: Label
+@export var horizon: MeshInstance3D
+@export var heading: Sprite3D
+
+
+@export var warn_g_force: float = 6.0
 
 var roll_input = 0.0
 var pitch_input = 0.0
 var yaw_input = 0.0
 var throttle_input = 0.0
+
+const G_BUFFER_SIZE := 10
+var _g_force_buffer: Array = []
+var _prev_velocity: Vector3 = Vector3.ZERO
+var smoothed_g: float = 0.0
 
 
 func read_vehicle_inputs(delta: float) -> void:
@@ -151,9 +169,7 @@ func align_with_camera_plane(delta: float) -> void:
 
 	var roll_error = -normal_local.x
 	var pitch_error = normal_local.z
-	
-	#print("%+.2f %+.2f" % [pitch_error, roll_error])
-	
+
 	pitch_integral += pitch_error * delta
 	var pitch_derivative = (pitch_error - pitch_last_error) / delta
 	pitch_last_error = pitch_error
@@ -169,17 +185,95 @@ func align_with_camera_plane(delta: float) -> void:
 	apply_roll(roll_output)
 
 
-func update_rcs() -> void:	
-	rc_vel.target_position = global_transform.basis.inverse() * linear_velocity
+func update_ui(delta: float) -> void:	
+	var speed: float = linear_velocity.length()
+	var speed_knots = speed * 1.94384
+	speed_label.text = "Speed: %.1f kn" % speed_knots
+
+	var throttle_percent: float = (throttle_input) * 100.0
+	throttle_label.text = "Throttle: %.0f%%" % throttle_percent
+	
+	aoa_label.text = "AoA: NaN"
+	
+	var total_accel = (linear_velocity - _prev_velocity) / delta
+	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
+	var net_accel = total_accel - gravity
+	var g_force = net_accel.length() / 9.80665
+
+	# Update buffer
+	_g_force_buffer.append(g_force)
+	if _g_force_buffer.size() > G_BUFFER_SIZE:
+		_g_force_buffer.pop_front()
+
+	# Smoothed G-force
+	smoothed_g = _g_force_buffer.reduce(func(a, b): return a + b) / _g_force_buffer.size()
+	gf_label.text = "Overload: %.2fG" % smoothed_g
+
+	if smoothed_g >= warn_g_force:
+		gf_label.add_theme_color_override("font_color", Color.RED)
+	else:
+		gf_label.add_theme_color_override("font_color", Color.LAWN_GREEN)
+
+	_prev_velocity = linear_velocity
+		
+	var parent_yaw = horizon.get_parent().global_transform.basis.get_euler().y
+	horizon.global_transform = Transform3D(
+		Basis(Vector3.UP, parent_yaw),
+		horizon.global_transform.origin)
+		
+	# Update heading sprite position
+	var cam_pos: Vector3 = $FPCameraHolder.global_transform.origin
+	var heading_dir: Vector3
+
+	if linear_velocity.length() > 1e-3:
+		heading_dir = linear_velocity.normalized()
+	else:
+		heading_dir = gravity.normalized()
+
+	var offset: Vector3 = heading_dir * 1.5
+	heading.global_transform.origin = cam_pos + offset
+
+
+func apply_directional_alignment() -> void:
+	var velocity: Vector3 = linear_velocity
+	if velocity.length() < 1e-3:
+		return
+
+	var forward: Vector3 = -transform.basis.z
+	var vel_dir: Vector3 = velocity.normalized()
+	var axis: Vector3 = forward.cross(vel_dir)
+	var angle: float = forward.angle_to(vel_dir)
+
+	if angle > 0.01:
+		var torque: Vector3 = axis.normalized() * angle * alignment_strength * velocity.length()
+		apply_torque(torque)
+
+
+func apply_air_drag() -> void:
+	var velocity: Vector3 = linear_velocity
+	var speed_squared: float = velocity.length_squared()
+	if speed_squared < 1e-4:
+		return  # avoid tiny/invalid values
+
+	var basis: Basis = transform.basis
+
+	var forward_vel: float = velocity.dot(basis.z)
+	var up_vel: float = velocity.dot(basis.y)
+	var side_vel: float = velocity.dot(basis.x)
+
+	var drag_force: Vector3 = Vector3.ZERO
+	drag_force += -basis.z * forward_vel * abs(forward_vel) * drag_forward
+	drag_force += -basis.y * up_vel * abs(up_vel) * drag_up
+	drag_force += -basis.x * side_vel * abs(side_vel) * drag_side
+
+	if drag_force.is_finite():
+		apply_central_force(drag_force)
 
 
 func _physics_process(delta: float) -> void:
 	read_vehicle_inputs(delta)
-
-	#stabilise_yaw(delta)
-	align_with_camera_plane(delta)
-
-	#stabilise_rotation(delta)
+	stabilise_rotation(delta)
 	apply_controls(delta)
-	
-	update_rcs()
+	#apply_directional_alignment()
+	apply_air_drag()
+	update_ui(delta)

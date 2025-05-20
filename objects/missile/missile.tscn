@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://cmrbjs74gmqdn"]
 
-[ext_resource type="Script" uid="uid://dqfc8gb66o1wr" path="res://objects/missile.gd" id="1_vcrkf"]
-[ext_resource type="PackedScene" uid="uid://b10gv1tbsvpnr" path="res://objects/explosion.tscn" id="2_7vy2j"]
+[ext_resource type="Script" uid="uid://dqfc8gb66o1wr" path="res://objects/missile/missile.gd" id="1_vcrkf"]
+[ext_resource type="PackedScene" uid="uid://b10gv1tbsvpnr" path="res://objects/common/explosion.tscn" id="2_7vy2j"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
 

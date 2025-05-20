@@ -1,10 +1,10 @@
 [gd_scene load_steps=20 format=4 uid="uid://dj47wc5nnm06h"]
 
+[ext_resource type="Script" uid="uid://dhxjopkuabn57" path="res://scenes/world.gd" id="1_bcyrs"]
 [ext_resource type="Texture2D" uid="uid://cxsddgs0gyvbd" path="res://textures/256x256/Wood/Wood_04-256x256.png" id="1_i4dot"]
 [ext_resource type="Texture2D" uid="uid://c1roa4832yb6l" path="res://textures/256x256/Wood/Wood_01-256x256.png" id="2_c81cj"]
 [ext_resource type="Texture2D" uid="uid://sndvqvvcq06x" path="res://textures/256x256/Tile/Tile_11-256x256.png" id="3_c81cj"]
 [ext_resource type="Texture2D" uid="uid://cn0tsbbgu47va" path="res://textures/kloofendal_43d_clear_puresky_1k.exr" id="4_bcyrs"]
-[ext_resource type="PackedScene" uid="uid://ck71e5phsxvxj" path="res://objects/vimana0.tscn" id="5_bcyrs"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7oua0"]
 albedo_texture = ExtResource("1_i4dot")
@@ -86,6 +86,7 @@ fog_light_energy = 0.2
 fog_density = 0.001
 
 [node name="world" type="Node3D"]
+script = ExtResource("1_bcyrs")
 
 [node name="level" type="Node3D" parent="."]
 
@@ -316,7 +317,7 @@ shadow_enabled = true
 
 [node name="objects" type="Node3D" parent="."]
 
-[node name="vimana0" parent="objects" instance=ExtResource("5_bcyrs")]
+[node name="Spawn" type="Node3D" parent="objects"]
 transform = Transform3D(0.994267, 0, 0.106923, 0, 1, 0, -0.106923, 0, 0.994267, 10.7364, 1.03872, -315.373)
 
 [node name="ui" type="Node3D" parent="."]

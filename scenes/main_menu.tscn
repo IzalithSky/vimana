@@ -1,0 +1,52 @@
+[gd_scene load_steps=5 format=3 uid="uid://qvqa1gc4ss6a"]
+
+[ext_resource type="Script" uid="uid://bkvvcwuacs1fp" path="res://scenes/main_menu.gd" id="1_l6cm7"]
+[ext_resource type="PackedScene" uid="uid://dj47wc5nnm06h" path="res://scenes/world_0.tscn" id="2_wu84c"]
+[ext_resource type="PackedScene" uid="uid://ck71e5phsxvxj" path="res://objects/vimana_j/vimana_j.tscn" id="3_8ln24"]
+[ext_resource type="PackedScene" uid="uid://bokx8wuhvb2hd" path="res://objects/vimana_h/vimana_h.tscn" id="4_rtw2f"]
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_l6cm7")
+world = ExtResource("2_wu84c")
+jet = ExtResource("3_8ln24")
+heli = ExtResource("4_rtw2f")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="filler1" type="Label" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+
+[node name="filler1" type="Label" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Label" type="Label" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Select Vehicle"
+
+[node name="ButtonJet" type="Button" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Jet Vimana"
+
+[node name="ButtonHeli" type="Button" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Heli Vimana"
+
+[node name="filler2" type="Label" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="filler2" type="Label" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
