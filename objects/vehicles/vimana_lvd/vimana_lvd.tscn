@@ -1,14 +1,13 @@
-[gd_scene load_steps=18 format=4 uid="uid://ck71e5phsxvxj"]
+[gd_scene load_steps=17 format=4 uid="uid://cg1rl1irjyc6q"]
 
-[ext_resource type="Script" uid="uid://5nop0mdwyr3e" path="res://objects/vimana_j/jet.gd" id="1_0qbkc"]
-[ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="1_s1d72"]
-[ext_resource type="PackedScene" uid="uid://b10gv1tbsvpnr" path="res://objects/common/explosion.tscn" id="2_g63xp"]
-[ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="3_0qbkc"]
-[ext_resource type="Script" uid="uid://db5fo0njlni2v" path="res://objects/common/horizon.gd" id="4_nhwor"]
-[ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="5_nndtu"]
-[ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="6_g63xp"]
-[ext_resource type="Script" uid="uid://d2nrb6pxnthli" path="res://objects/missile/missile_launcher.gd" id="8_ql27g"]
-[ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="9_67yly"]
+[ext_resource type="Script" uid="uid://bgyhgxmmogsmq" path="res://objects/vehicles/vimana_lvd/vimana_lvd.gd" id="1_3juvv"]
+[ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="3_y6qys"]
+[ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="4_ag212"]
+[ext_resource type="Script" uid="uid://db5fo0njlni2v" path="res://objects/common/horizon.gd" id="5_asrxm"]
+[ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="6_8dfia"]
+[ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="7_qwtcr"]
+[ext_resource type="Script" uid="uid://d2nrb6pxnthli" path="res://objects/missile/missile_launcher.gd" id="8_83kcv"]
+[ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="9_rv5pg"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
 _surfaces = [{
@@ -55,28 +54,18 @@ continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 5
 angular_damp = 3.0
-script = ExtResource("1_0qbkc")
-angular_damping_strength = 80.0
+script = ExtResource("1_3juvv")
 speed_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer/SpeedLabel")
 throttle_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer/ThrottleLabel")
 aoa_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer2/AoALabel")
 gf_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer2/GForceLabel")
 horizon = NodePath("Horizon")
 heading = NodePath("HeadingSprite3D")
-g_limit_pitch_enabled = false
-g_limit_throttle_enabled = false
-explosion_scene = ExtResource("2_g63xp")
-
-[node name="ThrustPointL" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.59701, 0.225189, 0)
-
-[node name="ThrustPointR" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.597, 0.225, 0)
 
 [node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.520594)
 visible = false
-material_override = ExtResource("1_s1d72")
+material_override = ExtResource("3_y6qys")
 mesh = SubResource("ArrayMesh_s1d72")
 skeleton = NodePath("../..")
 
@@ -87,7 +76,7 @@ debug_color = Color(0, 0.65098, 0.0156863, 0.254902)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
 visible = false
-material_override = ExtResource("1_s1d72")
+material_override = ExtResource("3_y6qys")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
@@ -124,7 +113,7 @@ height = 0.914551
 
 [node name="FPCameraHolder" type="Node3D" parent="." node_paths=PackedStringArray("fps_label")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.331581)
-script = ExtResource("3_0qbkc")
+script = ExtResource("4_ag212")
 fps_label = NodePath("Camera3D/CanvasLayer/HBoxContainer/VBoxContainer/FpsLabel")
 
 [node name="Camera3D" type="Camera3D" parent="FPCameraHolder"]
@@ -251,7 +240,7 @@ offset_right = 512.0
 offset_bottom = 512.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("4_nhwor")
+script = ExtResource("5_asrxm")
 
 [node name="NoseSprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, -1.5)
@@ -259,7 +248,7 @@ modulate = Color(0.486275, 0.988235, 0, 1)
 billboard = 1
 no_depth_test = true
 fixed_size = true
-texture = ExtResource("5_nndtu")
+texture = ExtResource("6_8dfia")
 
 [node name="HeadingSprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, -1.5)
@@ -267,9 +256,9 @@ modulate = Color(0.486275, 0.988235, 0, 1)
 billboard = 1
 no_depth_test = true
 fixed_size = true
-texture = ExtResource("6_g63xp")
+texture = ExtResource("7_qwtcr")
 
 [node name="MissileLauncher" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
-script = ExtResource("8_ql27g")
-missile_scene = ExtResource("9_67yly")
+script = ExtResource("8_83kcv")
+missile_scene = ExtResource("9_rv5pg")

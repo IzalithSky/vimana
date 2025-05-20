@@ -1,5 +1,4 @@
-class_name Vimana_0
-extends RigidBody3D
+class_name LvD extends RigidBody3D
 
 
 @export var input_sensitivity = 1.5
@@ -38,30 +37,30 @@ var smoothed_g: float = 0.0
 
 
 func read_vehicle_inputs(delta: float) -> void:
-	if Input.is_action_pressed("roll_right"):
+	if Input.is_action_pressed("yaw_right"):
 		roll_input -= input_sensitivity * delta
-	elif Input.is_action_pressed("roll_left"):
+	elif Input.is_action_pressed("yaw_left"):
 		roll_input += input_sensitivity * delta
 	else:
 		roll_input = move_toward(roll_input, 0, input_decay * delta)
 	
-	if Input.is_action_pressed("pitch_down"):
+	if Input.is_action_pressed("throttle_up"):
 		pitch_input -= input_sensitivity * delta
-	elif Input.is_action_pressed("pitch_up"):
+	elif Input.is_action_pressed("throttle_down"):
 		pitch_input += input_sensitivity * delta
 	else:
 		pitch_input = move_toward(pitch_input, 0, input_decay * delta)
 	
-	if Input.is_action_pressed("yaw_right"):
+	if Input.is_action_pressed("roll_right"):
 		yaw_input -= input_sensitivity * delta
-	elif Input.is_action_pressed("yaw_left"):
+	elif Input.is_action_pressed("roll_left"):
 		yaw_input += input_sensitivity * delta
 	else:
 		yaw_input = move_toward(yaw_input, 0, input_decay * delta)
 		
-	if Input.is_action_pressed("throttle_up"):
+	if Input.is_action_pressed("pitch_down"):
 		throttle_input += input_sensitivity * delta
-	elif Input.is_action_pressed("throttle_down"):
+	elif Input.is_action_pressed("pitch_up"):
 		throttle_input -= input_sensitivity * delta
 	else:
 		throttle_input = move_toward(throttle_input, 0, input_decay * delta)
@@ -73,8 +72,8 @@ func read_vehicle_inputs(delta: float) -> void:
 
 
 func apply_throttle(throttle_value: float) -> void:
-	var up_force = transform.basis.y * throttle_value * thrust_power
-	apply_central_force(up_force)
+	var forward_force = -camera.global_transform.basis.z * throttle_value * thrust_power
+	apply_central_force(forward_force)
 
 
 func apply_roll(roll_value: float) -> void:
@@ -97,13 +96,6 @@ func get_effective_pitch_and_roll() -> Vector2:
 	if combined.length() > 1:
 		combined = combined.normalized()
 	return combined
-
-
-#func apply_controls(delta: float) -> void:
-	#apply_throttle(throttle_input)
-	#apply_roll(roll_input)
-	#apply_pitch(pitch_input)
-	#apply_yaw(yaw_input)
 
 
 func apply_controls(delta: float) -> void:
@@ -136,53 +128,6 @@ func stabilise_rotation(delta: float) -> void:
 			var scale = clamp(spin / spin_threshold, 0, 1)
 			var correction_torque = -ang_vel * scale * torque_power
 			apply_stabilization_torque(correction_torque)
-
-
-func stabilise_yaw(delta: float) -> void:
-	if not (Input.is_action_pressed("yaw_right") or Input.is_action_pressed("yaw_left")):
-		var ang_vel = get_angular_velocity()
-		var spin = ang_vel.length()
-		if spin > 0:
-			var scale = clamp(spin / spin_threshold, 0, 1)
-			var correction_torque = -ang_vel * scale * torque_power
-			var yaw_corr = correction_torque.dot(transform.basis.y) / torque_power
-			apply_yaw(yaw_corr)
-
-
-@export var Kp = 0.5
-@export var Ki = 0.1
-@export var Kd = 0.1
-
-var pitch_integral: float = 0.0
-var pitch_last_error: float = 0.0
-var roll_integral: float = 0.0
-var roll_last_error: float = 0.0
-
-func align_with_camera_plane(delta: float) -> void:
-	var A = camera_holder.pointA.global_transform.origin
-	var B = camera_holder.pointB.global_transform.origin
-	var C = camera.global_transform.origin
-	
-	var plane_normal = (B - A).cross(C - A).normalized()
-	
-	var normal_local = transform.basis.inverse() * plane_normal
-
-	var roll_error = -normal_local.x
-	var pitch_error = normal_local.z
-
-	pitch_integral += pitch_error * delta
-	var pitch_derivative = (pitch_error - pitch_last_error) / delta
-	pitch_last_error = pitch_error
-
-	roll_integral += roll_error * delta
-	var roll_derivative = (roll_error - roll_last_error) / delta
-	roll_last_error = roll_error
-
-	var pitch_output = Kp * pitch_error + Ki * pitch_integral + Kd * pitch_derivative
-	var roll_output = Kp * roll_error + Ki * roll_integral + Kd * roll_derivative
-
-	apply_pitch(pitch_output)
-	apply_roll(roll_output)
 
 
 func update_ui(delta: float) -> void:	
@@ -234,21 +179,6 @@ func update_ui(delta: float) -> void:
 	heading.global_transform.origin = cam_pos + offset
 
 
-func apply_directional_alignment() -> void:
-	var velocity: Vector3 = linear_velocity
-	if velocity.length() < 1e-3:
-		return
-
-	var forward: Vector3 = -transform.basis.z
-	var vel_dir: Vector3 = velocity.normalized()
-	var axis: Vector3 = forward.cross(vel_dir)
-	var angle: float = forward.angle_to(vel_dir)
-
-	if angle > 0.01:
-		var torque: Vector3 = axis.normalized() * angle * alignment_strength * velocity.length()
-		apply_torque(torque)
-
-
 func apply_air_drag() -> void:
 	var velocity: Vector3 = linear_velocity
 	var speed_squared: float = velocity.length_squared()
@@ -270,10 +200,24 @@ func apply_air_drag() -> void:
 		apply_central_force(drag_force)
 
 
+func apply_directional_alignment() -> void:
+	var velocity: Vector3 = linear_velocity
+	if velocity.length() < 1e-3:
+		return
+
+	var forward: Vector3 = -transform.basis.z
+	var vel_dir: Vector3 = velocity.normalized()
+	var axis: Vector3 = forward.cross(vel_dir)
+	var angle: float = forward.angle_to(vel_dir)
+
+	if angle > 0.01:
+		var torque: Vector3 = axis.normalized() * angle * alignment_strength * velocity.length()
+		apply_torque(torque)
+
 func _physics_process(delta: float) -> void:
 	read_vehicle_inputs(delta)
 	stabilise_rotation(delta)
-	apply_controls(delta)
 	#apply_directional_alignment()
+	apply_controls(delta)
 	apply_air_drag()
 	update_ui(delta)
