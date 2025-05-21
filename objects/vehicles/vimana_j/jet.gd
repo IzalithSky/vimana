@@ -1,5 +1,4 @@
-class_name Jet
-extends RigidBody3D
+class_name Jet extends Vimana
 
 @export var min_thrust: float = 0.0
 @export var max_thrust: float = 1000.0
@@ -17,24 +16,9 @@ extends RigidBody3D
 
 @export var lift_coefficient: float = 0.1
 @export var angular_damping_strength: float = 8.0
-@export var max_aoa_deg: float = 5.7
-
-@export var drag_forward: float = 0.01
-@export var drag_up: float = 0.1
-@export var drag_side: float = 0.05
-@export var alignment_strength: float = 1.0
 
 @export var max_speed: float = 500.0  # throttle disabled above this
-@export var control_effectiveness_speed: float = 50.0  # full control above this
 
-@export var speed_label: Label
-@export var throttle_label: Label
-@export var aoa_label: Label
-@export var gf_label: Label
-@export var horizon: MeshInstance3D
-@export var heading: Sprite3D
-
-@export var warn_g_force: float = 6.0
 @export var g_limit_pitch_enabled: bool = true
 @export var g_limit_throttle_enabled: bool = true
 @export var max_g_force: float = 11.0
@@ -44,13 +28,11 @@ extends RigidBody3D
 
 var current_thrust: float = 0.0
 var aoa: float = 0.0
-var aoa_deg: float = 0.0
 
 var pitch_input: float = 0.0
 var yaw_input: float = 0.0
 var roll_input: float = 0.0
 
-var control_effectiveness: float = 0.0
 var pitch_rate: float = 0.0
 var yaw_rate: float = 0.0
 var roll_rate: float = 0.0
@@ -58,11 +40,6 @@ var roll_rate: float = 0.0
 var pitch_active: bool = false
 var yaw_active: bool = false
 var roll_active: bool = false
-
-const G_BUFFER_SIZE := 10
-var _g_force_buffer: Array = []
-var _prev_velocity: Vector3 = Vector3.ZERO
-var smoothed_g: float = 0.0
 
 
 func _ready() -> void:
@@ -86,72 +63,10 @@ func _physics_process(delta: float) -> void:
 	apply_jet_torque(delta)
 	apply_directional_alignment()
 	apply_trim_torque()
+	
+	throttle_percent = (current_thrust / max_thrust) * 100.0
 	update_ui(delta)
-
-
-func update_ui(delta: float) -> void:	
-	var speed: float = linear_velocity.length()
-	var speed_knots = speed * 1.94384
-	speed_label.text = "Speed: %.1f kn" % speed_knots
-
-	var throttle_percent: float = (current_thrust / max_thrust) * 100.0
-	throttle_label.text = "Throttle: %.0f%%" % throttle_percent
 	
-	aoa_label.text = "AoA: %.1f°" % aoa_deg
-	
-	var total_accel = (linear_velocity - _prev_velocity) / delta
-	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
-	var net_accel = total_accel - gravity
-	var g_force = net_accel.length() / 9.80665
-
-	# Update buffer
-	_g_force_buffer.append(g_force)
-	if _g_force_buffer.size() > G_BUFFER_SIZE:
-		_g_force_buffer.pop_front()
-
-	# Smoothed G-force
-	smoothed_g = _g_force_buffer.reduce(func(a, b): return a + b) / _g_force_buffer.size()
-	gf_label.text = "Overload: %.2fG" % smoothed_g
-
-	if smoothed_g >= warn_g_force:
-		gf_label.add_theme_color_override("font_color", Color.RED)
-	else:
-		gf_label.add_theme_color_override("font_color", Color.LAWN_GREEN)
-
-	_prev_velocity = linear_velocity
-
-	
-	if control_effectiveness < 1.0 or abs(aoa_deg) > max_aoa_deg:
-		aoa_label.add_theme_color_override("font_color", Color.RED)
-	else:
-		aoa_label.add_theme_color_override("font_color", Color.LAWN_GREEN)
-		
-	var parent_yaw = horizon.get_parent().global_transform.basis.get_euler().y
-	horizon.global_transform = Transform3D(
-		Basis(Vector3.UP, parent_yaw),
-		horizon.global_transform.origin)
-		
-	# Update heading sprite position
-	var cam_pos: Vector3 = $FPCameraHolder.global_transform.origin
-	var heading_dir: Vector3
-
-	if linear_velocity.length() > 1e-3:
-		heading_dir = linear_velocity.normalized()
-	else:
-		heading_dir = gravity.normalized()
-
-	var offset: Vector3 = heading_dir * 1.5
-	heading.global_transform.origin = cam_pos + offset
-
-
-func compute_control_state() -> void:
-	var forward_speed: float = linear_velocity.dot(-transform.basis.z)
-	control_effectiveness = clamp(forward_speed / control_effectiveness_speed, 0.0, 1.0)
-
-	var ang_vel: Vector3 = get_angular_velocity()
-	pitch_rate = ang_vel.dot(transform.basis.x)
-	yaw_rate = ang_vel.dot(transform.basis.y)
-	roll_rate = ang_vel.dot(transform.basis.z)
 
 
 func handle_throttle(delta: float) -> void:
@@ -181,54 +96,33 @@ func apply_lift() -> void:
 
 	if velocity.length() < 1e-3:
 		return
-
+	
 	var vel_proj: Vector3 = velocity - transform.basis.x * velocity.dot(transform.basis.x)  # remove side (yaw) component
 	var vel_dir: Vector3 = vel_proj.normalized()
 	var aoa: float = forward.angle_to(vel_dir)
 	var sign_factor: float = sign(up.dot(vel_dir.cross(forward)))
 	aoa *= sign_factor
-
+	
 	aoa_deg = rad_to_deg(aoa)
 	var max_aoa: float = max_aoa_deg
 	var zero_lift_aoa: float = lift_zero_aoa_deg
 	var aoa_range: float = max_aoa - zero_lift_aoa
-
+	
 	if abs(aoa_range) < 1e-3:
 		return  # avoid division by zero or near-zero
-
+	
 	var lift_ratio: float = clamp((aoa_deg - zero_lift_aoa) / aoa_range, 0.0, 1.0)
 	var lift_strength: float = clamp(velocity.length_squared() * lift_ratio * lift_coefficient, -max_lift, max_lift)
-
+	
 	var lift_force: Vector3 = transform.basis.y * lift_strength
 	apply_central_force(lift_force)
-
-
-func apply_air_drag() -> void:
-	var velocity: Vector3 = linear_velocity
-	var speed_squared: float = velocity.length_squared()
-	if speed_squared < 1e-4:
-		return  # avoid tiny/invalid values
-
-	var basis: Basis = transform.basis
-
-	var forward_vel: float = velocity.dot(basis.z)
-	var up_vel: float = velocity.dot(basis.y)
-	var side_vel: float = velocity.dot(basis.x)
-
-	var drag_force: Vector3 = Vector3.ZERO
-	drag_force += -basis.z * forward_vel * abs(forward_vel) * drag_forward
-	drag_force += -basis.y * up_vel * abs(up_vel) * drag_up
-	drag_force += -basis.x * side_vel * abs(side_vel) * drag_side
-
-	if drag_force.is_finite():
-		apply_central_force(drag_force)
 
 
 func apply_jet_torque(delta: float) -> void:
 	pitch_active = false
 	yaw_active = false
 	roll_active = false
-
+	
 	# --- Pitch input ---
 	if Input.is_action_pressed("pitch_up"):
 		if not (g_limit_pitch_enabled and smoothed_g >= max_g_force):
@@ -240,7 +134,7 @@ func apply_jet_torque(delta: float) -> void:
 			pitch_active = true
 	else:
 		pitch_input = move_toward(pitch_input, 0.0, input_decay * delta)
-
+	
 	pitch_input = clamp(pitch_input, -max_pitch, max_pitch)
 
 	# --- Yaw input ---
@@ -252,7 +146,7 @@ func apply_jet_torque(delta: float) -> void:
 		yaw_active = true
 	else:
 		yaw_input = move_toward(yaw_input, 0.0, input_decay * delta)
-
+	
 	yaw_input = clamp(yaw_input, -max_yaw, max_yaw)
 
 	# --- Roll input ---
@@ -264,9 +158,9 @@ func apply_jet_torque(delta: float) -> void:
 		roll_active = true
 	else:
 		roll_input = move_toward(roll_input, 0.0, input_decay * delta)
-
+	
 	roll_input = clamp(roll_input, -max_roll, max_roll)
-
+	
 	# --- Apply torque ---
 	apply_torque(transform.basis.x * pitch_input * control_effectiveness)
 	apply_torque(transform.basis.y * yaw_input * control_effectiveness)
@@ -276,30 +170,15 @@ func apply_jet_torque(delta: float) -> void:
 func apply_trim_torque() -> void:
 	if control_effectiveness < 1e-3:
 		return
-
+	
 	if not pitch_active:
 		var pitch_trim: float = clamp(-pitch_rate * angular_damping_strength, -max_pitch, max_pitch)
 		apply_torque(transform.basis.x * pitch_trim * control_effectiveness)
-
+	
 	if not yaw_active:
 		var yaw_trim: float = clamp(-yaw_rate * angular_damping_strength, -max_yaw, max_yaw)
 		apply_torque(transform.basis.y * yaw_trim * control_effectiveness)
-
+	
 	if not roll_active:
 		var roll_trim: float = clamp(-roll_rate * angular_damping_strength, -max_roll, max_roll)
 		apply_torque(transform.basis.z * roll_trim * control_effectiveness)
-
-
-func apply_directional_alignment() -> void:
-	var velocity: Vector3 = linear_velocity
-	if velocity.length() < 1e-3:
-		return
-
-	var forward: Vector3 = -transform.basis.z
-	var vel_dir: Vector3 = velocity.normalized()
-	var axis: Vector3 = forward.cross(vel_dir)
-	var angle: float = forward.angle_to(vel_dir)
-
-	if angle > 0.01:
-		var torque: Vector3 = axis.normalized() * angle * alignment_strength * velocity.length()
-		apply_torque(torque)

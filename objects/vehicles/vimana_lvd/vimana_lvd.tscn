@@ -48,19 +48,13 @@ albedo_texture = SubResource("ViewportTexture_nhwor")
 radius = 2.0
 height = 4.0
 
-[node name="RigidBody3D" type="RigidBody3D" node_paths=PackedStringArray("speed_label", "throttle_label", "aoa_label", "gf_label", "horizon", "heading")]
+[node name="RigidBody3D" type="RigidBody3D"]
 mass = 3.0
 continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 5
 angular_damp = 3.0
 script = ExtResource("1_3juvv")
-speed_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer/SpeedLabel")
-throttle_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer/ThrottleLabel")
-aoa_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer2/AoALabel")
-gf_label = NodePath("Display/SubViewport/HBoxContainer/VBoxContainer2/GForceLabel")
-horizon = NodePath("Horizon")
-heading = NodePath("HeadingSprite3D")
 
 [node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.520594)
@@ -157,10 +151,10 @@ size_flags_vertical = 6
 [node name="LegendLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
-text = "W/S:s Pitch
-A/D: Roll
-Q/E: Yaw
-M1/M2: Throttle
+text = "W/S: Throttle
+A/D: Yaw
+Q/E: Roll
+M1/M2: Pitch
 M3: Missile
 Mouse: Freelook"
 
