@@ -11,4 +11,5 @@ func _ready() -> void:
 	if vehicle_scene:
 		var vehicle = vehicle_scene.instantiate()
 		vehicle.global_transform = spawn.global_transform
+		vehicle.add_to_group("player")
 		objects.add_child(vehicle)

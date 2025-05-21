@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://db5fo0njlni2v" path="res://objects/common/horizon.gd" id="4_nhwor"]
 [ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="5_nndtu"]
 [ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="6_g63xp"]
-[ext_resource type="Script" uid="uid://d2nrb6pxnthli" path="res://objects/missile/missile_launcher.gd" id="8_ql27g"]
+[ext_resource type="Script" uid="uid://ca3q1n33gqkgg" path="res://objects/player_missile_launcher.gd" id="8_pcmts"]
 [ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="9_67yly"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
@@ -259,5 +259,5 @@ texture = ExtResource("6_g63xp")
 
 [node name="MissileLauncher" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
-script = ExtResource("8_ql27g")
+script = ExtResource("8_pcmts")
 missile_scene = ExtResource("9_67yly")
