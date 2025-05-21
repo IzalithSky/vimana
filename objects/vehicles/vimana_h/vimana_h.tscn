@@ -1,11 +1,12 @@
-[gd_scene load_steps=17 format=4 uid="uid://bokx8wuhvb2hd"]
+[gd_scene load_steps=18 format=4 uid="uid://bokx8wuhvb2hd"]
 
 [ext_resource type="Script" uid="uid://dyxvmhny5frid" path="res://objects/vehicles/vimana_h/heli.gd" id="1_2yl4s"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="3_7m1m4"]
+[ext_resource type="Script" uid="uid://digjrqq0dauj1" path="res://objects/missile/missile_display.gd" id="3_li03w"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="4_cmws1"]
 [ext_resource type="Script" uid="uid://db5fo0njlni2v" path="res://objects/common/horizon.gd" id="5_b75js"]
 [ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="6_wmq1v"]
-[ext_resource type="Script" uid="uid://ca3q1n33gqkgg" path="res://objects/player_missile_launcher.gd" id="7_66awe"]
+[ext_resource type="Script" uid="uid://ca3q1n33gqkgg" path="res://objects/missile/player_missile_launcher.gd" id="7_66awe"]
 [ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="7_wis5o"]
 [ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="9_5o11h"]
 
@@ -256,3 +257,9 @@ texture = ExtResource("7_wis5o")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
 script = ExtResource("7_66awe")
 missile_scene = ExtResource("9_5o11h")
+
+[node name="MissileDisplay" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+script = ExtResource("3_li03w")
+update_interval_frames = 1
+metadata/_custom_type_script = "uid://digjrqq0dauj1"

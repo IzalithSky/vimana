@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://btp5yncagvu5c"]
+
+[ext_resource type="Script" uid="uid://digjrqq0dauj1" path="res://objects/missile/missile_display.gd" id="1_afaxc"]
+
+[node name="MissileDisplay" type="Node3D"]
+script = ExtResource("1_afaxc")

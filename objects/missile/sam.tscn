@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=3 uid="uid://d2f0mhxbgcgr2"]
+
+[ext_resource type="Texture2D" uid="uid://cbe6godw5c3yb" path="res://textures/256x256/Roofs/Roofs_05-256x256.png" id="1_iew6l"]
+[ext_resource type="Script" uid="uid://b8gu7esoqx2fq" path="res://objects/missile/sam.gd" id="2_utyds"]
+[ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="3_q05ts"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fhkym"]
+albedo_texture = ExtResource("1_iew6l")
+
+[node name="SAM1" type="CSGBox3D"]
+material_override = SubResource("StandardMaterial3D_fhkym")
+size = Vector3(20, 20, 20)
+script = ExtResource("2_utyds")
+missile_scene = ExtResource("3_q05ts")

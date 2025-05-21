@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://d04saj83e3413"]
+
+[ext_resource type="Texture2D" uid="uid://0ln3ibes8dj2" path="res://textures/missile_sprite.png" id="1_y88y7"]
+
+[node name="MissileMarker" type="Node3D"]
+
+[node name="front" type="Sprite3D" parent="."]
+transform = Transform3D(-0.32, 0, -2.79753e-08, 0, 0.32, 0, 2.79753e-08, 0, -0.32, 0, 0, -0.01)
+modulate = Color(0.601075, 0.551266, 0, 0.6)
+double_sided = false
+no_depth_test = true
+texture = ExtResource("1_y88y7")
+
+[node name="back" type="Sprite3D" parent="."]
+transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, 0.01)
+modulate = Color(0.908982, 0.315385, 0, 0.6)
+double_sided = false
+no_depth_test = true
+texture = ExtResource("1_y88y7")

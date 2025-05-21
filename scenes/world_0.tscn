@@ -1,12 +1,11 @@
-[gd_scene load_steps=22 format=4 uid="uid://dj47wc5nnm06h"]
+[gd_scene load_steps=21 format=4 uid="uid://dj47wc5nnm06h"]
 
 [ext_resource type="Script" uid="uid://dhxjopkuabn57" path="res://scenes/world.gd" id="1_bcyrs"]
 [ext_resource type="Texture2D" uid="uid://cxsddgs0gyvbd" path="res://textures/256x256/Wood/Wood_04-256x256.png" id="1_i4dot"]
 [ext_resource type="Texture2D" uid="uid://c1roa4832yb6l" path="res://textures/256x256/Wood/Wood_01-256x256.png" id="2_c81cj"]
 [ext_resource type="Texture2D" uid="uid://sndvqvvcq06x" path="res://textures/256x256/Tile/Tile_11-256x256.png" id="3_c81cj"]
 [ext_resource type="Texture2D" uid="uid://cn0tsbbgu47va" path="res://textures/kloofendal_43d_clear_puresky_1k.exr" id="4_bcyrs"]
-[ext_resource type="Script" uid="uid://b8gu7esoqx2fq" path="res://objects/sam.gd" id="6_7oua0"]
-[ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="7_85mci"]
+[ext_resource type="PackedScene" uid="uid://d2f0mhxbgcgr2" path="res://objects/missile/sam.tscn" id="6_7oua0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7oua0"]
 albedo_texture = ExtResource("1_i4dot")
@@ -324,45 +323,29 @@ transform = Transform3D(0.994267, 0, 0.106923, 0, 1, 0, -0.106923, 0, 0.994267, 
 
 [node name="SAMs" type="Node3D" parent="objects"]
 
-[node name="SAM1" type="CSGBox3D" parent="objects/SAMs"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.57855, 0, 90.9384)
-script = ExtResource("6_7oua0")
-missile_scene = ExtResource("7_85mci")
+[node name="SAM1" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.57855, -1113.77, -1129.11)
+fire_interval = 5.0
 
-[node name="SAM2" type="CSGBox3D" parent="objects/SAMs"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 952.729, 0, 1683.12)
-script = ExtResource("6_7oua0")
-missile_scene = ExtResource("7_85mci")
+[node name="SAM2" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -565.347, 0, 2169.36)
+fire_interval = 5.0
 
-[node name="SAM3" type="CSGBox3D" parent="objects/SAMs"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1940.56, 0, -81.9309)
-script = ExtResource("6_7oua0")
-missile_scene = ExtResource("7_85mci")
+[node name="SAM3" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2059.58, 0, -851.821)
+fire_interval = 5.0
 
-[node name="SAM4" type="CSGBox3D" parent="objects/SAMs"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1440.79, 0, -929.358)
-script = ExtResource("6_7oua0")
-missile_scene = ExtResource("7_85mci")
+[node name="SAM4" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2698.81, 0, 90.9384)
+fire_interval = 5.0
 
-[node name="SAM5" type="CSGBox3D" parent="objects/SAMs"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1654.74, 0, 529.821)
-script = ExtResource("6_7oua0")
-missile_scene = ExtResource("7_85mci")
+[node name="SAM5" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.57855, 0, -2296.72)
+fire_interval = 5.0
 
-[node name="SAM6" type="CSGBox3D" parent="objects/SAMs"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.287, 0, -1855.34)
-script = ExtResource("6_7oua0")
-missile_scene = ExtResource("7_85mci")
-
-[node name="SAM7" type="CSGBox3D" parent="objects/SAMs"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1482.58, 0, -1947.27)
-script = ExtResource("6_7oua0")
-missile_scene = ExtResource("7_85mci")
-
-[node name="SAM8" type="CSGBox3D" parent="objects/SAMs"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -292.505, 0, 1292)
-script = ExtResource("6_7oua0")
-missile_scene = ExtResource("7_85mci")
+[node name="SAM6" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2157.98, 0, 90.9384)
+fire_interval = 5.0
 
 [node name="ui" type="Node3D" parent="."]
 

@@ -6,6 +6,7 @@ class_name MissileLauncher extends Node3D
 func launch_missile() -> void:
 	if missile_scene:
 		var missile: RigidBody3D = missile_scene.instantiate()
+		missile.add_to_group("missiles")
 		get_tree().current_scene.add_child(missile)
 		missile.global_transform = global_transform
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cbe6godw5c3yb"
-path.s3tc="res://.godot/imported/Roofs_05-256x256.png-2fa105dd1139dd33b6b73793cc01361f.s3tc.ctex"
+uid="uid://0ln3ibes8dj2"
+path.s3tc="res://.godot/imported/missile_sprite.png-5ab9f41dd516ae186650822cc884ae67.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://textures/256x256/Roofs/Roofs_05-256x256.png"
-dest_files=["res://.godot/imported/Roofs_05-256x256.png-2fa105dd1139dd33b6b73793cc01361f.s3tc.ctex"]
+source_file="res://textures/missile_sprite.png"
+dest_files=["res://.godot/imported/missile_sprite.png-5ab9f41dd516ae186650822cc884ae67.s3tc.ctex"]
 
 [params]
 
