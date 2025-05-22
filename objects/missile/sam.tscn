@@ -1,14 +1,41 @@
-[gd_scene load_steps=5 format=3 uid="uid://d2f0mhxbgcgr2"]
+[gd_scene load_steps=8 format=4 uid="uid://d2f0mhxbgcgr2"]
 
-[ext_resource type="Texture2D" uid="uid://cbe6godw5c3yb" path="res://textures/256x256/Roofs/Roofs_05-256x256.png" id="1_iew6l"]
 [ext_resource type="Script" uid="uid://b8gu7esoqx2fq" path="res://objects/missile/sam.gd" id="2_utyds"]
 [ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="3_q05ts"]
+[ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="4_utyds"]
+[ext_resource type="Texture2D" uid="uid://b6bgn0hr67tt5" path="res://textures/256x256/Roofs/Roofs_07-256x256.png" id="5_q05ts"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fhkym"]
-albedo_texture = ExtResource("1_iew6l")
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_jetyv"]
+data = PackedVector3Array(-10, -10, 10, -10, -10, -10, -10, 10, -10, 10, -10, -10, -10, -10, -10, -10, -10, 10, -10, 10, -10, -10, -10, -10, 10, -10, -10, -10, 10, -10, -10, 10, 10, -10, -10, 10, -10, -10, 10, -10, 10, 10, 10, 10, 10, 10, 10, 10, -10, 10, 10, -10, 10, -10, -10, -10, 10, 10, -10, 10, 10, -10, -10, 10, 10, 10, 10, -10, 10, -10, -10, 10, 10, -10, -10, 10, -10, 10, 10, 10, 10, 10, -10, -10, 10, 10, -10, -10, 10, -10, -10, 10, -10, 10, 10, -10, 10, 10, 10, 10, 10, 10, 10, 10, -10, 10, -10, -10)
 
-[node name="SAM1" type="CSGBox3D"]
-material_override = SubResource("StandardMaterial3D_fhkym")
-size = Vector3(20, 20, 20)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0it58"]
+albedo_texture = ExtResource("5_q05ts")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_0m86a"]
+_surfaces = [{
+"aabb": AABB(-10, -10, -10, 20, 20, 20),
+"attribute_data": PackedByteArray("AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/"),
+"format": 34359738391,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 36,
+"vertex_data": PackedByteArray("AAAgwQAAIMEAACBBAAAgwQAAIMEAACDBAAAgwQAAIEEAACDBAAAgQQAAIMEAACDBAAAgwQAAIMEAACDBAAAgwQAAIMEAACBBAAAgwQAAIEEAACDBAAAgwQAAIMEAACDBAAAgQQAAIMEAACDBAAAgwQAAIEEAACDBAAAgwQAAIEEAACBBAAAgwQAAIMEAACBBAAAgwQAAIMEAACBBAAAgwQAAIEEAACBBAAAgQQAAIEEAACBBAAAgQQAAIEEAACBBAAAgwQAAIEEAACBBAAAgwQAAIEEAACDBAAAgwQAAIMEAACBBAAAgQQAAIMEAACBBAAAgQQAAIMEAACDBAAAgQQAAIEEAACBBAAAgQQAAIMEAACBBAAAgwQAAIMEAACBBAAAgQQAAIMEAACDBAAAgQQAAIMEAACBBAAAgQQAAIEEAACBBAAAgQQAAIMEAACDBAAAgQQAAIEEAACDBAAAgwQAAIEEAACDBAAAgwQAAIEEAACDBAAAgQQAAIEEAACDBAAAgQQAAIEEAACBBAAAgQQAAIEEAACBBAAAgQQAAIEEAACDBAAAgQQAAIMEAACDBAAD/f/9//n8AAP9//3/+fwAA/3//f/5//38AAP//AAD/fwAA//8AAP9/AAD//wAA/////wAA/z//////AAD/P/////8AAP8/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//3//fwAA/z//f/9/AAD/P/9//38AAP8//3//////AAD/f/////8AAP9//////wAA/38AAP//AAD/fwAA//8AAP9/AAD//wAA/3//fwAA/z//f/9/AAD/P/9//38AAP8/////f/9//n////9//3/+f////3//f/5//////wAA/z//////AAD/P/////8AAP8//3//////AAD/f/////8AAP9//////wAA////f/9//n////9//3/+f////3//f/5/")
+}]
+
+[node name="StaticBody3D" type="StaticBody3D"]
 script = ExtResource("2_utyds")
+fire_interval = 5.0
 missile_scene = ExtResource("3_q05ts")
+
+[node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConcavePolygonShape3D_jetyv")
+
+[node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_0it58")
+mesh = SubResource("ArrayMesh_0m86a")
+skeleton = NodePath("../..")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("4_utyds")
+max_hp = 30
+metadata/_custom_type_script = "uid://dxfwciqw71xsy"

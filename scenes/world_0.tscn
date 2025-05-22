@@ -347,6 +347,10 @@ fire_interval = 5.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2157.98, 0, 90.9384)
 fire_interval = 5.0
 
+[node name="SAM7" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 106.177, -1113.77, -1058.95)
+fire_interval = 5.0
+
 [node name="ui" type="Node3D" parent="."]
 
 [node name="DebugOverlay" type="CanvasLayer" parent="ui"]

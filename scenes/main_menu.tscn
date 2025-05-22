@@ -1,17 +1,17 @@
 [gd_scene load_steps=6 format=3 uid="uid://qvqa1gc4ss6a"]
 
-[ext_resource type="Script" uid="uid://bkvvcwuacs1fp" path="res://scenes/main_menu.gd" id="1_l6cm7"]
-[ext_resource type="PackedScene" uid="uid://dj47wc5nnm06h" path="res://scenes/world_0.tscn" id="2_wu84c"]
-[ext_resource type="PackedScene" uid="uid://ck71e5phsxvxj" path="res://objects/vehicles/vimana_j/vimana_j.tscn" id="3_8ln24"]
-[ext_resource type="PackedScene" uid="uid://bokx8wuhvb2hd" path="res://objects/vehicles/vimana_h/vimana_h.tscn" id="4_rtw2f"]
-[ext_resource type="PackedScene" uid="uid://cg1rl1irjyc6q" path="res://objects/vehicles/vimana_lvd/vimana_lvd.tscn" id="5_8ln24"]
+[ext_resource type="Script" uid="uid://bkvvcwuacs1fp" path="res://scenes/main_menu.gd" id="1_x7jby"]
+[ext_resource type="PackedScene" uid="uid://dj47wc5nnm06h" path="res://scenes/world_0.tscn" id="2_lqp0t"]
+[ext_resource type="PackedScene" uid="uid://ck71e5phsxvxj" path="res://objects/vehicles/vimana_j/vimana_j.tscn" id="3_g8w8u"]
+[ext_resource type="PackedScene" uid="uid://bokx8wuhvb2hd" path="res://objects/vehicles/vimana_h/vimana_h.tscn" id="4_ys27f"]
+[ext_resource type="PackedScene" uid="uid://cg1rl1irjyc6q" path="res://objects/vehicles/vimana_lvd/vimana_lvd.tscn" id="5_xpd2f"]
 
 [node name="MainMenu" type="Node2D"]
-script = ExtResource("1_l6cm7")
-world = ExtResource("2_wu84c")
-jet = ExtResource("3_8ln24")
-heli = ExtResource("4_rtw2f")
-lvd = ExtResource("5_8ln24")
+script = ExtResource("1_x7jby")
+world = ExtResource("2_lqp0t")
+jet = ExtResource("3_g8w8u")
+heli = ExtResource("4_ys27f")
+lvd = ExtResource("5_xpd2f")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -48,6 +48,10 @@ text = "Heli Vimana"
 [node name="ButtonLvD" type="Button" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "LvD Vimana"
+
+[node name="ExitButton" type="Button" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Exit"
 
 [node name="filler2" type="Label" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
 layout_mode = 2

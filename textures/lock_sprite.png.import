@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b6bgn0hr67tt5"
-path.s3tc="res://.godot/imported/Roofs_07-256x256.png-fcbfd46faba73d7a342611f13e8f4741.s3tc.ctex"
+uid="uid://cff6sjyic4j1s"
+path.s3tc="res://.godot/imported/lock_sprite.png-9e9ae45fbbc411e6e41ae7c0c16a3826.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://textures/256x256/Roofs/Roofs_07-256x256.png"
-dest_files=["res://.godot/imported/Roofs_07-256x256.png-fcbfd46faba73d7a342611f13e8f4741.s3tc.ctex"]
+source_file="res://textures/lock_sprite.png"
+dest_files=["res://.godot/imported/lock_sprite.png-9e9ae45fbbc411e6e41ae7c0c16a3826.s3tc.ctex"]
 
 [params]
 

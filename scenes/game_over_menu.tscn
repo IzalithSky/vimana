@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8ux2n4rsr871"]
+
+[ext_resource type="Script" uid="uid://cdy0eqmmkggvt" path="res://scenes/game_over_menu.gd" id="1_6ebp1"]
+[ext_resource type="PackedScene" uid="uid://qvqa1gc4ss6a" path="res://scenes/main_menu.tscn" id="2_cwb3k"]
+
+[node name="GameOverMenu" type="Node2D"]
+script = ExtResource("1_6ebp1")
+main_menu_scene = ExtResource("2_cwb3k")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="filler1" type="Label" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+
+[node name="filler1" type="Label" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="MainMenuButton" type="Button" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Main Menu"
+
+[node name="ExitButton" type="Button" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Exit"
+
+[node name="filler2" type="Label" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="filler2" type="Label" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6

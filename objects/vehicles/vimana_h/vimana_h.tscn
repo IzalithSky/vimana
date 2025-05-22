@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://bokx8wuhvb2hd"]
+[gd_scene load_steps=21 format=4 uid="uid://bokx8wuhvb2hd"]
 
 [ext_resource type="Script" uid="uid://dyxvmhny5frid" path="res://objects/vehicles/vimana_h/heli.gd" id="1_2yl4s"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="3_7m1m4"]
@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="7_wis5o"]
 [ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="9_5o11h"]
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="10_li03w"]
+[ext_resource type="Script" uid="uid://bjcaxvbxfnhwq" path="res://objects/common/player.gd" id="11_dma6b"]
+[ext_resource type="PackedScene" uid="uid://c8ux2n4rsr871" path="res://scenes/game_over_menu.tscn" id="12_hr311"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
 _surfaces = [{
@@ -169,7 +171,8 @@ text = "W/S: Pitch
 A/D: Roll
 Q/E: Yaw
 M1/M2: Throttle
-M3: Missile
+R: Select Target
+V: Missile
 Mouse: Freelook"
 
 [node name="Display" type="MeshInstance3D" parent="."]
@@ -266,9 +269,10 @@ no_depth_test = true
 fixed_size = true
 texture = ExtResource("7_wis5o")
 
-[node name="MissileLauncher" type="Node3D" parent="."]
+[node name="MissileLauncher" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
 script = ExtResource("7_66awe")
+camera = NodePath("../FPCameraHolder/Camera3D")
 missile_scene = ExtResource("9_5o11h")
 
 [node name="MissileDisplay" type="Node3D" parent="."]
@@ -281,3 +285,8 @@ metadata/_custom_type_script = "uid://digjrqq0dauj1"
 script = ExtResource("10_li03w")
 health_label = NodePath("../FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer2/HpLabel")
 metadata/_custom_type_script = "uid://dxfwciqw71xsy"
+
+[node name="Player" type="Node" parent="."]
+script = ExtResource("11_dma6b")
+game_over_menu_scene = ExtResource("12_hr311")
+metadata/_custom_type_script = "uid://bjcaxvbxfnhwq"

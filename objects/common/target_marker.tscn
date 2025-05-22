@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://bnqlnpxb47hb"]
+
+[ext_resource type="Script" uid="uid://tbhaklp2dvwo" path="res://objects/common/target_marker.gd" id="1_ybepw"]
+[ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="2_auwka"]
+[ext_resource type="Texture2D" uid="uid://dc75xp38jffuu" path="res://textures/next_sprite.png" id="3_17ybv"]
+[ext_resource type="Texture2D" uid="uid://cff6sjyic4j1s" path="res://textures/lock_sprite.png" id="4_ylqi5"]
+
+[node name="TargetMarker" type="Node3D"]
+script = ExtResource("1_ybepw")
+
+[node name="Target" type="Sprite3D" parent="."]
+transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, 0)
+modulate = Color(0.814995, 0.701291, 0, 1)
+billboard = 1
+double_sided = false
+no_depth_test = true
+fixed_size = true
+texture = ExtResource("2_auwka")
+
+[node name="Lock" type="Sprite3D" parent="."]
+transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, 0)
+modulate = Color(0.919814, 0.059574, 0, 1)
+billboard = 1
+double_sided = false
+no_depth_test = true
+fixed_size = true
+texture = ExtResource("4_ylqi5")
+
+[node name="Next" type="Sprite3D" parent="."]
+transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, 0)
+modulate = Color(0.486275, 0.988235, 0, 1)
+billboard = 1
+double_sided = false
+no_depth_test = true
+fixed_size = true
+texture = ExtResource("3_17ybv")

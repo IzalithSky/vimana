@@ -20,7 +20,7 @@ func take_damage(amount: int) -> void:
 	emit_signal("damaged", amount)
 	_update_label()
 
-	if current_hp == 0:
+	if current_hp <= 0:
 		emit_signal("died")
 
 
