@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://ck71e5phsxvxj"]
+[gd_scene load_steps=20 format=4 uid="uid://ck71e5phsxvxj"]
 
 [ext_resource type="Script" uid="uid://5nop0mdwyr3e" path="res://objects/vehicles/vimana_j/jet.gd" id="1_0qbkc"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="1_s1d72"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="6_g63xp"]
 [ext_resource type="Script" uid="uid://ca3q1n33gqkgg" path="res://objects/missile/player_missile_launcher.gd" id="8_pcmts"]
 [ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="9_67yly"]
+[ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="11_y4ep4"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
 _surfaces = [{
@@ -143,6 +144,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="VBoxContainer2" type="VBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer"]
+layout_mode = 2
+
+[node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="HpLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+text = "111"
+
 [node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -268,3 +281,8 @@ texture = ExtResource("6_g63xp")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
 script = ExtResource("8_pcmts")
 missile_scene = ExtResource("9_67yly")
+
+[node name="Health" type="Node" parent="." node_paths=PackedStringArray("health_label")]
+script = ExtResource("11_y4ep4")
+health_label = NodePath("../FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer2/HpLabel")
+metadata/_custom_type_script = "uid://dxfwciqw71xsy"
