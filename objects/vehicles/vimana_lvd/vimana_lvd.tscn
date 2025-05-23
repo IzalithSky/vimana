@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://cg1rl1irjyc6q"]
+[gd_scene load_steps=20 format=4 uid="uid://cg1rl1irjyc6q"]
 
 [ext_resource type="Script" uid="uid://bgyhgxmmogsmq" path="res://objects/vehicles/vimana_lvd/vimana_lvd.gd" id="1_3juvv"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="3_y6qys"]
@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="9_rv5pg"]
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="10_hkbin"]
 [ext_resource type="Script" uid="uid://bjcaxvbxfnhwq" path="res://objects/common/player.gd" id="11_fyiq8"]
-[ext_resource type="PackedScene" uid="uid://c8ux2n4rsr871" path="res://scenes/game_over_menu.tscn" id="12_c8onf"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
 _surfaces = [{
@@ -288,5 +287,4 @@ metadata/_custom_type_script = "uid://dxfwciqw71xsy"
 
 [node name="Player" type="Node" parent="."]
 script = ExtResource("11_fyiq8")
-game_over_menu_scene = ExtResource("12_c8onf")
 metadata/_custom_type_script = "uid://bjcaxvbxfnhwq"
