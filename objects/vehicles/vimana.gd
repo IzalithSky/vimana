@@ -1,9 +1,9 @@
 class_name Vimana extends RigidBody3D
 
 
-@export var drag_forward: float = 0.01
-@export var drag_up: float = 0.1
-@export var drag_side: float = 0.05
+@export var drag_forward: float = 0.005
+@export var drag_up: float = 0.05
+@export var drag_side: float = 0.025
 @export var alignment_strength: float = 1.0
 
 @export var warn_g_force: float = 6.0
