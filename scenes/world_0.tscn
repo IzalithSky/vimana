@@ -318,6 +318,10 @@ shadow_enabled = true
 
 [node name="objects" type="Node3D" parent="."]
 
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="objects"]
+_spawnable_scenes = PackedStringArray("uid://ck71e5phsxvxj")
+spawn_path = NodePath("../Spawn")
+
 [node name="Spawn" type="Node3D" parent="objects"]
 transform = Transform3D(0.994267, 0, 0.106923, 0, 1, 0, -0.106923, 0, 0.994267, 10.7364, 1.03872, -315.373)
 
@@ -325,31 +329,24 @@ transform = Transform3D(0.994267, 0, 0.106923, 0, 1, 0, -0.106923, 0, 0.994267, 
 
 [node name="SAM1" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.57855, -1113.77, -1129.11)
-fire_interval = 5.0
 
 [node name="SAM2" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -565.347, 0, 2169.36)
-fire_interval = 5.0
 
 [node name="SAM3" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2059.58, 0, -851.821)
-fire_interval = 5.0
 
 [node name="SAM4" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2698.81, 0, 90.9384)
-fire_interval = 5.0
 
 [node name="SAM5" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.57855, 0, -2296.72)
-fire_interval = 5.0
 
 [node name="SAM6" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2157.98, 0, 90.9384)
-fire_interval = 5.0
 
 [node name="SAM7" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 106.177, -1113.77, -1058.95)
-fire_interval = 5.0
 
 [node name="ui" type="Node3D" parent="."]
 

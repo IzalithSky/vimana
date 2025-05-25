@@ -1,26 +1,52 @@
-class_name GameOverMenu extends Node2D
+class_name NetworkManager
+extends Node                      # Autoload singleton
 
+@export var world_scene_path: String = "res://scenes/world_0.tscn"
+@export var player_scene: PackedScene = preload("res://objects/vehicles/vimana_j/vimana_j.tscn")
 
-@export var main_menu_scene_path: String = "res://scenes/main_menu.tscn"
-
-@onready var main_menu_button: Button = $CanvasLayer/HBoxContainer/VBoxContainer/MainMenuButton
-@onready var exit_button: Button = $CanvasLayer/HBoxContainer/VBoxContainer/ExitButton
-
+var peer := ENetMultiplayerPeer.new()
 
 func _ready() -> void:
-	main_menu_button.pressed.connect(func(): _return_to_main_menu())
-	exit_button.pressed.connect(func(): _exit_game())
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	# hook signals once
+	multiplayer.peer_connected.connect(_spawn_player)
+	multiplayer.connected_to_server.connect(_on_connected)
 
 
-func _return_to_main_menu() -> void:
-	if main_menu_scene_path:
-		var main_menu_scene: PackedScene = load(main_menu_scene_path)
-		var menu: Node = main_menu_scene.instantiate()
-		get_tree().root.add_child(menu)
-		get_tree().current_scene.queue_free()
-		get_tree().current_scene = menu
+# -------- public API ---------------------------------------------------------
+
+func host(port: int = 7777) -> void:
+	peer.create_server(port)
+	multiplayer.multiplayer_peer = peer
+	_spawn_world()
+	_spawn_player(multiplayer.get_unique_id())   # host’s own player
 
 
-func _exit_game() -> void:
-	get_tree().quit()
+func join(ip: String, port: int = 7777) -> void:
+	peer.create_client(ip, port)
+	multiplayer.multiplayer_peer = peer
+	# world will spawn via _on_connected() when the connection completes
+
+
+# -------- callbacks ----------------------------------------------------------
+
+func _on_connected() -> void:
+	_spawn_world()   # client loads world; players arrive via peer_connected
+
+
+func _spawn_player(id: int) -> void:
+	if !multiplayer.is_server():
+		return                              # only server instantiates players
+	var container := get_tree().root.get_node("World/objects")
+	if container == null:
+		return                              # world not ready yet
+	var p := player_scene.instantiate()
+	p.set_multiplayer_authority(id)
+	container.add_child(p)                  # MultiplayerSpawner replicates it
+
+
+func _spawn_world() -> void:
+	if world_scene_path != "" and !get_tree().root.has_node("World"):
+		var world_scene := load(world_scene_path) as PackedScene
+		var world := world_scene.instantiate()
+		world.name = "World"
+		get_tree().root.add_child(world)

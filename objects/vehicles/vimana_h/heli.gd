@@ -7,9 +7,6 @@ class_name Heli extends Vimana
 @export var torque_power = 20.0
 @export var spin_threshold = 1
 
-@onready var camera_holder: FPCameraHolder = $FPCameraHolder
-@onready var camera: Camera3D = $FPCameraHolder.camera
-
 var roll_input = 0.0
 var pitch_input = 0.0
 var yaw_input = 0.0

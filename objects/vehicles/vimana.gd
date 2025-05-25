@@ -16,6 +16,7 @@ class_name Vimana extends RigidBody3D
 @onready var gf_label: Label= $Display/SubViewport/HBoxContainer/VBoxContainer2/GForceLabel
 @onready var horizon: MeshInstance3D = $Horizon
 @onready var heading: Sprite3D = $HeadingSprite3D
+@onready var camera: Camera3D = %Camera3D
 
 const G_BUFFER_SIZE := 10
 var _g_force_buffer: Array = []

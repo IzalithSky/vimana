@@ -44,6 +44,12 @@ var roll_active: bool = false
 
 func _ready() -> void:
 	self.body_entered.connect(_on_body_entered)
+	
+	if get_multiplayer_authority() == multiplayer.get_unique_id():
+		camera.current = true
+		print("I own this player, camera on")   # ← add this
+	else:
+		camera.current = false
 
 
 func _on_body_entered(body: Node) -> void:
@@ -70,6 +76,9 @@ func _physics_process(delta: float) -> void:
 
 
 func handle_throttle(delta: float) -> void:
+	if !is_multiplayer_authority():     # not my character → skip controls
+		return
+	
 	if g_limit_throttle_enabled and smoothed_g >= max_g_force:
 		current_thrust = move_toward(current_thrust, 0.0, input_rate * 10.0 * delta)
 		return
@@ -119,6 +128,9 @@ func apply_lift() -> void:
 
 
 func apply_jet_torque(delta: float) -> void:
+	if !is_multiplayer_authority():     # not my character → skip controls
+		return
+	
 	pitch_active = false
 	yaw_active = false
 	roll_active = false

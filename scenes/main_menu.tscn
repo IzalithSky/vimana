@@ -55,6 +55,18 @@ visible = false
 layout_mode = 2
 text = "Exit"
 
+[node name="HostButton" type="Button" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="IPField" type="LineEdit" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "localhost"
+
 [node name="Label2" type="Label" parent="CanvasLayer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 6

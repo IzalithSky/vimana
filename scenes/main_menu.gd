@@ -11,6 +11,9 @@ class_name MainMenu extends Node2D
 @onready var button_heli: Button = $CanvasLayer/HBoxContainer/VBoxContainer/ButtonHeli
 @onready var button_lv_d: Button = $CanvasLayer/HBoxContainer/VBoxContainer/ButtonLvD
 @onready var exit_button: Button = $CanvasLayer/HBoxContainer/VBoxContainer/ExitButton
+@onready var host_button: Button = $CanvasLayer/HBoxContainer/VBoxContainer/HostButton
+@onready var join_button: Button = $CanvasLayer/HBoxContainer/VBoxContainer/JoinButton
+@onready var ip_input: LineEdit = $CanvasLayer/HBoxContainer/VBoxContainer/IPField
 
 
 func _ready() -> void:
@@ -18,6 +21,8 @@ func _ready() -> void:
 	button_heli.pressed.connect(func(): _start_game(heli))
 	button_lv_d.pressed.connect(func(): _start_game(lvd))
 	exit_button.pressed.connect(func(): _exit_game())
+	host_button.pressed.connect(func(): nm.host())
+	join_button.pressed.connect(func(): nm.join(ip_input.text))
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 

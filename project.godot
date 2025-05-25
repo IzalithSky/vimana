@@ -15,6 +15,10 @@ run/main_scene="uid://qk17oqtdr44n"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://textures/icon.svg"
 
+[autoload]
+
+nm="*res://objects/common/network_manager.gd"
+
 [display]
 
 window/size/viewport_width=800
