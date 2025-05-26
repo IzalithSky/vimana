@@ -1,10 +1,12 @@
-[gd_scene load_steps=20 format=4 uid="uid://dj47wc5nnm06h"]
+[gd_scene load_steps=24 format=4 uid="uid://dj47wc5nnm06h"]
 
 [ext_resource type="Texture2D" uid="uid://cxsddgs0gyvbd" path="res://textures/256x256/Wood/Wood_04-256x256.png" id="1_i4dot"]
 [ext_resource type="Texture2D" uid="uid://c1roa4832yb6l" path="res://textures/256x256/Wood/Wood_01-256x256.png" id="2_c81cj"]
 [ext_resource type="Texture2D" uid="uid://sndvqvvcq06x" path="res://textures/256x256/Tile/Tile_11-256x256.png" id="3_c81cj"]
 [ext_resource type="Texture2D" uid="uid://cn0tsbbgu47va" path="res://textures/kloofendal_43d_clear_puresky_1k.exr" id="4_bcyrs"]
-[ext_resource type="PackedScene" uid="uid://d2f0mhxbgcgr2" path="res://objects/missile/sam.tscn" id="6_7oua0"]
+[ext_resource type="PackedScene" uid="uid://ck71e5phsxvxj" path="res://objects/vehicles/vimana_j/vimana_j.tscn" id="6_85mci"]
+[ext_resource type="PackedScene" uid="uid://c4fte11vqk3o8" path="res://objects/vehicles/ai_rig.tscn" id="7_85mci"]
+[ext_resource type="Texture2D" uid="uid://crnctaa4f70iy" path="res://textures/256x256/Roofs/Roofs_11-256x256.png" id="8_ge04i"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7oua0"]
 albedo_texture = ExtResource("1_i4dot")
@@ -84,6 +86,20 @@ sky = SubResource("Sky_bcyrs")
 glow_enabled = true
 fog_light_energy = 0.2
 fog_density = 0.001
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fhkym"]
+albedo_texture = ExtResource("8_ge04i")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_85mci"]
+_surfaces = [{
+"aabb": AABB(-2.09454, -0.0900879, -1.18102, 4.18907, 0.180176, 2.36203),
+"attribute_data": PackedByteArray("AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAATWtdPwAAAAAAAIA/YAGCPQAAgD8AAAAAAACAP9S/bz8AAIA/AAAAAAAAAAAAAAAATWtdPwAAAAAAAAAAAAAAAAAAgD9gAYI9AACAPwAAgD8AAIA/YAGCPQAAAAAAAAAAAACAPwAAAAAAAAAAAAAAAAAAAABNa10/AACAPwAAgD9gAYI9AAAAAGABgj0AAIA/AACAPwAAgD8AAAAAAAAAAAAAAAAAAIA/AACAPwAAAAAAAAAAAAAAAAAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAAAAAAAAATWtdPwAAgD9Na10/AAAAAAAAgD9Na10/AACAPwAAAAAAAAAAAAAAAAAAAABNa10/AACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AACAPwAAgD/Uv28/AACAPwAAgD8AAAAAAAAAAAAAAAAAAIA/AACAPwAAAABgAYI9AAAAAAAAgD8AAIA/C2pXPzyScj8AAAAAAACAP01rXT8AAIA/AAAAAAAAAAAAAAAAAACAPwtqVz88knI/AAAAAAAAAAALalc/PJJyPwAAgD/Uv28/AACAPwAAAAAAAAAAAAAAAAAAgD8AAIA/AAAAAM5SCj4AAAAAAACAPwAAgD8AAIA/AACAP9S/bz8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/1L9vPwAAgD/Uv28/AAAAAAAAAAAAAIA/AACAPwAAgD8AAIA/zlIKPgAAAADOUgo+AAAAAAAAAAALalc/QdxWPU1rXT8AAAAAAACAPwAAgD8Lalc/QdxWPQAAAAAAAAAAAACAPwAAgD8AAAAAAAAAAAAAAAAAAIA/AACAPwAAAAAAAAAAAAAAAAAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAP9S/bz8AAAAAAACAP2ABgj0Lalc/QdxWPQAAgD8AAIA/"),
+"format": 34359738391,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 96,
+"vertex_data": PackedByteArray("3gwGwACAuL0SAhi/bIWyvwCAuL2HK5e/bIWyvwCAuD2HK5e/AAAAAACAuD2uUCw/AAAAAACAuD03VfY+sJvBPQCAuD0SAhg/AAAAAACAuL03VfY+bIWyvwCAuL2HK5e/3gwGwACAuL0SAhi/AAAAAACAuD2uUCw/KPUavwCAuD2HK5c/AAAAAACAuD03VfY+bIWyvwCAuD2HK5e/AAAAAACAuD03VfY+KPUavwCAuD2HK5c/KPUavwCAuL2HK5c/KPUavwCAuD2HK5c/AAAAAACAuD2uUCw/bIWyvwCAuD2HK5e/AAAAAACAuL03VfY+AAAAAACAuD03VfY+bIWyvwCAuD2HK5e/KPUavwCAuD2HK5c/3gwGwACAuD0SAhi/3gwGwACAuD0SAhi/KPUavwCAuD2HK5c/3gwGwACAuL0SAhi/bIWyvwCAuD2HK5e/3gwGwACAuD0SAhi/3gwGwACAuL0SAhi/KPUavwCAuL2HK5c/AAAAAACAuD2uUCw/AAAAAACAuL2uUCw/KPUavwCAuL2HK5c/AAAAAACAuL2uUCw/3gwGwACAuL0SAhi/3gwGwACAuL0SAhi/AAAAAACAuL2uUCw/sJvBPQCAuL0SAhg/3gwGwACAuL0SAhi/sJvBPQCAuL0SAhg/AAAAAACAuL03VfY+3gwGwACAuL0SAhi/KPUavwCAuD2HK5c/KPUavwCAuL2HK5c/bIWyvwCAuL2HK5e/AAAAAACAuL03VfY+bIWyvwCAuD2HK5e/sJvBPQCAuD0SAhg/KPUaPwCAuD2HK5c/AAAAAACAuD2uUCw/3gwGQACAuD0SAhi/KPUaPwCAuD2HK5c/sJvBPQCAuD0SAhg/3gwGQACAuD0SAhi/sJvBPQCAuD0SAhg/AAAAAACAuD03VfY+KPUaPwCAuD2HK5c/3gwGQACAuD0SAhi/KPUaPwCAuL2HK5c/AAAAAACAuD2uUCw/KPUaPwCAuD2HK5c/KPUaPwCAuL2HK5c/AAAAAACAuD03VfY+bIWyPwCAuD2HK5e/3gwGQACAuD0SAhi/3gwGQACAuD0SAhi/bIWyPwCAuD2HK5e/bIWyPwCAuL2HK5e/AAAAAACAuD03VfY+AAAAAACAuL03VfY+bIWyPwCAuD2HK5e/KPUaPwCAuL2HK5c/AAAAAACAuL2uUCw/AAAAAACAuD2uUCw/KPUaPwCAuL2HK5c/sJvBPQCAuL0SAhg/AAAAAACAuL2uUCw/bIWyPwCAuL2HK5e/sJvBPQCAuL0SAhg/KPUaPwCAuL2HK5c/KPUaPwCAuL2HK5c/3gwGQACAuD0SAhi/3gwGQACAuL0SAhi/3gwGQACAuL0SAhi/3gwGQACAuD0SAhi/bIWyPwCAuL2HK5e/KPUaPwCAuL2HK5c/3gwGQACAuL0SAhi/bIWyPwCAuL2HK5e/bIWyPwCAuL2HK5e/bIWyPwCAuD2HK5e/AAAAAACAuL03VfY+AAAAAACAuL03VfY+sJvBPQCAuL0SAhg/bIWyPwCAuL2HK5e/AACYxf9//n8AAJjF/3/+fwAAmMX/f/5//3//////zCL/f//////MIv9//////8wi/38AAP//zCL/fwAA///MIv9/AAD//8wi/3//////zCL/f//////MIv9//////8wi/3//////zCL/f//////MIv9//////8wiZbr/f/9//n9luv9//3/+f2W6/3//f/5///9lugAAMx3//2W6AAAzHf//ZboAADMd/3//////zCL/f//////MIv9//////8wiZjr/fwAAMx1mOv9/AAAzHWY6/38AADMdAACYxf9//n8AAJjF/3/+fwAAmMX/f/5/Zbr/f/9//n9luv9//3/+f2W6/3//f/5//38AAP//zCL/fwAA///MIv9/AAD//8wi/38AAP//zCL/fwAA///MIv9/AAD//8wi/38AAP//zCL/fwAA///MIv9/AAD//8wiZjr/fwAAMx1mOv9/AAAzHWY6/38AADMd//9lugAAMx3//2W6AAAzHf//ZboAADMd/3///wAAzCL/f///AADMIv9///8AAMwi/3///wAAzCL/f///AADMIv9///8AAMwi/3///wAAzCL/f///AADMIv9///8AAMwimMX/f5lF/z+Yxf9/mUX/P5jF/3+ZRf8/mUX/f/9//n+ZRf9//3/+f5lF/3//f/5//3///wAAzCL/f///AADMIv9///8AAMwi//+Yxf9//n///5jF/3/+f///mMX/f/5/AABluplF/z8AAGW6mUX/PwAAZbqZRf8/mUX/f/9//n+ZRf9//3/+f5lF/3//f/5//38AAAAAzCL/fwAAAADMIv9/AAAAAMwi/38AAAAAzCL/fwAAAADMIv9/AAAAAMwimMX/f5lF/z+Yxf9/mUX/P5jF/3+ZRf8///+Yxf9//n///5jF/3/+f///mMX/f/5//38AAAAAzCL/fwAAAADMIv9/AAAAAMwiAABluplF/z8AAGW6mUX/PwAAZbqZRf8//38AAAAAzCL/fwAAAADMIv9/AAAAAMwi")
+}]
 
 [node name="world" type="Node3D"]
 
@@ -321,26 +337,46 @@ transform = Transform3D(0.994267, 0, 0.106923, 0, 1, 0, -0.106923, 0, 0.994267, 
 
 [node name="SAMs" type="Node3D" parent="objects"]
 
-[node name="SAM1" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.57855, -1113.77, -1129.11)
+[node name="Jets" type="Node3D" parent="objects"]
 
-[node name="SAM2" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -565.347, 0, 2169.36)
+[node name="jet1" parent="objects/Jets" instance=ExtResource("6_85mci")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -77.2419, 48.6978, -44.8519)
+rig_path = NodePath("AIRig")
 
-[node name="SAM3" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2059.58, 0, -851.821)
+[node name="AIRig" parent="objects/Jets/jet1" instance=ExtResource("7_85mci")]
+desired_range = 20.0
+range_tolerance = 5.0
 
-[node name="SAM4" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2698.81, 0, 90.9384)
+[node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet1"]
+transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_fhkym")
+mesh = SubResource("ArrayMesh_85mci")
 
-[node name="SAM5" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.57855, 0, -2296.72)
+[node name="jet2" parent="objects/Jets" instance=ExtResource("6_85mci")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -77.2419, 397.009, 622.788)
+rig_path = NodePath("AIRig")
 
-[node name="SAM6" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2157.98, 0, 90.9384)
+[node name="AIRig" parent="objects/Jets/jet2" instance=ExtResource("7_85mci")]
+desired_range = 20.0
+range_tolerance = 5.0
 
-[node name="SAM7" parent="objects/SAMs" instance=ExtResource("6_7oua0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 106.177, -1113.77, -1058.95)
+[node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet2"]
+transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_fhkym")
+mesh = SubResource("ArrayMesh_85mci")
+
+[node name="jet3" parent="objects/Jets" instance=ExtResource("6_85mci")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1021.01, -425.225, -44.8519)
+rig_path = NodePath("AIRig")
+
+[node name="AIRig" parent="objects/Jets/jet3" instance=ExtResource("7_85mci")]
+desired_range = 20.0
+range_tolerance = 5.0
+
+[node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet3"]
+transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_fhkym")
+mesh = SubResource("ArrayMesh_85mci")
 
 [node name="ui" type="Node3D" parent="."]
 

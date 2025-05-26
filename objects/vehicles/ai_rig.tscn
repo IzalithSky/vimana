@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4fte11vqk3o8"]
+
+[ext_resource type="Script" uid="uid://ctpcdd5ns6nwx" path="res://objects/vehicles/ai_input.gd" id="1_kd31y"]
+
+[node name="AIRig" type="Node3D"]
+script = ExtResource("1_kd31y")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
