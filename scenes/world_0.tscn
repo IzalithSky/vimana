@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=4 uid="uid://dj47wc5nnm06h"]
+[gd_scene load_steps=26 format=4 uid="uid://dj47wc5nnm06h"]
 
 [ext_resource type="Texture2D" uid="uid://cxsddgs0gyvbd" path="res://textures/256x256/Wood/Wood_04-256x256.png" id="1_i4dot"]
 [ext_resource type="Texture2D" uid="uid://c1roa4832yb6l" path="res://textures/256x256/Wood/Wood_01-256x256.png" id="2_c81cj"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://ck71e5phsxvxj" path="res://objects/vehicles/vimana_j/vimana_j.tscn" id="6_85mci"]
 [ext_resource type="PackedScene" uid="uid://c4fte11vqk3o8" path="res://objects/vehicles/ai_rig.tscn" id="7_85mci"]
 [ext_resource type="Texture2D" uid="uid://crnctaa4f70iy" path="res://textures/256x256/Roofs/Roofs_11-256x256.png" id="8_ge04i"]
+[ext_resource type="Script" uid="uid://d2nrb6pxnthli" path="res://objects/missile/missile_launcher.gd" id="8_v0qym"]
+[ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="9_buokp"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7oua0"]
 albedo_texture = ExtResource("1_i4dot")
@@ -340,43 +342,42 @@ transform = Transform3D(0.994267, 0, 0.106923, 0, 1, 0, -0.106923, 0, 0.994267, 
 [node name="Jets" type="Node3D" parent="objects"]
 
 [node name="jet1" parent="objects/Jets" instance=ExtResource("6_85mci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -77.2419, 48.6978, -44.8519)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1283.66, -560.894, -2194.77)
 rig_path = NodePath("AIRig")
 
-[node name="AIRig" parent="objects/Jets/jet1" instance=ExtResource("7_85mci")]
+[node name="AIRig" parent="objects/Jets/jet1" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 20.0
 range_tolerance = 5.0
+missile_launcher = NodePath("../MissileLauncher")
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet1"]
 transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_fhkym")
 mesh = SubResource("ArrayMesh_85mci")
 
+[node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet1"]
+script = ExtResource("8_v0qym")
+missile_scene = ExtResource("9_buokp")
+metadata/_custom_type_script = "uid://d2nrb6pxnthli"
+
 [node name="jet2" parent="objects/Jets" instance=ExtResource("6_85mci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -77.2419, 397.009, 622.788)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1565.65, -344.107, -2439.83)
 rig_path = NodePath("AIRig")
 
-[node name="AIRig" parent="objects/Jets/jet2" instance=ExtResource("7_85mci")]
+[node name="AIRig" parent="objects/Jets/jet2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 20.0
 range_tolerance = 5.0
+missile_launcher = NodePath("../MissileLauncher")
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet2"]
 transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_fhkym")
 mesh = SubResource("ArrayMesh_85mci")
 
-[node name="jet3" parent="objects/Jets" instance=ExtResource("6_85mci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1021.01, -425.225, -44.8519)
-rig_path = NodePath("AIRig")
-
-[node name="AIRig" parent="objects/Jets/jet3" instance=ExtResource("7_85mci")]
-desired_range = 20.0
-range_tolerance = 5.0
-
-[node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet3"]
-transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_fhkym")
-mesh = SubResource("ArrayMesh_85mci")
+[node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet2"]
+script = ExtResource("8_v0qym")
+missile_scene = ExtResource("9_buokp")
+metadata/_custom_type_script = "uid://d2nrb6pxnthli"
 
 [node name="ui" type="Node3D" parent="."]
 

@@ -11,10 +11,12 @@ class_name PlayerMissileLauncher
 @onready var marker_scene: PackedScene = preload("res://objects/common/target_marker.tscn")
 
 var target_next: Node3D = null
-var markers: Dictionary = {}  # instance_id -> marker
+var markers: Dictionary = {}
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	super._process(delta)
+	
 	if is_instance_valid(target) == false:
 		target = null
 	if is_instance_valid(target_next) == false:
