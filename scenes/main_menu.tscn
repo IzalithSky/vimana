@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://qk17oqtdr44n"]
+[gd_scene load_steps=7 format=3 uid="uid://qk17oqtdr44n"]
 
 [ext_resource type="Script" uid="uid://bkvvcwuacs1fp" path="res://scenes/main_menu.gd" id="1_l6cm7"]
 [ext_resource type="PackedScene" uid="uid://dj47wc5nnm06h" path="res://scenes/world_0.tscn" id="2_8ln24"]
 [ext_resource type="PackedScene" uid="uid://ck71e5phsxvxj" path="res://objects/vehicles/vimana_j/vimana_j.tscn" id="3_8ln24"]
 [ext_resource type="PackedScene" uid="uid://bokx8wuhvb2hd" path="res://objects/vehicles/vimana_h/vimana_h.tscn" id="4_rtw2f"]
 [ext_resource type="PackedScene" uid="uid://cg1rl1irjyc6q" path="res://objects/vehicles/vimana_lvd/vimana_lvd.tscn" id="5_oa1go"]
+[ext_resource type="PackedScene" uid="uid://dii7431l7ulys" path="res://objects/vehicles/player_rig.tscn" id="6_rtw2f"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_l6cm7")
@@ -12,6 +13,7 @@ world = ExtResource("2_8ln24")
 jet = ExtResource("3_8ln24")
 heli = ExtResource("4_rtw2f")
 lvd = ExtResource("5_oa1go")
+rigScene = ExtResource("6_rtw2f")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

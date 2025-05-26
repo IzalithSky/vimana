@@ -1,16 +1,9 @@
-[gd_scene load_steps=20 format=4 uid="uid://bokx8wuhvb2hd"]
+[gd_scene load_steps=7 format=4 uid="uid://bokx8wuhvb2hd"]
 
 [ext_resource type="Script" uid="uid://dyxvmhny5frid" path="res://objects/vehicles/vimana_h/heli.gd" id="1_2yl4s"]
+[ext_resource type="PackedScene" uid="uid://b10gv1tbsvpnr" path="res://objects/common/explosion.tscn" id="2_3gkdx"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="3_7m1m4"]
-[ext_resource type="Script" uid="uid://digjrqq0dauj1" path="res://objects/missile/missile_display.gd" id="3_li03w"]
-[ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="4_cmws1"]
-[ext_resource type="Script" uid="uid://db5fo0njlni2v" path="res://objects/common/horizon.gd" id="5_b75js"]
-[ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="6_wmq1v"]
-[ext_resource type="Script" uid="uid://ca3q1n33gqkgg" path="res://objects/missile/player_missile_launcher.gd" id="7_66awe"]
-[ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="7_wis5o"]
-[ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="9_5o11h"]
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="10_li03w"]
-[ext_resource type="Script" uid="uid://bjcaxvbxfnhwq" path="res://objects/common/player.gd" id="11_dma6b"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
 _surfaces = [{
@@ -26,31 +19,6 @@ _surfaces = [{
 [sub_resource type="BoxShape3D" id="BoxShape3D_s1d72"]
 size = Vector3(1, 1, 4)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_0qbkc"]
-viewport_path = NodePath("Display/SubViewport")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nhwor"]
-resource_local_to_scene = true
-transparency = 1
-shading_mode = 0
-albedo_texture = SubResource("ViewportTexture_0qbkc")
-
-[sub_resource type="QuadMesh" id="QuadMesh_0qbkc"]
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_nhwor"]
-viewport_path = NodePath("Horizon/SubViewport")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1m05p"]
-resource_local_to_scene = true
-transparency = 1
-cull_mode = 1
-shading_mode = 0
-albedo_texture = SubResource("ViewportTexture_nhwor")
-
-[sub_resource type="SphereMesh" id="SphereMesh_0qbkc"]
-radius = 2.0
-height = 4.0
-
 [node name="RigidBody3D" type="RigidBody3D"]
 mass = 3.0
 continuous_cd = true
@@ -58,6 +26,7 @@ contact_monitor = true
 max_contacts_reported = 5
 angular_damp = 3.0
 script = ExtResource("1_2yl4s")
+explosion_scene = ExtResource("2_3gkdx")
 
 [node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.520594)
@@ -108,183 +77,6 @@ height = 0.914551
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.23, 0)
 height = 0.914551
 
-[node name="FPCameraHolder" type="Node3D" parent="." node_paths=PackedStringArray("fps_label")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.331581)
-script = ExtResource("4_cmws1")
-fps_label = NodePath("Camera3D/CanvasLayer/HBoxContainer/VBoxContainer/FpsLabel")
-
-[node name="Camera3D" type="Camera3D" parent="FPCameraHolder"]
-unique_name_in_owner = true
-fov = 85.0
-near = 0.01
-far = 8000.0
-
-[node name="PointA" type="Node3D" parent="FPCameraHolder/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
-
-[node name="PointB" type="Node3D" parent="FPCameraHolder/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1)
-
-[node name="CanvasLayer" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
-
-[node name="HBoxContainer" type="HBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer"]
-layout_mode = 2
-
-[node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer2"]
-layout_mode = 2
-size_flags_vertical = 6
-
-[node name="HpLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer2"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
-text = "111"
-
-[node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="FpsLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
-text = "111"
-
-[node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 6
-
-[node name="LegendLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
-text = "W/S: Pitch
-A/D: Roll
-Q/E: Yaw
-M1/M2: Throttle
-R: Select Target
-V: Missile
-Mouse: Freelook"
-
-[node name="Display" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
-material_override = SubResource("StandardMaterial3D_nhwor")
-mesh = SubResource("QuadMesh_0qbkc")
-
-[node name="SubViewport" type="SubViewport" parent="Display"]
-transparent_bg = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Display/SubViewport"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Display/SubViewport/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-alignment = 1
-
-[node name="SpeedLabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
-theme_override_font_sizes/font_size = 16
-text = "111"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ThrottleLabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
-theme_override_font_sizes/font_size = 16
-text = "333"
-
-[node name="Label" type="Label" parent="Display/SubViewport/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="Display/SubViewport/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 8
-alignment = 1
-
-[node name="AoALabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer2"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
-theme_override_font_sizes/font_size = 16
-text = "222"
-
-[node name="GForceLabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer2"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
-text = "444"
-
-[node name="Horizon" type="MeshInstance3D" parent="."]
-material_override = SubResource("StandardMaterial3D_1m05p")
-mesh = SubResource("SphereMesh_0qbkc")
-
-[node name="SubViewport" type="SubViewport" parent="Horizon"]
-transparent_bg = true
-size = Vector2i(1024, 1024)
-
-[node name="Control" type="Control" parent="Horizon/SubViewport"]
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -512.0
-offset_top = -512.0
-offset_right = 512.0
-offset_bottom = 512.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("5_b75js")
-
-[node name="NoseSprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, -1.5)
-modulate = Color(0.486275, 0.988235, 0, 1)
-billboard = 1
-no_depth_test = true
-fixed_size = true
-texture = ExtResource("6_wmq1v")
-
-[node name="HeadingSprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, -1.5)
-modulate = Color(0.486275, 0.988235, 0, 1)
-billboard = 1
-no_depth_test = true
-fixed_size = true
-texture = ExtResource("7_wis5o")
-
-[node name="MissileLauncher" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
-script = ExtResource("7_66awe")
-camera = NodePath("../FPCameraHolder/Camera3D")
-missile_scene = ExtResource("9_5o11h")
-
-[node name="MissileDisplay" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
-script = ExtResource("3_li03w")
-update_interval_frames = 1
-metadata/_custom_type_script = "uid://digjrqq0dauj1"
-
-[node name="Health" type="Node" parent="." node_paths=PackedStringArray("health_label")]
+[node name="Health" type="Node" parent="."]
 script = ExtResource("10_li03w")
-health_label = NodePath("../FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer2/HpLabel")
 metadata/_custom_type_script = "uid://dxfwciqw71xsy"
-
-[node name="Player" type="Node" parent="."]
-script = ExtResource("11_dma6b")
-metadata/_custom_type_script = "uid://bjcaxvbxfnhwq"

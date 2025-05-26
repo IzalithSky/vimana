@@ -1,0 +1,206 @@
+[gd_scene load_steps=15 format=3 uid="uid://dii7431l7ulys"]
+
+[ext_resource type="Script" uid="uid://bxfpd6lllbosy" path="res://objects/vehicles/player_controls.gd" id="1_lgipv"]
+[ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="1_w214r"]
+[ext_resource type="Script" uid="uid://db5fo0njlni2v" path="res://objects/vehicles/horizon.gd" id="2_vluwj"]
+[ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="3_lgipv"]
+[ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="4_fcjbv"]
+[ext_resource type="Script" uid="uid://digjrqq0dauj1" path="res://objects/missile/missile_display.gd" id="5_xxp4i"]
+[ext_resource type="Script" uid="uid://ca3q1n33gqkgg" path="res://objects/missile/player_missile_launcher.gd" id="6_sbsnl"]
+[ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="7_pf0s1"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_0qbkc"]
+viewport_path = NodePath("Display/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nhwor"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_0qbkc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_0qbkc"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_nhwor"]
+viewport_path = NodePath("Horizon/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1m05p"]
+resource_local_to_scene = true
+transparency = 1
+cull_mode = 1
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_nhwor")
+
+[sub_resource type="SphereMesh" id="SphereMesh_0qbkc"]
+radius = 2.0
+height = 4.0
+
+[node name="PlayerRig" type="Node3D"]
+script = ExtResource("1_lgipv")
+
+[node name="FPCameraHolder" type="Node3D" parent="." node_paths=PackedStringArray("fps_label")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.331581)
+script = ExtResource("1_w214r")
+fps_label = NodePath("Camera3D/CanvasLayer/HBoxContainer/VBoxContainer/FpsLabel")
+
+[node name="Camera3D" type="Camera3D" parent="FPCameraHolder"]
+unique_name_in_owner = true
+fov = 85.0
+near = 0.01
+far = 8000.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer"]
+layout_mode = 2
+
+[node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="HpLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+text = "111"
+
+[node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="FpsLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+text = "111"
+
+[node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="LegendLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+text = "W/S: Pitch
+A/D: Roll
+Q/E: Yaw
+M1/M2: Throttle
+R: Select Target
+V: Missile
+Mouse: Freelook"
+
+[node name="Display" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+material_override = SubResource("StandardMaterial3D_nhwor")
+mesh = SubResource("QuadMesh_0qbkc")
+skeleton = NodePath("../..")
+
+[node name="SubViewport" type="SubViewport" parent="Display"]
+transparent_bg = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Display/SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Display/SubViewport/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+alignment = 1
+
+[node name="SpeedLabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+theme_override_font_sizes/font_size = 16
+text = "111"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ThrottleLabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+theme_override_font_sizes/font_size = 16
+text = "333"
+
+[node name="Label" type="Label" parent="Display/SubViewport/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Display/SubViewport/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+alignment = 1
+
+[node name="AoALabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+theme_override_font_sizes/font_size = 16
+text = "222"
+
+[node name="GForceLabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+text = "444"
+
+[node name="Horizon" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_1m05p")
+mesh = SubResource("SphereMesh_0qbkc")
+skeleton = NodePath("../..")
+
+[node name="SubViewport" type="SubViewport" parent="Horizon"]
+transparent_bg = true
+size = Vector2i(1024, 1024)
+
+[node name="Control" type="Control" parent="Horizon/SubViewport"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -512.0
+offset_top = -512.0
+offset_right = 512.0
+offset_bottom = 512.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_vluwj")
+
+[node name="NoseSprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, -1.5)
+modulate = Color(0.486275, 0.988235, 0, 1)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+texture = ExtResource("3_lgipv")
+
+[node name="HeadingSprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, -1.5)
+modulate = Color(0.486275, 0.988235, 0, 1)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+texture = ExtResource("4_fcjbv")
+
+[node name="MissileDisplay" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+script = ExtResource("5_xxp4i")
+update_interval_frames = 1
+metadata/_custom_type_script = "uid://digjrqq0dauj1"
+
+[node name="MissileLauncher" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
+script = ExtResource("6_sbsnl")
+camera = NodePath("../FPCameraHolder/Camera3D")
+missile_scene = ExtResource("7_pf0s1")

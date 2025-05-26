@@ -8,8 +8,6 @@ extends Node3D
 @export var fps_label: Label
 
 @onready var camera : Camera3D = $Camera3D
-@onready var pointA: Node3D = $Camera3D/PointA
-@onready var pointB: Node3D = $Camera3D/PointB
 
 var current_pitch : float = 0.0
 var current_yaw : float = 0.0

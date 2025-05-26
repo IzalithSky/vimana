@@ -8,6 +8,7 @@ class_name Player extends Node
 
 func _ready() -> void:
 	health.died.connect(_on_player_died)
+	get_parent().add_to_group("player")
 
 
 func _on_player_died() -> void:
