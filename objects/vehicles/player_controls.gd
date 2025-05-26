@@ -75,7 +75,7 @@ func _process(delta: float) -> void:
 		Color.RED if smoothed >= v.warn_g_force else Color.LAWN_GREEN)
 	v._prev_velocity = v.linear_velocity
 	
-	if v.control_effectiveness < 1.0 or abs(v.aoa_deg) > v.max_aoa_deg:
+	if v.control_effectiveness < 1.0 or not v.lift_ok:
 		aoa_label.add_theme_color_override("font_color", Color.RED)
 	else:
 		aoa_label.add_theme_color_override("font_color", Color.LAWN_GREEN)

@@ -20,13 +20,12 @@ _surfaces = [{
 size = Vector3(1, 1, 4)
 
 [node name="RigidBody3D" type="RigidBody3D"]
-mass = 3.0
+mass = 100.0
 continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 5
 angular_damp = 3.0
 script = ExtResource("1_0qbkc")
-angular_damping_strength = 80.0
 explosion_scene = ExtResource("2_g63xp")
 
 [node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="."]

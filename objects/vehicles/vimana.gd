@@ -6,10 +6,9 @@ class_name Vimana extends RigidBody3D
 @export var drag_forward: float = 0.005
 @export var drag_up: float = 0.05
 @export var drag_side: float = 0.025
-@export var alignment_strength: float = 1.0
+@export var alignment_strength: float = 10.0
 
 @export var warn_g_force: float = 6.0
-@export var max_aoa_deg: float = 5.7
 @export var control_effectiveness_speed: float = 50.0
 
 @export var explosion_scene: PackedScene
@@ -28,6 +27,7 @@ var smoothed_g: float = 0.0
 var aoa_deg: float = 0.0
 var control_effectiveness: float = 0.0
 var throttle_percent: float = 0.0
+var lift_ok: bool = true
 
 
 func _on_body_entered(body: Node) -> void:
@@ -37,21 +37,24 @@ func _on_body_entered(body: Node) -> void:
 		explosion.global_transform.origin = global_transform.origin
 
 
+func compute_aoa() -> void:
+	var v: Vector3 = linear_velocity
+	if v.length() < 0.001:
+		aoa_deg = 0.0
+		return
+	
+	var forward: Vector3 = -transform.basis.z
+	var up: Vector3 = transform.basis.y
+	var vel_dir: Vector3 = v.normalized()
+	
+	var aoa: float = -atan2(vel_dir.dot(up), vel_dir.dot(forward))
+	aoa_deg = rad_to_deg(aoa)
+
+
 func compute_control_state() -> void:
 	var forward_speed: float = linear_velocity.dot(-transform.basis.z)
 	control_effectiveness = clamp(forward_speed / control_effectiveness_speed, 0.0, 1.0)
-	var forward: Vector3 = -transform.basis.z
-	var up: Vector3 = transform.basis.y
-	var velocity: Vector3 = linear_velocity
-	if velocity.length() < 0.001:
-		aoa_deg = 0.0
-		return
-	var vel_proj: Vector3 = velocity - transform.basis.x * velocity.dot(transform.basis.x)
-	var vel_dir: Vector3 = vel_proj.normalized()
-	var aoa: float = forward.angle_to(vel_dir)
-	var sign_factor: float = sign(up.dot(vel_dir.cross(forward)))
-	aoa *= sign_factor
-	aoa_deg = rad_to_deg(aoa)
+	compute_aoa()
 
 
 func apply_air_drag() -> void:

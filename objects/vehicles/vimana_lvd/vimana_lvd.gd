@@ -18,12 +18,14 @@ func apply_throttle(throttle_value: float) -> void:
 		apply_central_force(forward_force)
 
 
-func _physics_process(delta: float) -> void:
-	rig.collect_inputs(delta)
-	
-	stabilise_rotation(delta)
-	apply_directional_alignment()
-	apply_controls(delta)
-	apply_air_drag()
-	
-	throttle_percent = throttle_input * 100.0
+func apply_directional_alignment() -> void:
+	var velocity: Vector3 = linear_velocity
+	if velocity.length() < 0.001:
+		return
+	var forward: Vector3 = -transform.basis.z
+	var vel_dir: Vector3 = velocity.normalized()
+	var axis: Vector3 = forward.cross(vel_dir)
+	var angle: float = forward.angle_to(vel_dir)
+	if angle > 0.01:
+		var torque: Vector3 = axis.normalized() * angle * alignment_strength * velocity.length()
+		apply_torque(torque)

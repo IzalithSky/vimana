@@ -20,7 +20,7 @@ _surfaces = [{
 size = Vector3(1, 1, 4)
 
 [node name="RigidBody3D" type="RigidBody3D"]
-mass = 3.0
+mass = 100.0
 continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 5
