@@ -1,13 +1,7 @@
 class_name SAM extends MissileLauncher
 
 
-
-@export var fire_interval: float = 2.0
-
 @onready var health: Health = $Health
-
-var _timer: float = 0.0
-
 
 func _ready() -> void:
 	add_to_group("targets")
@@ -19,11 +13,8 @@ func die() -> void:
 
 
 func _process(delta: float) -> void:
-	if not target:
-		target = get_tree().get_first_node_in_group("player")
-	
-	if target:
-		_timer += delta
-		if _timer >= fire_interval:
-			_timer = 0.0
-			launch_missile()
+	super._process(delta)
+	if target == null:
+		target = get_tree().get_first_node_in_group("player") as Node3D
+	if target != null and ready_to_fire():
+		launch_missile()

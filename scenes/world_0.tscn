@@ -347,8 +347,8 @@ rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet1" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 20.0
-range_tolerance = 5.0
 missile_launcher = NodePath("../MissileLauncher")
+target_group = "ally"
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet1"]
 transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
@@ -366,8 +366,8 @@ rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 20.0
-range_tolerance = 5.0
 missile_launcher = NodePath("../MissileLauncher")
+target_group = "ally"
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet2"]
 transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
@@ -375,6 +375,26 @@ material_override = SubResource("StandardMaterial3D_fhkym")
 mesh = SubResource("ArrayMesh_85mci")
 
 [node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet2"]
+script = ExtResource("8_v0qym")
+missile_scene = ExtResource("9_buokp")
+metadata/_custom_type_script = "uid://d2nrb6pxnthli"
+
+[node name="jet3" parent="objects/Jets" instance=ExtResource("6_85mci")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -380.45, -186.506, -166.808)
+rig_path = NodePath("AIRig")
+
+[node name="AIRig" parent="objects/Jets/jet3" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
+desired_range = 20.0
+missile_launcher = NodePath("../MissileLauncher")
+target_group = "targets"
+is_hostile = false
+
+[node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet3"]
+transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_fhkym")
+mesh = SubResource("ArrayMesh_85mci")
+
+[node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet3"]
 script = ExtResource("8_v0qym")
 missile_scene = ExtResource("9_buokp")
 metadata/_custom_type_script = "uid://d2nrb6pxnthli"
