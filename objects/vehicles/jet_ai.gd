@@ -1,8 +1,8 @@
-class_name JetAI
-extends Node
+class_name JetAI extends Node
 
-@export var desired_range: float = 400.0
-@export var range_tolerance: float = 20.0
+
+@export var desired_range: float = 1000.0
+@export var range_tolerance: float = 100.0
 @export var max_bank_deg: float = 60.0
 @export var roll_gain: float = 2.0
 @export var pitch_gain: float = 1.2
@@ -17,34 +17,44 @@ extends Node
 @export var fire_range: float = 1000.0
 @export var missile_launcher: MissileLauncher
 @export var target_group: String = "player"
+@export var anchor_group: String = "anchors"
 @export var is_hostile: bool = true
+@export var is_expert: bool = false
 
 @onready var ray: RayCast3D = $RayCast3D
 
 var vehicle: Jet
 var target: Node3D
+var anchor: Node3D
+
 
 func _ready() -> void:
 	vehicle = get_parent() as Jet
 	if missile_launcher == null and has_node("MissileLauncher"):
 		missile_launcher = $MissileLauncher
 	ray.target_position = Vector3.FORWARD * ray_length
-	if is_hostile:
-		vehicle.add_to_group("targets")
-	else:
-		vehicle.add_to_group("ally")
+	var group: String = "targets" if is_hostile else "ally"
+	vehicle.add_to_group(group)
+	
+	var health: Health = vehicle.get_node("Health") as Health
+	health.died.connect(_on_vehicle_died)
 
-func find_nearest_target() -> Node3D:
-	var nodes: Array = get_tree().get_nodes_in_group(target_group)
+
+func _on_vehicle_died() -> void:
+	vehicle.queue_free()
+
+
+func find_nearest(g: String) -> Node3D:
 	var best: Node3D
-	var best_dist: float = INF
-	for n in nodes:
+	var best_d: float = INF
+	for n in get_tree().get_nodes_in_group(g):
 		if n is Node3D and n != vehicle:
 			var d: float = (n.global_transform.origin - vehicle.global_transform.origin).length()
-			if d < best_dist:
-				best_dist = d
+			if d < best_d:
+				best_d = d
 				best = n
 	return best
+
 
 func move_towards(p: Vector3) -> void:
 	var dir: Vector3 = (p - vehicle.global_transform.origin).normalized()
@@ -53,12 +63,14 @@ func move_towards(p: Vector3) -> void:
 	vehicle.pitch_input = clamp(local.y  * pitch_gain, -1.0, 1.0)
 	vehicle.yaw_input   = 0.0
 
+
 func move_away(p: Vector3) -> void:
 	var dir: Vector3 = (vehicle.global_transform.origin - p).normalized()
 	var local: Vector3 = vehicle.global_transform.basis.inverse() * dir
 	vehicle.roll_input  = clamp(-local.x * roll_gain, -1.0, 1.0)
 	vehicle.pitch_input = clamp(local.y  * pitch_gain, -1.0, 1.0)
 	vehicle.yaw_input   = 0.0
+
 
 func recover_from_stall() -> void:
 	var vel: Vector3 = vehicle.linear_velocity
@@ -70,6 +82,7 @@ func recover_from_stall() -> void:
 	vehicle.yaw_input   = 0.0
 	vehicle.throttle_input = 1.0
 
+
 func avoid_obstacle() -> bool:
 	ray.global_transform = vehicle.global_transform
 	ray.force_raycast_update()
@@ -78,6 +91,7 @@ func avoid_obstacle() -> bool:
 		vehicle.throttle_input = 1.0
 		return true
 	return false
+
 
 func beam_evade(m: Node3D) -> void:
 	var dir: Vector3 = (m.global_transform.origin - vehicle.global_transform.origin).normalized()
@@ -91,44 +105,61 @@ func beam_evade(m: Node3D) -> void:
 	vehicle.yaw_input   = 0.0
 	vehicle.throttle_input = missile_throttle
 
+
 func evade_missile() -> bool:
-	var missiles: Array = get_tree().get_nodes_in_group("missiles")
-	var threat: Node3D
-	var best: float = missile_evade_distance
-	for m in missiles:
+	var best: Node3D
+	var best_d: float = missile_evade_distance
+	for m in get_tree().get_nodes_in_group("missiles"):
 		if m.get("target") == vehicle:
 			var d: float = (m.global_transform.origin - vehicle.global_transform.origin).length()
-			if d < best:
-				best = d
-				threat = m
-	if threat:
-		beam_evade(threat)
+			if d < best_d:
+				best_d = d
+				best = m
+	if best:
+		if is_expert:
+			beam_evade(best)
+		else:
+			move_away(best.global_transform.origin)
+			vehicle.throttle_input = 1.0
 		return true
 	return false
+
 
 func try_fire() -> void:
 	if missile_launcher == null or target == null:
 		return
-	var to_tgt: Vector3 = target.global_transform.origin - vehicle.global_transform.origin
-	if to_tgt.length() > fire_range:
+	var to_t: Vector3 = target.global_transform.origin - vehicle.global_transform.origin
+	if to_t.length() > fire_range:
 		return
-	var forward: Vector3 = -vehicle.transform.basis.z
-	var angle_deg: float = rad_to_deg(acos(clamp(forward.normalized().dot(to_tgt.normalized()), -1.0, 1.0)))
-	if angle_deg <= fire_cone_deg:
+	var angle: float = rad_to_deg(acos(clamp((-vehicle.transform.basis.z).normalized().dot(to_t.normalized()), -1.0, 1.0)))
+	if angle <= fire_cone_deg:
 		missile_launcher.target = target
 		missile_launcher.launch_missile()
+
+
+func act_on_point(p: Vector3) -> void:
+	var d: float = (p - vehicle.global_transform.origin).length()
+	if d > desired_range + range_tolerance:
+		move_towards(p)
+		vehicle.throttle_input = 1.0
+	elif d < desired_range - range_tolerance:
+		move_away(p)
+		vehicle.throttle_input = 0.3
+	else:
+		move_towards(p)
+		vehicle.throttle_input = 0.6
+
 
 func collect_inputs(_delta: float) -> void:
 	if vehicle == null:
 		return
 	if target == null or not is_instance_valid(target):
-		target = find_nearest_target()
-	if target == null:
-		vehicle.roll_input = 0.0
-		vehicle.pitch_input = 0.0
-		vehicle.yaw_input = 0.0
-		vehicle.throttle_input = 0.0
-		return
+		target = find_nearest(target_group)
+	if target == null or not is_instance_valid(target):
+		anchor = find_nearest(anchor_group)
+	else:
+		anchor = null
+	
 	if not vehicle.lift_ok:
 		recover_from_stall()
 		try_fire()
@@ -139,15 +170,14 @@ func collect_inputs(_delta: float) -> void:
 	if evade_missile():
 		try_fire()
 		return
-	var to_target: Vector3 = target.global_transform.origin - vehicle.global_transform.origin
-	var dist: float = to_target.length()
-	if dist > desired_range + range_tolerance:
-		move_towards(target.global_transform.origin)
-		vehicle.throttle_input = 1.0
-	elif dist < desired_range - range_tolerance:
-		move_away(target.global_transform.origin)
-		vehicle.throttle_input = 0.3
+	
+	if target != null:
+		act_on_point(target.global_transform.origin)
+		try_fire()
+	elif anchor != null:
+		act_on_point(anchor.global_transform.origin)
 	else:
-		move_towards(target.global_transform.origin)
-		vehicle.throttle_input = 0.6
-	try_fire()
+		vehicle.roll_input = 0.0
+		vehicle.pitch_input = 0.0
+		vehicle.yaw_input = 0.0
+		vehicle.throttle_input = 0.0
