@@ -95,7 +95,8 @@ Q/E: Yaw
 M1/M2: Throttle
 R: Select Target
 V: Missile
-Mouse: Freelook"
+Mouse: Freelook
+Z: Zoom"
 
 [node name="Display" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
