@@ -7,29 +7,81 @@ class_name PlayerMissileLauncher
 @export var targeting_fov_deg: float = 45.0
 @export var targeting_max_distance: float = 4000.0
 @export var marker_orbit_distance: float = 1.5
+@export var fire_attach_threshold: float = 0.3
+@export var follow_distance: float = 4.0
 
 @onready var marker_scene: PackedScene = preload("res://objects/common/target_marker.tscn")
+@onready var missile_cam: Camera3D = $"../MissileCamera"
 
 var target_next: Node3D = null
 var markers: Dictionary = {}
+
+var _followed_missile: Node3D = null
+var _pending_attach_missile: Node3D = null
+var _fire_hold_time: float = 0.0
 
 
 func _process(delta: float) -> void:
 	super._process(delta)
 	
-	if is_instance_valid(target) == false:
+	if not is_instance_valid(target):
 		target = null
-	if is_instance_valid(target_next) == false:
+	if not is_instance_valid(target_next):
 		target_next = null
 	
 	if Input.is_action_just_pressed(fire_action):
-		launch_missile()
+		var m: Node3D = launch_missile()
+		_pending_attach_missile = m
+		_fire_hold_time = 0.0
+	
+	if Input.is_action_pressed(fire_action):
+		_fire_hold_time += delta
+		if _pending_attach_missile != null and _fire_hold_time >= fire_attach_threshold and _followed_missile == null:
+			_attach_camera_to(_pending_attach_missile)
+			_pending_attach_missile = null
+	else:
+		_fire_hold_time = 0.0
+		_pending_attach_missile = null
+		if _followed_missile != null:
+			_detach_camera()
+	
+	if _followed_missile != null and is_instance_valid(_followed_missile):
+		var behind: Vector3 = _followed_missile.global_transform.basis.z * -follow_distance
+		missile_cam.global_transform.origin = _followed_missile.global_transform.origin + behind
+		if is_instance_valid(_followed_missile.target):
+			missile_cam.look_at(_followed_missile.target.global_transform.origin)
 	
 	if Input.is_action_just_pressed(select_target_action):
 		select_next_target()
 	
 	update_next_target()
 	update_target_markers()
+
+
+func launch_missile() -> Node3D:
+	return super.launch_missile()
+
+
+func _attach_camera_to(missile: Node3D) -> void:
+	if missile_cam == null:
+		return
+	_followed_missile = missile
+	missile_cam.current = true
+	if camera != null:
+		camera.current = false
+	missile.connect("tree_exited", Callable(self, "_on_missile_gone"))
+
+
+func _detach_camera() -> void:
+	if missile_cam != null:
+		missile_cam.current = false
+	if camera != null:
+		camera.current = true
+	_followed_missile = null
+
+
+func _on_missile_gone() -> void:
+	_detach_camera()
 
 
 func update_next_target() -> void:
@@ -69,7 +121,7 @@ func get_best_target(exclude: Node3D) -> Node3D:
 		var dir_to_target: Vector3 = to_target.normalized()
 		var angle_cos: float = cam_dir.dot(dir_to_target)
 		if angle_cos >= fov_cos:
-			var score: float = 1.0 - angle_cos  # smaller is better
+			var score: float = 1.0 - angle_cos
 			if score < best_score:
 				best_score = score
 				best_target = candidate
@@ -84,11 +136,11 @@ func update_target_markers() -> void:
 		if not obj is Node3D:
 			continue
 	
-		var target: Node3D = obj
-		if not is_instance_valid(target):
+		var target_obj: Node3D = obj
+		if not is_instance_valid(target_obj):
 			continue
 		
-		var target_id: int = target.get_instance_id()
+		var target_id: int = target_obj.get_instance_id()
 		active_ids.append(target_id)
 	
 		var marker: Node3D
@@ -101,17 +153,16 @@ func update_target_markers() -> void:
 			marker = markers[target_id]
 	
 		if marker != null:
-			marker.global_transform.origin = target.global_transform.origin
+			marker.global_transform.origin = target_obj.global_transform.origin
 			marker.look_at(global_transform.origin)
 	
-			if target == self.target:
+			if target_obj == self.target:
 				marker.call("set_locked")
-			elif target == target_next:
+			elif target_obj == target_next:
 				marker.call("set_next")
 			else:
 				marker.call("clear")
 	
-	# Remove markers for targets no longer valid
 	for id in markers.keys():
 		if id not in active_ids:
 			markers[id].queue_free()

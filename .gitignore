@@ -3,3 +3,5 @@
 /android/
 /export/index/
 /export/*.zip
+
+.DS_Store

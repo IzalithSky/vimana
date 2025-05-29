@@ -16,9 +16,9 @@ func ready_to_fire() -> bool:
 	return _timer >= fire_interval
 
 
-func launch_missile() -> void:
+func launch_missile() -> Node3D:
 	if not ready_to_fire():
-		return
+		return null
 	var missile: Missile = missile_scene.instantiate()
 	missile.add_to_group("missiles")
 	missile.global_transform = global_transform
@@ -27,3 +27,4 @@ func launch_missile() -> void:
 		missile.add_collision_exception_with(get_parent())
 	get_tree().current_scene.add_child(missile)
 	_timer = 0.0
+	return missile
