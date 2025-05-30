@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dii7431l7ulys"]
+[gd_scene load_steps=17 format=3 uid="uid://dii7431l7ulys"]
 
 [ext_resource type="Script" uid="uid://bxfpd6lllbosy" path="res://objects/vehicles/player_controls.gd" id="1_lgipv"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="1_w214r"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" uid="uid://digjrqq0dauj1" path="res://objects/missile/missile_display.gd" id="5_xxp4i"]
 [ext_resource type="Script" uid="uid://ca3q1n33gqkgg" path="res://objects/missile/player_missile_launcher.gd" id="6_sbsnl"]
 [ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="7_pf0s1"]
+[ext_resource type="Script" uid="uid://bk4syu2gcjm2n" path="res://objects/common/target_tracker.gd" id="9_lgipv"]
+[ext_resource type="PackedScene" uid="uid://bnqlnpxb47hb" path="res://objects/common/target_marker.tscn" id="10_fcjbv"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_0qbkc"]
 viewport_path = NodePath("Display/SubViewport")
@@ -200,10 +202,17 @@ script = ExtResource("5_xxp4i")
 update_interval_frames = 1
 metadata/_custom_type_script = "uid://digjrqq0dauj1"
 
-[node name="MissileLauncher" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
+[node name="MissileLauncher" type="Node3D" parent="." node_paths=PackedStringArray("camera", "target_tracker")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
 script = ExtResource("6_sbsnl")
 camera = NodePath("../FPCameraHolder/Camera3D")
+target_tracker = NodePath("../TargetTracker")
 missile_scene = ExtResource("7_pf0s1")
+
+[node name="TargetTracker" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
+script = ExtResource("9_lgipv")
+camera = NodePath("../FPCameraHolder/Camera3D")
+marker_scene = ExtResource("10_fcjbv")
+metadata/_custom_type_script = "uid://bk4syu2gcjm2n"
 
 [node name="MissileCamera" type="Camera3D" parent="."]

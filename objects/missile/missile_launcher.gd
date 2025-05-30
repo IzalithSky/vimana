@@ -16,7 +16,7 @@ func ready_to_fire() -> bool:
 	return _timer >= fire_interval
 
 
-func launch_missile() -> Node3D:
+func launch_missile() -> Missile:
 	if not ready_to_fire():
 		return null
 	var missile: Missile = missile_scene.instantiate()

@@ -5,8 +5,9 @@ extends RigidBody3D
 @export var drag_coeff: float = 0.005
 @export var torque_strength: float = 20.0
 @export var max_turn_rate_deg: float = 90.0
-@export var max_ang_vel_deg: float = 720.0
+@export var max_ang_vel_deg: float = 160.0
 @export var max_fuel: float = 20.0
+@export var turn_fule_burn_rate: float = 4.0
 @export var proximity_radius: float = 10.0
 @export var explosion_radius: float = 25.0
 @export var explosion_min_damage: int = 10
@@ -43,7 +44,7 @@ func _physics_process(delta: float) -> void:
 				var max_turn_rad: float = deg_to_rad(max_turn_rate_deg) * delta
 				var turn_angle: float = min(angle_diff, max_turn_rad)
 				apply_torque(axis * torque_strength * turn_angle / delta)
-				fuel -= (turn_angle / max_turn_rad) * delta
+				fuel -= turn_fule_burn_rate * (turn_angle / max_turn_rad) * delta
 	fuel = max(fuel, 0.0)
 	if target and global_transform.origin.distance_to(target.global_transform.origin) < proximity_radius:
 		_spawn_explosion()
