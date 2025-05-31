@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 		_pending_attach_missile = null
 		if _followed_missile != null:
 			_detach_camera()
-
+	
 	if _followed_missile != null and is_instance_valid(_followed_missile):
 		var behind: Vector3 = _followed_missile.global_transform.basis.z * -follow_distance
 		missile_cam.global_transform.origin = _followed_missile.global_transform.origin + behind
@@ -40,8 +40,8 @@ func _process(delta: float) -> void:
 			missile_cam.look_at(_followed_missile.target.global_transform.origin)
 
 
-func launch_missile() -> Missile:
-	var m: Missile = super.launch_missile()
+func launch_missile() -> MissileHeatSeeker:
+	var m: MissileHeatSeeker = super.launch_missile()
 	if m != null and target_tracker != null and target_tracker.target != null:
 		m.target = target_tracker.target
 	return m

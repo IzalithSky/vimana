@@ -16,10 +16,10 @@ func ready_to_fire() -> bool:
 	return _timer >= fire_interval
 
 
-func launch_missile() -> Missile:
+func launch_missile() -> MissileHeatSeeker:
 	if not ready_to_fire():
 		return null
-	var missile: Missile = missile_scene.instantiate()
+	var missile: MissileHeatSeeker = missile_scene.instantiate()
 	missile.add_to_group("missiles")
 	missile.global_transform = global_transform
 	missile.target = target

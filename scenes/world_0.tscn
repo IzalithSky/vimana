@@ -5,9 +5,9 @@
 [ext_resource type="Texture2D" uid="uid://sndvqvvcq06x" path="res://textures/256x256/Tile/Tile_11-256x256.png" id="3_c81cj"]
 [ext_resource type="PackedScene" uid="uid://ck71e5phsxvxj" path="res://objects/vehicles/vimana_j/vimana_j.tscn" id="6_85mci"]
 [ext_resource type="PackedScene" uid="uid://c4fte11vqk3o8" path="res://objects/vehicles/ai_rig.tscn" id="7_85mci"]
+[ext_resource type="PackedScene" uid="uid://binjvtutugvoy" path="res://objects/missile/missile_heatseaker.tscn" id="8_buokp"]
 [ext_resource type="Texture2D" uid="uid://crnctaa4f70iy" path="res://textures/256x256/Roofs/Roofs_11-256x256.png" id="8_ge04i"]
 [ext_resource type="Script" uid="uid://d2nrb6pxnthli" path="res://objects/missile/missile_launcher.gd" id="8_v0qym"]
-[ext_resource type="PackedScene" uid="uid://cmrbjs74gmqdn" path="res://objects/missile/missile.tscn" id="9_buokp"]
 [ext_resource type="PackedScene" uid="uid://bwqjbnwmus3ka" path="res://scenes/pause_menu.tscn" id="9_v0qym"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7oua0"]
@@ -341,7 +341,7 @@ mesh = SubResource("ArrayMesh_85mci")
 
 [node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet1"]
 script = ExtResource("8_v0qym")
-missile_scene = ExtResource("9_buokp")
+missile_scene = ExtResource("8_buokp")
 metadata/_custom_type_script = "uid://d2nrb6pxnthli"
 
 [node name="jet2" parent="objects/Jets" instance=ExtResource("6_85mci")]
@@ -360,7 +360,7 @@ mesh = SubResource("ArrayMesh_85mci")
 
 [node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet2"]
 script = ExtResource("8_v0qym")
-missile_scene = ExtResource("9_buokp")
+missile_scene = ExtResource("8_buokp")
 metadata/_custom_type_script = "uid://d2nrb6pxnthli"
 
 [node name="jet3" parent="objects/Jets" instance=ExtResource("6_85mci")]
@@ -379,7 +379,7 @@ mesh = SubResource("ArrayMesh_85mci")
 
 [node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet3"]
 script = ExtResource("8_v0qym")
-missile_scene = ExtResource("9_buokp")
+missile_scene = ExtResource("8_buokp")
 metadata/_custom_type_script = "uid://d2nrb6pxnthli"
 
 [node name="jet4" parent="objects/Jets" instance=ExtResource("6_85mci")]
@@ -398,7 +398,7 @@ mesh = SubResource("ArrayMesh_85mci")
 
 [node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet4"]
 script = ExtResource("8_v0qym")
-missile_scene = ExtResource("9_buokp")
+missile_scene = ExtResource("8_buokp")
 metadata/_custom_type_script = "uid://d2nrb6pxnthli"
 
 [node name="jet_ally" parent="objects/Jets" instance=ExtResource("6_85mci")]
@@ -419,7 +419,7 @@ mesh = SubResource("ArrayMesh_85mci")
 
 [node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet_ally"]
 script = ExtResource("8_v0qym")
-missile_scene = ExtResource("9_buokp")
+missile_scene = ExtResource("8_buokp")
 metadata/_custom_type_script = "uid://d2nrb6pxnthli"
 
 [node name="ui" type="Node3D" parent="."]
