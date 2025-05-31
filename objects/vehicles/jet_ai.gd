@@ -1,6 +1,5 @@
 class_name JetAI extends Node
 
-
 @export var desired_range: float = 1000.0
 @export var range_tolerance: float = 100.0
 @export var max_bank_deg: float = 60.0
@@ -20,12 +19,15 @@ class_name JetAI extends Node
 @export var anchor_group: String = "anchors"
 @export var is_hostile: bool = true
 @export var is_expert: bool = false
+@export var max_pursuit_time: float = 15.0
 
 @onready var ray: RayCast3D = $RayCast3D
 
 var vehicle: Jet
 var target: Node3D
 var anchor: Node3D
+var pursuit_timer: float = 0.0
+var missile_fired_recently: bool = false
 
 
 func _ready() -> void:
@@ -35,9 +37,9 @@ func _ready() -> void:
 	ray.target_position = Vector3.FORWARD * ray_length
 	var group: String = "targets" if is_hostile else "ally"
 	vehicle.add_to_group(group)
-	
 	var health: Health = vehicle.get_node("Health") as Health
 	health.died.connect(_on_vehicle_died)
+	randomize()
 
 
 func _on_vehicle_died() -> void:
@@ -135,6 +137,8 @@ func try_fire() -> void:
 	if angle <= fire_cone_deg:
 		missile_launcher.target = target
 		missile_launcher.launch_missile()
+		pursuit_timer = 0.0
+		missile_fired_recently = true
 
 
 func act_on_point(p: Vector3) -> void:
@@ -153,13 +157,26 @@ func act_on_point(p: Vector3) -> void:
 func collect_inputs(_delta: float) -> void:
 	if vehicle == null:
 		return
+
+	pursuit_timer += _delta
+	if target and pursuit_timer > max_pursuit_time and not missile_fired_recently:
+		var prev_target := target
+		var candidates := []
+		for candidate in get_tree().get_nodes_in_group(target_group):
+			if candidate != vehicle and candidate != prev_target and candidate is Node3D:
+				candidates.append(candidate)
+		if candidates.size() > 0:
+			target = candidates[randi() % candidates.size()]
+			pursuit_timer = 0.0
+	missile_fired_recently = false
+
 	if target == null or not is_instance_valid(target):
 		target = find_nearest(target_group)
 	if target == null or not is_instance_valid(target):
 		anchor = find_nearest(anchor_group)
 	else:
 		anchor = null
-	
+
 	if not vehicle.lift_ok:
 		recover_from_stall()
 		try_fire()
@@ -170,7 +187,7 @@ func collect_inputs(_delta: float) -> void:
 	if evade_missile():
 		try_fire()
 		return
-	
+
 	if target != null:
 		act_on_point(target.global_transform.origin)
 		try_fire()

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ffknhbjvj0jp"
-path="res://.godot/imported/kloofendal_43d_clear_puresky_1k.exr-c2e0bd366a41f6e7722c32ee9e9a0949.ctex"
+uid="uid://262c1fhqd110"
+path="res://.godot/imported/kloppenheim_05_puresky_1k.hdr-ba9337eabdb55ecc3dc4f581d5dd2739.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/kloofendal_43d_clear_puresky_1k.exr"
-dest_files=["res://.godot/imported/kloofendal_43d_clear_puresky_1k.exr-c2e0bd366a41f6e7722c32ee9e9a0949.ctex"]
+source_file="res://textures/kloppenheim_05_puresky_1k.hdr"
+dest_files=["res://.godot/imported/kloppenheim_05_puresky_1k.hdr-ba9337eabdb55ecc3dc4f581d5dd2739.ctex"]
 
 [params]
 
