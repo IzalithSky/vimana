@@ -12,13 +12,20 @@ class_name Missile extends RigidBody3D
 @export var explosion_max_damage: int = 80
 @export var explosion_collision_mask: int = 1
 @export var explosion_scene: PackedScene
+@export var trail_scene: PackedScene
+@export var trail_ttl_after_death: float = 4.0
 
 var fuel: float = 0.0
+var trail: Trail
 
 
 func _ready() -> void:
 	fuel = max_fuel
 	body_entered.connect(_on_body_entered)
+	if trail_scene:
+		trail = trail_scene.instantiate() as Trail
+		get_tree().current_scene.add_child(trail)
+		trail.global_transform = global_transform
 
 
 func _physics_process(delta: float) -> void:
@@ -32,9 +39,10 @@ func _physics_process(delta: float) -> void:
 	var max_av: float = deg_to_rad(max_ang_vel_deg)
 	if angular_velocity.length_squared() > max_av * max_av:
 		angular_velocity = angular_velocity.normalized() * max_av
+	if trail:
+		trail.global_transform = global_transform
 	if fuel <= 0.0:
-		_spawn_explosion()
-		queue_free()
+		_die()
 
 
 func _apply_drag() -> void:
@@ -54,7 +62,15 @@ func _custom_physics(delta: float) -> void:
 
 
 func _on_body_entered(body: Node) -> void:
+	_die()
+
+
+func _die() -> void:
 	_spawn_explosion()
+	if trail:
+		trail.trail_enabled = false
+		trail.node_ttl = trail_ttl_after_death
+		trail = null
 	queue_free()
 
 

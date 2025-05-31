@@ -1,11 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://ck71e5phsxvxj"]
+[gd_scene load_steps=8 format=3 uid="uid://ck71e5phsxvxj"]
 
 [ext_resource type="Script" uid="uid://5nop0mdwyr3e" path="res://objects/vehicles/vimana_j/jet.gd" id="1_0qbkc"]
+[ext_resource type="PackedScene" uid="uid://f4a1kaj0eu8o" path="res://objects/common/wing_trail.tscn" id="2_5aqhi"]
 [ext_resource type="PackedScene" uid="uid://b10gv1tbsvpnr" path="res://objects/common/explosion.tscn" id="2_g63xp"]
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="11_y4ep4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s1d72"]
 size = Vector3(1, 1, 4)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_5aqhi"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_j0qix"]
 
 [node name="RigidBody3D" type="RigidBody3D"]
 mass = 100.0
@@ -24,3 +29,17 @@ debug_color = Color(0, 0.65098, 0.0156863, 0.254902)
 [node name="Health" type="Node" parent="."]
 script = ExtResource("11_y4ep4")
 metadata/_custom_type_script = "uid://dxfwciqw71xsy"
+
+[node name="WingL" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
+
+[node name="Trail" parent="WingL" instance=ExtResource("2_5aqhi")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("ImmediateMesh_5aqhi")
+
+[node name="WingR" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
+
+[node name="Trail" parent="WingR" instance=ExtResource("2_5aqhi")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("ImmediateMesh_j0qix")
