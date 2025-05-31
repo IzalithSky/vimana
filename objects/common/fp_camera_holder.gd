@@ -40,3 +40,8 @@ func _input(event: InputEvent) -> void:
 		is_zooming = not is_zooming
 	elif not zoom_as_toggle:
 		is_zooming = Input.is_action_pressed("zoom")
+	
+	if event.is_action_pressed("center_camera"):
+		current_pitch = 0.0
+		current_yaw = 0.0
+		camera.rotation = Vector3(current_pitch, current_yaw, 0.0)
