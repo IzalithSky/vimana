@@ -2,11 +2,9 @@ class_name JetAI extends Node
 
 @export var desired_range: float = 1000.0
 @export var range_tolerance: float = 100.0
-@export var max_bank_deg: float = 60.0
 @export var roll_gain: float = 2.0
 @export var pitch_gain: float = 1.2
-@export var avoid_pitch_gain: float = 1.0
-@export var avoid_roll_gain: float = 1.0
+@export var yaw_gain: float = 1.0
 @export var ray_length: float = 200.0
 @export var missile_evade_distance: float = 600.0
 @export var missile_beam_bank_deg: float = 60.0
@@ -63,7 +61,7 @@ func move_towards(p: Vector3) -> void:
 	var local: Vector3 = vehicle.global_transform.basis.inverse() * dir
 	vehicle.roll_input  = clamp(-local.x * roll_gain, -1.0, 1.0)
 	vehicle.pitch_input = clamp(local.y  * pitch_gain, -1.0, 1.0)
-	vehicle.yaw_input   = 0.0
+	vehicle.yaw_input = clamp(local.x * yaw_gain, -1.0, 1.0)
 
 
 func move_away(p: Vector3) -> void:
@@ -71,7 +69,7 @@ func move_away(p: Vector3) -> void:
 	var local: Vector3 = vehicle.global_transform.basis.inverse() * dir
 	vehicle.roll_input  = clamp(-local.x * roll_gain, -1.0, 1.0)
 	vehicle.pitch_input = clamp(local.y  * pitch_gain, -1.0, 1.0)
-	vehicle.yaw_input   = 0.0
+	vehicle.yaw_input = clamp(local.x * yaw_gain, -1.0, 1.0)
 
 
 func recover_from_stall() -> void:
