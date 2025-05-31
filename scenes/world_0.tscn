@@ -301,7 +301,6 @@ rig_path = NodePath("AIRig")
 [node name="AIRig" parent="objects/Jets/jet1" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 20.0
 missile_launcher = NodePath("../MissileLauncher")
-target_group = "ally"
 is_expert = true
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet1"]
@@ -321,7 +320,6 @@ rig_path = NodePath("AIRig")
 [node name="AIRig" parent="objects/Jets/jet2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 20.0
 missile_launcher = NodePath("../MissileLauncher")
-target_group = "ally"
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet2"]
 transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
@@ -340,7 +338,6 @@ rig_path = NodePath("AIRig")
 [node name="AIRig" parent="objects/Jets/jet3" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 20.0
 missile_launcher = NodePath("../MissileLauncher")
-target_group = "ally"
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet3"]
 transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
@@ -359,7 +356,6 @@ rig_path = NodePath("AIRig")
 [node name="AIRig" parent="objects/Jets/jet4" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 20.0
 missile_launcher = NodePath("../MissileLauncher")
-target_group = "ally"
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet4"]
 transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
@@ -378,7 +374,8 @@ rig_path = NodePath("AIRig")
 [node name="AIRig" parent="objects/Jets/jet_ally" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 20.0
 missile_launcher = NodePath("../MissileLauncher")
-target_group = "targets"
+target_group = "bravo"
+ally_group = "alpha"
 is_hostile = false
 is_expert = true
 

@@ -1,5 +1,6 @@
 class_name JetAI extends Node
 
+
 @export var desired_range: float = 1000.0
 @export var range_tolerance: float = 100.0
 @export var roll_gain: float = 2.0
@@ -13,7 +14,8 @@ class_name JetAI extends Node
 @export var fire_cone_deg: float = 15.0
 @export var fire_range: float = 1000.0
 @export var missile_launcher: MissileLauncher
-@export var target_group: String = "player"
+@export var target_group: String = "alpha"
+@export var ally_group: String = "bravo"
 @export var anchor_group: String = "anchors"
 @export var is_hostile: bool = true
 @export var is_expert: bool = false
@@ -33,8 +35,7 @@ func _ready() -> void:
 	if missile_launcher == null and has_node("MissileLauncher"):
 		missile_launcher = $MissileLauncher
 	ray.target_position = Vector3.FORWARD * ray_length
-	var group: String = "targets" if is_hostile else "ally"
-	vehicle.add_to_group(group)
+	vehicle.add_to_group(ally_group)
 	var health: Health = vehicle.get_node("Health") as Health
 	health.died.connect(_on_vehicle_died)
 	randomize()
@@ -45,30 +46,30 @@ func _on_vehicle_died() -> void:
 
 
 func find_nearest(g: String) -> Node3D:
-	var best: Node3D
+	var best: Node3D = null
 	var best_d: float = INF
-	for n in get_tree().get_nodes_in_group(g):
+	for n: Node in get_tree().get_nodes_in_group(g):
 		if n is Node3D and n != vehicle:
-			var d: float = (n.global_transform.origin - vehicle.global_transform.origin).length()
+			var d: float = (n as Node3D).global_transform.origin.distance_to(vehicle.global_transform.origin)
 			if d < best_d:
 				best_d = d
-				best = n
+				best = n as Node3D
 	return best
 
 
 func move_towards(p: Vector3) -> void:
 	var dir: Vector3 = (p - vehicle.global_transform.origin).normalized()
 	var local: Vector3 = vehicle.global_transform.basis.inverse() * dir
-	vehicle.roll_input  = clamp(-local.x * roll_gain, -1.0, 1.0)
-	vehicle.pitch_input = clamp(local.y  * pitch_gain, -1.0, 1.0)
+	vehicle.roll_input = clamp(-local.x * roll_gain, -1.0, 1.0)
+	vehicle.pitch_input = clamp(local.y * pitch_gain, -1.0, 1.0)
 	vehicle.yaw_input = clamp(local.x * yaw_gain, -1.0, 1.0)
 
 
 func move_away(p: Vector3) -> void:
 	var dir: Vector3 = (vehicle.global_transform.origin - p).normalized()
 	var local: Vector3 = vehicle.global_transform.basis.inverse() * dir
-	vehicle.roll_input  = clamp(-local.x * roll_gain, -1.0, 1.0)
-	vehicle.pitch_input = clamp(local.y  * pitch_gain, -1.0, 1.0)
+	vehicle.roll_input = clamp(-local.x * roll_gain, -1.0, 1.0)
+	vehicle.pitch_input = clamp(local.y * pitch_gain, -1.0, 1.0)
 	vehicle.yaw_input = clamp(local.x * yaw_gain, -1.0, 1.0)
 
 
@@ -77,9 +78,9 @@ func recover_from_stall() -> void:
 	if vel.length() < 0.1:
 		return
 	var local: Vector3 = vehicle.global_transform.basis.inverse() * vel.normalized()
-	vehicle.roll_input  = clamp(local.x * roll_gain, -1.0, 1.0)
+	vehicle.roll_input = clamp(local.x * roll_gain, -1.0, 1.0)
 	vehicle.pitch_input = clamp(local.y * pitch_gain, -1.0, 1.0)
-	vehicle.yaw_input   = 0.0
+	vehicle.yaw_input = 0.0
 	vehicle.throttle_input = 1.0
 
 
@@ -98,49 +99,80 @@ func beam_evade(m: Node3D) -> void:
 	var local: Vector3 = vehicle.global_transform.basis.inverse() * dir
 	var bank_sign: float = -sign(local.x)
 	var desired_bank_deg: float = bank_sign * missile_beam_bank_deg
-	var current_bank_deg: float = rad_to_deg(asin(clamp(vehicle.transform.basis.x.dot(Vector3.UP), -1.0, 1.0)))
+	var current_bank_deg: float = rad_to_deg(asin(clamp(vehicle.global_transform.basis.x.dot(Vector3.UP), -1.0, 1.0)))
 	var roll_error_deg: float = desired_bank_deg - current_bank_deg
-	vehicle.roll_input  = clamp(roll_error_deg / missile_beam_bank_deg * roll_gain, -1.0, 1.0)
+	vehicle.roll_input = clamp(roll_error_deg / missile_beam_bank_deg * roll_gain, -1.0, 1.0)
 	vehicle.pitch_input = missile_pitch_input
-	vehicle.yaw_input   = 0.0
+	vehicle.yaw_input = 0.0
 	vehicle.throttle_input = missile_throttle
 
 
 func evade_missile() -> bool:
-	var best: Node3D
-	var best_d: float = missile_evade_distance
-	for m in get_tree().get_nodes_in_group("missiles"):
-		if m.get("target") == vehicle:
-			var d: float = (m.global_transform.origin - vehicle.global_transform.origin).length()
-			if d < best_d:
-				best_d = d
-				best = m
-	if best:
+	var threat: Node3D = null
+	var threat_d: float = INF
+	var threat_t: float = INF          # time to closest approach
+	
+	for n: Node in get_tree().get_nodes_in_group("missiles"):
+		if not (n is RigidBody3D):
+			continue
+		var m: RigidBody3D = n
+		
+		var rel_pos: Vector3 = m.global_transform.origin - vehicle.global_transform.origin
+		var rel_vel: Vector3 = m.linear_velocity - vehicle.linear_velocity
+		var vel_sq: float = rel_vel.length_squared()
+		if vel_sq < 1e-3:
+			continue                                  # missile not moving relative to us
+		
+		var t_ca: float = -rel_pos.dot(rel_vel) / vel_sq   # time of closest approach
+		if t_ca < 0.0 or t_ca > 3.0:                        # ignore if in past or too far in future
+			continue
+		
+		var closest_vec: Vector3 = rel_pos + rel_vel * t_ca
+		var d_ca: float = closest_vec.length()
+		
+		if d_ca < threat_d:
+			threat_d = d_ca
+			threat_t = t_ca
+			threat = m
+	
+	if threat != null and threat_d < missile_evade_distance:
 		if is_expert:
-			beam_evade(best)
+			beam_evade(threat)
 		else:
-			move_away(best.global_transform.origin)
+			move_away(threat.global_transform.origin)
 			vehicle.throttle_input = 1.0
 		return true
+	
 	return false
 
 
 func try_fire() -> void:
-	if missile_launcher == null or target == null:
+	if missile_launcher == null:
 		return
-	var to_t: Vector3 = target.global_transform.origin - vehicle.global_transform.origin
-	if to_t.length() > fire_range:
+	
+	var seeker_origin: Vector3 = vehicle.global_transform.origin
+	var seeker_fwd: Vector3 = -vehicle.global_transform.basis.z
+	var heat_target: HeatSource = HeatSeekUtils.best_heat_source(
+		self,
+		seeker_origin,
+		seeker_fwd,
+		fire_cone_deg,
+		1e-8)
+	
+	if heat_target == null or heat_target.is_in_group(ally_group):
 		return
-	var angle: float = rad_to_deg(acos(clamp((-vehicle.transform.basis.z).normalized().dot(to_t.normalized()), -1.0, 1.0)))
-	if angle <= fire_cone_deg:
-		missile_launcher.target = target
-		missile_launcher.launch_missile()
-		pursuit_timer = 0.0
-		missile_fired_recently = true
+	
+	var to_target: Vector3 = heat_target.global_transform.origin - seeker_origin
+	if to_target.length() > fire_range:
+		return
+	
+	missile_launcher.launch_missile()
+	pursuit_timer = 0.0
+	missile_fired_recently = true
 
 
 func act_on_point(p: Vector3) -> void:
-	var d: float = (p - vehicle.global_transform.origin).length()
+	var d: float = vehicle.global_transform.origin.distance_to(p)
 	if d > desired_range + range_tolerance:
 		move_towards(p)
 		vehicle.throttle_input = 1.0
@@ -155,26 +187,28 @@ func act_on_point(p: Vector3) -> void:
 func collect_inputs(_delta: float) -> void:
 	if vehicle == null:
 		return
-
+	
 	pursuit_timer += _delta
-	if target and pursuit_timer > max_pursuit_time and not missile_fired_recently:
-		var prev_target := target
-		var candidates := []
-		for candidate in get_tree().get_nodes_in_group(target_group):
-			if candidate != vehicle and candidate != prev_target and candidate is Node3D:
-				candidates.append(candidate)
+	
+	if target != null and pursuit_timer > max_pursuit_time and not missile_fired_recently:
+		var prev_target: Node3D = target
+		var candidates: Array[Node3D] = []
+		for candidate: Node in get_tree().get_nodes_in_group(target_group):
+			if candidate is Node3D and candidate != vehicle and candidate != prev_target:
+				candidates.append(candidate as Node3D)
 		if candidates.size() > 0:
 			target = candidates[randi() % candidates.size()]
 			pursuit_timer = 0.0
+	
 	missile_fired_recently = false
-
+	
 	if target == null or not is_instance_valid(target):
 		target = find_nearest(target_group)
 	if target == null or not is_instance_valid(target):
 		anchor = find_nearest(anchor_group)
 	else:
 		anchor = null
-
+	
 	if not vehicle.lift_ok:
 		recover_from_stall()
 		try_fire()
@@ -185,7 +219,7 @@ func collect_inputs(_delta: float) -> void:
 	if evade_missile():
 		try_fire()
 		return
-
+	
 	if target != null:
 		act_on_point(target.global_transform.origin)
 		try_fire()
