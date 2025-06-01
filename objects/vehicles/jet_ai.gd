@@ -136,6 +136,11 @@ func evade_missile() -> bool:
 			threat = m
 	
 	if threat != null and threat_d < missile_evade_distance:
+		for child in vehicle.get_children():
+			if child is FlareLauncher and child.ready_to_fire():
+				child.launch_flares()
+				return true
+		
 		if is_expert:
 			beam_evade(threat)
 		else:

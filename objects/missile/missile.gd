@@ -14,6 +14,7 @@ class_name Missile extends RigidBody3D
 @export var explosion_scene: PackedScene
 @export var trail_scene: PackedScene
 @export var trail_ttl_after_death: float = 4.0
+@export var stabilised = true
 
 var fuel: float = 0.0
 var trail: Trail
@@ -51,6 +52,8 @@ func _apply_drag() -> void:
 
 
 func _apply_stabilisation() -> void:
+	if not stabilised:
+		return
 	var av_len: float = angular_velocity.length()
 	if av_len > 1e-4:
 		var mag: float = min(av_len, torque_strength)

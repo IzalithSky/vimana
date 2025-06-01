@@ -35,6 +35,10 @@ func _start_game(vehicle_scene: PackedScene) -> void:
 	pml.missile_cam = rig.missile_camera
 	pml.missile_scene = preload("res://objects/missile/missile_heatseaker.tscn")
 	
+	var fll: FlareLauncher = FlareLauncher.new()
+	vehicle_root.add_child(fll)
+	fll.flare_scene = preload("res://objects/missile/flare.tscn")
+	
 	var player: Player = Player.new()
 	vehicle_root.add_child(player)
 	

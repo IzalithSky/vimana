@@ -97,3 +97,9 @@ func _process(delta: float) -> void:
 		else ProjectSettings.get_setting("physics/3d/default_gravity_vector").normalized()
 	)
 	heading_sprite.global_transform.origin = cam_pos + heading_dir * 1.5
+	
+	if Input.is_action_just_pressed("flares"):
+		for child in v.get_children():
+			if child is FlareLauncher:
+				child.launch_flares()
+				break

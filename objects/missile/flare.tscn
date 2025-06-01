@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://b3xs5okdiio4j"]
+
+[ext_resource type="Script" uid="uid://dqfc8gb66o1wr" path="res://objects/missile/missile.gd" id="1_owid2"]
+[ext_resource type="PackedScene" uid="uid://b10gv1tbsvpnr" path="res://objects/common/explosion.tscn" id="2_2oy1x"]
+[ext_resource type="PackedScene" uid="uid://bucpax13pgdsw" path="res://objects/missile_trail.tscn" id="3_7amda"]
+[ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="4_2oy1x"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
+
+[node name="RigidBody3D" type="RigidBody3D"]
+collision_mask = 2
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_owid2")
+thrust = 100.0
+torque_strength = 0.0
+max_fuel = 5.0
+proximity_radius = 0.0
+explosion_radius = 1.0
+explosion_min_damage = 1
+explosion_max_damage = 2
+explosion_scene = ExtResource("2_2oy1x")
+trail_scene = ExtResource("3_7amda")
+stabilised = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_g63xp")
+
+[node name="HeatSource" type="Node3D" parent="."]
+script = ExtResource("4_2oy1x")
+metadata/_custom_type_script = "uid://cmb8absq6qrpl"
