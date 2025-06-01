@@ -18,11 +18,18 @@ func ready_to_fire() -> bool:
 func launch_missile() -> Missile:
 	if not ready_to_fire():
 		return null
+
 	var missile: Missile = missile_scene.instantiate()
 	missile.add_to_group("missiles")
 	missile.global_transform = global_transform
-	if get_parent() is CollisionObject3D:
-		missile.add_collision_exception_with(get_parent())
+
+	var parent: Node3D = get_parent()
+	if parent is RigidBody3D:
+		missile.linear_velocity = parent.linear_velocity
+		missile.angular_velocity = parent.angular_velocity
+	if parent is CollisionObject3D:
+		missile.add_collision_exception_with(parent)
+
 	get_tree().current_scene.add_child(missile)
 	_timer = 0.0
 	return missile

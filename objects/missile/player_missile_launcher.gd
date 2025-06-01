@@ -3,10 +3,10 @@ class_name PlayerMissileLauncher extends MissileLauncher
 
 @export var fire_action: String = "fire_missile"
 @export var camera: Camera3D
+@export var missile_cam: Camera3D
 @export var fire_attach_threshold: float = 0.3
 @export var follow_distance: float = 4.0
 
-@onready var missile_cam: Camera3D = $"../MissileCamera"
 
 var _followed_missile: Node3D = null
 var _pending_attach_missile: Node3D = null
@@ -35,8 +35,8 @@ func _process(delta: float) -> void:
 	if _followed_missile != null and is_instance_valid(_followed_missile):
 		var behind: Vector3 = _followed_missile.global_transform.basis.z * -follow_distance
 		missile_cam.global_transform.origin = _followed_missile.global_transform.origin + behind
-		if "target" in _followed_missile and is_instance_valid(_followed_missile.get("target")):
-			missile_cam.look_at(_followed_missile.get("target").global_transform.origin)
+		var fwd: Vector3 = -_followed_missile.global_transform.basis.z
+		missile_cam.look_at(missile_cam.global_transform.origin + fwd)
 
 
 func _attach_camera_to(missile: Node3D) -> void:

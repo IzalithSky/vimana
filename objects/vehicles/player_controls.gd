@@ -18,6 +18,7 @@ class_name PlayerControls extends Node
 @onready var horizon: MeshInstance3D = $Horizon
 @onready var heading_sprite: Sprite3D = $HeadingSprite3D
 @onready var camera: Camera3D = %Camera3D
+@onready var missile_camera: Camera3D = $MissileCamera
 
 
 const G_BUFFER_SIZE: int = 10

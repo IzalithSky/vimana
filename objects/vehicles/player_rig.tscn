@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dii7431l7ulys"]
+[gd_scene load_steps=16 format=3 uid="uid://dii7431l7ulys"]
 
 [ext_resource type="Script" uid="uid://bxfpd6lllbosy" path="res://objects/vehicles/player_controls.gd" id="1_lgipv"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="1_w214r"]
@@ -6,8 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="3_lgipv"]
 [ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="4_fcjbv"]
 [ext_resource type="Script" uid="uid://digjrqq0dauj1" path="res://objects/missile/missile_display.gd" id="5_xxp4i"]
-[ext_resource type="Script" uid="uid://ca3q1n33gqkgg" path="res://objects/missile/player_missile_launcher.gd" id="6_sbsnl"]
-[ext_resource type="PackedScene" uid="uid://binjvtutugvoy" path="res://objects/missile/missile_heatseaker.tscn" id="8_fcjbv"]
 [ext_resource type="Script" uid="uid://bk4syu2gcjm2n" path="res://objects/common/target_tracker.gd" id="9_lgipv"]
 [ext_resource type="PackedScene" uid="uid://bnqlnpxb47hb" path="res://objects/common/target_marker.tscn" id="10_fcjbv"]
 [ext_resource type="Script" uid="uid://g4cuyhv8kiex" path="res://objects/common/heatseeker_target_tracker.gd" id="11_xxp4i"]
@@ -49,7 +47,7 @@ fps_label = NodePath("Camera3D/CanvasLayer/HBoxContainer/VBoxContainer/FpsLabel"
 unique_name_in_owner = true
 fov = 85.0
 near = 0.01
-far = 8000.0
+far = 30000.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
 
@@ -205,12 +203,6 @@ script = ExtResource("5_xxp4i")
 update_interval_frames = 1
 metadata/_custom_type_script = "uid://digjrqq0dauj1"
 
-[node name="MissileLauncher" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
-script = ExtResource("6_sbsnl")
-camera = NodePath("../FPCameraHolder/Camera3D")
-missile_scene = ExtResource("8_fcjbv")
-
 [node name="TargetTracker" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
 script = ExtResource("9_lgipv")
 camera = NodePath("../FPCameraHolder/Camera3D")
@@ -224,3 +216,4 @@ marker_scene = ExtResource("10_fcjbv")
 metadata/_custom_type_script = "uid://g4cuyhv8kiex"
 
 [node name="MissileCamera" type="Camera3D" parent="."]
+far = 30000.0
