@@ -13,16 +13,19 @@ class_name PlayerControls extends Node
 @onready var throttle_label: Label = $Display/SubViewport/HBoxContainer/VBoxContainer/ThrottleLabel
 @onready var aoa_label: Label = $Display/SubViewport/HBoxContainer/VBoxContainer2/AoALabel
 @onready var gf_label: Label = $Display/SubViewport/HBoxContainer/VBoxContainer2/GForceLabel
+@onready var throttle_progress_bar: ProgressBar = $FPCameraHolder/Camera3D/CanvasLayer2/HBoxContainer/VBoxContainerT/ThrottleProgressBar
+@onready var vl_progress_bar: ProgressBar = $FPCameraHolder/Camera3D/CanvasLayer2/HBoxContainer/VBoxContainerV/HBoxContainer1/VLProgressBar
+@onready var va_progress_bar: ProgressBar = $FPCameraHolder/Camera3D/CanvasLayer2/HBoxContainer/VBoxContainerV/HBoxContainer1/VAProgressBar
 @onready var health: Node = v.get_node_or_null("Health")
-@onready var hp_label: Label = $FPCameraHolder/Camera3D/CanvasLayer/HBoxContainer/VBoxContainer2/HpLabel
+@onready var hp_label: Label = $FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer2/HpLabel
 @onready var horizon: MeshInstance3D = $Horizon
 @onready var heading_sprite: Sprite3D = $HeadingSprite3D
 @onready var camera: Camera3D = %Camera3D
 @onready var missile_camera: Camera3D = $MissileCamera
 
-
-const G_BUFFER_SIZE: int = 10
-var _buf: Array[float] = []
+const HEADING_BUFFER_SIZE: int = 10
+var _heading_buf: Array[float] = []
+var _prev_heading: Vector3
 
 
 func collect_inputs(delta: float) -> void:
@@ -49,7 +52,7 @@ func collect_inputs(delta: float) -> void:
 	v.roll_input  = clamp(v.roll_input,  -1.0, 1.0)
 	v.pitch_input = clamp(v.pitch_input, -1.0, 1.0)
 	v.yaw_input   = clamp(v.yaw_input,   -1.0, 1.0)
-
+	
 	var t_r: float = thr_rate * delta
 	if Input.is_action_pressed("throttle_up"):
 		v.throttle_input += t_r
@@ -64,23 +67,15 @@ func _process(delta: float) -> void:
 		#get_tree().get_nodes_in_group("missiles").size(),
 		#get_tree().get_nodes_in_group("flares").size(),
 		#ts.size()])
-		
-	var speed_kn: float = v.linear_velocity.length() * 1.94384
-	speed_label.text = "Speed: %.1f kn" % speed_kn
+	
+	#var speed_kn: float = v.linear_velocity.length() * 1.94384
+	speed_label.text = "Speed: %.1f m/s" % v.linear_velocity.length()
 	throttle_label.text = "Throttle: %.0f%%" % v.throttle_percent
 	aoa_label.text = "AoA: %.1f°" % v.aoa_deg
 	
-	var g_force: float = ((v.linear_velocity - v._prev_velocity) / delta -
-						  ProjectSettings.get_setting("physics/3d/default_gravity_vector")
-						 ).length() / 9.80665
-	_buf.append(g_force)
-	if _buf.size() > G_BUFFER_SIZE:
-		_buf.pop_front()
-	var smoothed: float = _buf.reduce(func(a, b): return a + b) / _buf.size()
-	gf_label.text = "Overload: %.2fG" % smoothed
+	gf_label.text = "Overload: %.2fG" % v.smoothed_g
 	gf_label.add_theme_color_override("font_color",
-		Color.RED if smoothed >= v.warn_g_force else Color.LAWN_GREEN)
-	v._prev_velocity = v.linear_velocity
+		Color.RED if v.smoothed_g >= v.warn_g_force else Color.LAWN_GREEN)
 	
 	if v.control_effectiveness < 1.0 or not v.lift_ok:
 		aoa_label.add_theme_color_override("font_color", Color.RED)
@@ -104,8 +99,25 @@ func _process(delta: float) -> void:
 	)
 	heading_sprite.global_transform.origin = cam_pos + heading_dir * 1.5
 	
+	throttle_progress_bar.value = v.throttle_percent
+	vl_progress_bar.value = fmod(v.linear_velocity.length(), vl_progress_bar.max_value)
+	var curr_heading: Vector3 = -v.global_transform.basis.z.normalized()
+	var angle_diff_rad: float = _prev_heading.angle_to(curr_heading)
+	var heading_deg_per_sec: float = rad_to_deg(angle_diff_rad) / delta
+	_heading_buf.append(heading_deg_per_sec)
+	if _heading_buf.size() > HEADING_BUFFER_SIZE:
+		_heading_buf.pop_front()
+	var smoothed_heading_rate: float = 0.0
+	if _heading_buf.size() > 0:
+		smoothed_heading_rate = _heading_buf.reduce(func(a, b): return a + b) / _heading_buf.size()
+	va_progress_bar.value = fmod(smoothed_heading_rate, va_progress_bar.max_value)
+	_prev_heading = curr_heading
+	
 	if Input.is_action_just_pressed("flares"):
 		for child in v.get_children():
 			if child is FlareLauncher:
 				child.launch_flares()
 				break
+	
+	if Input.is_action_just_pressed("aoa_limiter"):
+		v.aoa_limiter = not v.aoa_limiter

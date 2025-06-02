@@ -16,9 +16,9 @@ thrust = 100.0
 torque_strength = 0.0
 max_fuel = 5.0
 proximity_radius = 0.0
-explosion_radius = 1.0
-explosion_min_damage = 1
-explosion_max_damage = 2
+explosion_radius = 0.0
+explosion_min_damage = 0
+explosion_max_damage = 0
 trail_scene = ExtResource("3_2oy1x")
 stabilised = false
 

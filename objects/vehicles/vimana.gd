@@ -14,6 +14,8 @@ class_name Vimana extends RigidBody3D
 @export var explosion_scene: PackedScene
 @export var explosive_speed: float = 15.0
 
+@export var aoa_limiter: bool = true
+
 var rig: Node
 var roll_input: float = 0.0
 var pitch_input: float = 0.0
@@ -46,6 +48,15 @@ func _on_body_entered(body: Node) -> void:
 				break
 
 
+func update_g_force(delta: float) -> void:
+	var g_force: float = ((linear_velocity - _prev_velocity) / delta -
+		ProjectSettings.get_setting("physics/3d/default_gravity_vector")).length() / 9.80665
+	_g_force_buffer.append(g_force)
+	if _g_force_buffer.size() > G_BUFFER_SIZE:
+		_g_force_buffer.pop_front()
+	smoothed_g = _g_force_buffer.reduce(func(a, b): return a + b) / _g_force_buffer.size()
+	_prev_velocity = linear_velocity
+
 
 func compute_aoa() -> void:
 	var v: Vector3 = linear_velocity
@@ -61,10 +72,11 @@ func compute_aoa() -> void:
 	aoa_deg = rad_to_deg(aoa)
 
 
-func compute_control_state() -> void:
+func compute_control_state(delta: float) -> void:
 	var forward_speed: float = linear_velocity.dot(-transform.basis.z)
 	control_effectiveness = clamp(forward_speed / control_effectiveness_speed, 0.0, 1.0)
 	compute_aoa()
+	update_g_force(delta)
 
 
 func apply_air_drag() -> void:

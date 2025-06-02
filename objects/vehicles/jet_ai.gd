@@ -6,12 +6,11 @@ class_name JetAI extends Node
 @export var roll_gain: float = 2.0
 @export var pitch_gain: float = 1.2
 @export var yaw_gain: float = 1.0
-@export var ray_length: float = 200.0
 @export var missile_evade_distance: float = 600.0
 @export var missile_beam_bank_deg: float = 60.0
 @export var missile_pitch_input: float = 1.0
 @export var missile_throttle: float = 1.0
-@export var fire_cone_deg: float = 15.0
+@export var fire_cone_deg: float = 60.0
 @export var fire_range: float = 1000.0
 @export var missile_launcher: MissileLauncher
 @export var target_group: String = "alpha"
@@ -35,7 +34,6 @@ func _ready() -> void:
 	vehicle = get_parent() as Jet
 	if missile_launcher == null and has_node("MissileLauncher"):
 		missile_launcher = $MissileLauncher
-	ray.target_position = Vector3.FORWARD * ray_length
 	vehicle.add_to_group(ally_group)
 	var health: Health = vehicle.get_node("Health") as Health
 	health.died.connect(_on_vehicle_died)
@@ -90,11 +88,12 @@ func avoid_obstacle() -> bool:
 	if velocity.length_squared() < 1e-4:
 		return false
 	
-	var predicted_pos: Vector3 = vehicle.global_transform.origin + velocity * obstacle_prediction_horizon
-	var look_dir: Vector3 = (predicted_pos - vehicle.global_transform.origin).normalized()
+	var look_dir: Vector3 = velocity.normalized()
+	var cast_distance: float = velocity.length() * obstacle_prediction_horizon
+	var cast_target: Vector3 = vehicle.global_transform.origin + look_dir * cast_distance
 	
 	ray.global_transform = Transform3D(Basis().looking_at(look_dir, Vector3.UP), vehicle.global_transform.origin)
-	ray.target_position = look_dir * ray_length
+	ray.target_position = cast_target - vehicle.global_transform.origin
 	ray.force_raycast_update()
 	
 	if ray.is_colliding():
@@ -120,7 +119,7 @@ func beam_evade(m: Node3D) -> void:
 func evade_missile() -> bool:
 	var threat: Node3D = null
 	var threat_d: float = INF
-	var threat_t: float = INF          # time to closest approach
+	var threat_t: float = INF
 	
 	for n: Node in get_tree().get_nodes_in_group("missiles"):
 		if not (n is RigidBody3D):
@@ -131,10 +130,10 @@ func evade_missile() -> bool:
 		var rel_vel: Vector3 = m.linear_velocity - vehicle.linear_velocity
 		var vel_sq: float = rel_vel.length_squared()
 		if vel_sq < 1e-3:
-			continue                                  # missile not moving relative to us
+			continue
 		
-		var t_ca: float = -rel_pos.dot(rel_vel) / vel_sq   # time of closest approach
-		if t_ca < 0.0 or t_ca > 3.0:                        # ignore if in past or too far in future
+		var t_ca: float = -rel_pos.dot(rel_vel) / vel_sq
+		if t_ca < 0.0 or t_ca > 3.0:
 			continue
 		
 		var closest_vec: Vector3 = rel_pos + rel_vel * t_ca
@@ -226,14 +225,10 @@ func collect_inputs(_delta: float) -> void:
 	
 	if not vehicle.lift_ok:
 		recover_from_stall()
-		try_fire()
-		return
-	if avoid_obstacle():
-		try_fire()
-		return
-	if evade_missile():
-		try_fire()
-		return
+	elif avoid_obstacle():
+		if evade_missile():
+			try_fire()
+			return
 	
 	if target != null:
 		act_on_point(target.global_transform.origin)

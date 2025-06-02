@@ -5,7 +5,7 @@ class_name TimeSkipLoader extends Node
 @export var progress_bar: ProgressBar
 @export var pause_duration: float = 2.0
 @export var time_scale: float = 4.0
-@export var time_scale_duration: float = 30.0
+@export var time_scale_duration: float = 22.0
 @export var update_interval: float = 0.1
 
 

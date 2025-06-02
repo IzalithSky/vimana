@@ -19,12 +19,12 @@ class_name Jet extends Vimana
 func _ready() -> void:
 	rig = get_node(rig_path)
 	self.body_entered.connect(_on_body_entered)
-	throttle_input = -1.0
+	throttle_input = 0.0
 
 
 func _physics_process(delta: float) -> void:
 	rig.collect_inputs(delta)
-	compute_control_state()
+	compute_control_state(delta)
 	apply_thrust()
 	apply_jet_torque(delta)
 	apply_lift()
@@ -39,6 +39,13 @@ func apply_thrust() -> void:
 
 
 func apply_jet_torque(delta: float) -> void:
+	if aoa_limiter:
+		if smoothed_g > warn_g_force:
+			var scale: float = warn_g_force / smoothed_g
+			pitch_input = clamp(pitch_input, -scale, scale)
+		if not lift_ok:
+			var aoa_frac: float = clamp(1.0 - abs(aoa_deg) / stall_aoa_deg, 0.0, 1.0)
+			pitch_input *= aoa_frac
 	apply_torque(transform.basis.x * pitch_input * control_effectiveness * max_pitch)
 	apply_torque(transform.basis.y * yaw_input * control_effectiveness * max_yaw)
 	apply_torque(transform.basis.z * roll_input * control_effectiveness * max_roll)
