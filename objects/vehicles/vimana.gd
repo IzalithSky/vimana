@@ -12,7 +12,7 @@ class_name Vimana extends RigidBody3D
 @export var control_effectiveness_speed: float = 50.0
 
 @export var explosion_scene: PackedScene
-@export var explosive_speed: float = 50.0
+@export var explosive_speed: float = 15.0
 
 var rig: Node
 var roll_input: float = 0.0

@@ -53,5 +53,4 @@ func _custom_physics(delta: float) -> void:
 				fuel -= turn_fule_burn_rate * (turn_angle / max_turn) * delta
 	
 	if target != null and global_transform.origin.distance_to(target.global_transform.origin) < proximity_radius:
-		_spawn_explosion()
-		queue_free()
+		_die()

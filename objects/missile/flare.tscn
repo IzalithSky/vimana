@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://b3xs5okdiio4j"]
+[gd_scene load_steps=5 format=3 uid="uid://b3xs5okdiio4j"]
 
 [ext_resource type="Script" uid="uid://dqfc8gb66o1wr" path="res://objects/missile/missile.gd" id="1_owid2"]
-[ext_resource type="PackedScene" uid="uid://b10gv1tbsvpnr" path="res://objects/common/explosion.tscn" id="2_2oy1x"]
 [ext_resource type="PackedScene" uid="uid://c8sar8l1jjagi" path="res://objects/flare_trail.tscn" id="3_2oy1x"]
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="4_2oy1x"]
 
@@ -20,7 +19,6 @@ proximity_radius = 0.0
 explosion_radius = 1.0
 explosion_min_damage = 1
 explosion_max_damage = 2
-explosion_scene = ExtResource("2_2oy1x")
 trail_scene = ExtResource("3_2oy1x")
 stabilised = false
 

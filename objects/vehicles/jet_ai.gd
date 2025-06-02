@@ -19,7 +19,8 @@ class_name JetAI extends Node
 @export var anchor_group: String = "anchors"
 @export var is_hostile: bool = true
 @export var is_expert: bool = false
-@export var max_pursuit_time: float = 15.0
+@export var max_pursuit_time: float = 35.0
+@export var obstacle_prediction_horizon: float = 5.0
 
 @onready var ray: RayCast3D = $RayCast3D
 
@@ -85,8 +86,17 @@ func recover_from_stall() -> void:
 
 
 func avoid_obstacle() -> bool:
-	ray.global_transform = vehicle.global_transform
+	var velocity: Vector3 = vehicle.linear_velocity
+	if velocity.length_squared() < 1e-4:
+		return false
+	
+	var predicted_pos: Vector3 = vehicle.global_transform.origin + velocity * obstacle_prediction_horizon
+	var look_dir: Vector3 = (predicted_pos - vehicle.global_transform.origin).normalized()
+	
+	ray.global_transform = Transform3D(Basis().looking_at(look_dir, Vector3.UP), vehicle.global_transform.origin)
+	ray.target_position = look_dir * ray_length
 	ray.force_raycast_update()
+	
 	if ray.is_colliding():
 		move_away(ray.get_collision_point())
 		vehicle.throttle_input = 1.0

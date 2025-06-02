@@ -72,7 +72,6 @@ func _on_body_entered(body: Node) -> void:
 func _die() -> void:
 	_spawn_explosion()
 	if trail:
-		trail.trail_enabled = false
 		trail.node_ttl = trail_ttl_after_death
 		trail = null
 	queue_free()
@@ -83,21 +82,26 @@ func _spawn_explosion() -> void:
 		var e: Node3D = explosion_scene.instantiate()
 		get_tree().current_scene.add_child(e)
 		e.global_transform.origin = global_transform.origin
+	
 	var shape: SphereShape3D = SphereShape3D.new()
 	shape.radius = explosion_radius
+	
 	var query: PhysicsShapeQueryParameters3D = PhysicsShapeQueryParameters3D.new()
 	query.shape = shape
 	query.transform = global_transform
 	query.collision_mask = explosion_collision_mask
 	query.collide_with_bodies = true
+	
 	var state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
 	var results: Array = state.intersect_shape(query, 32)
+	
 	for result in results:
 		var node: Node = result["collider"]
-		if node.has_node("Health"):
-			var health_node: Node = node.get_node("Health")
-			if "take_damage" in health_node:
+		for child in node.get_children():
+			if child is Health:
+				var health_node: Health = child
 				var dist: float = global_transform.origin.distance_to(node.global_transform.origin)
 				var t: float = clamp(1.0 - dist / explosion_radius, 0.0, 1.0)
 				var dmg: float = lerp(float(explosion_min_damage), float(explosion_max_damage), t)
-				health_node.call("take_damage", int(round(dmg)))
+				health_node.take_damage(int(round(dmg)))
+				break
