@@ -132,7 +132,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1283.6
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet1" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("4_u85gc")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 is_expert = true
 
@@ -157,7 +157,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1565.65, 906.48, -2439.83)
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("4_u85gc")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 is_expert = true
 
@@ -182,7 +182,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1271.4, 1412.2, -4768.59)
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet3" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("4_u85gc")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 is_expert = true
 
@@ -207,7 +207,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1572.53, 906.48, -5058.66)
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet4" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("4_u85gc")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 is_expert = true
 
@@ -232,7 +232,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -380.45, 1064.08, -166.808)
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet_ally" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("4_u85gc")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 target_group = "bravo"
 ally_group = "alpha"
@@ -260,7 +260,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 701.623, 1064.08, -166.808)
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet_ally2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("4_u85gc")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 target_group = "bravo"
 ally_group = "alpha"
@@ -288,7 +288,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -836.477, 1248.88, 258.894)
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet_ally3" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("4_u85gc")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 target_group = "bravo"
 ally_group = "alpha"
@@ -312,11 +312,11 @@ fire_interval = 8.0
 metadata/_custom_type_script = "uid://b351wendvw15f"
 
 [node name="jet_ally4" parent="objects/Jets" instance=ExtResource("3_hotsa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 252.239, 1395.06, 1417.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -667.242, 1395.06, 1417.5)
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet_ally4" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("4_u85gc")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 target_group = "bravo"
 ally_group = "alpha"
@@ -344,7 +344,7 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.80762, 4.86108)
 fov = 85.0
 near = 0.01
-far = 8000.0
+far = 25000.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="objects/Jets/jet_ally4/FPCameraHolder/Camera3D"]
 

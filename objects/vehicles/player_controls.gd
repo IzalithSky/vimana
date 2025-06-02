@@ -58,7 +58,7 @@ func collect_inputs(delta: float) -> void:
 	v.throttle_input = clamp(v.throttle_input, -1.0, 1.0)
 
 
-func _process(delta: float) -> void:
+func _process(delta: float) -> void:	
 	var speed_kn: float = v.linear_velocity.length() * 1.94384
 	speed_label.text = "Speed: %.1f kn" % speed_kn
 	throttle_label.text = "Throttle: %.0f%%" % v.throttle_percent

@@ -31,10 +31,20 @@ var lift_ok: bool = true
 
 
 func _on_body_entered(body: Node) -> void:
-	if linear_velocity.length() >= explosive_speed:
+	var speed: float = linear_velocity.length()
+	
+	if speed >= explosive_speed and explosion_scene:
 		var explosion: Node3D = explosion_scene.instantiate()
 		get_tree().current_scene.add_child(explosion)
 		explosion.global_transform.origin = global_transform.origin
+	
+	if speed >= explosive_speed:
+		for child in get_children():
+			if child is Health:
+				var dmg: int = int(round(speed))
+				child.take_damage(dmg)
+				break
+
 
 
 func compute_aoa() -> void:

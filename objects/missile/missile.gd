@@ -25,6 +25,7 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	if trail_scene:
 		trail = trail_scene.instantiate() as Trail
+		trail.permanent = false
 		get_tree().current_scene.add_child(trail)
 		trail.global_transform = global_transform
 

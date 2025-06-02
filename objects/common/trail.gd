@@ -8,6 +8,7 @@ var _dirty: bool = false
 var old_pos: Vector3
 var node_ttl: float = -1.0
 
+@export var permanent: bool = true
 @export var trail_enabled: bool = true
 @export var from_width: float = 0.5
 @export var to_width: float = 0.0
@@ -20,6 +21,7 @@ var node_ttl: float = -1.0
 
 
 func _ready() -> void:
+	add_to_group("trails")
 	old_pos = global_transform.origin
 	mesh = ImmediateMesh.new()
 
@@ -51,10 +53,10 @@ func _process(delta: float) -> void:
 	if points.size() >= 2:
 		_dirty = true
 	
-	if node_ttl > 0.0:
+	if not permanent and node_ttl >= 0.0:
 		node_ttl -= delta
 		_dirty = true
-		if node_ttl <= 0.0 and points.is_empty():
+		if node_ttl <= 0.0:
 			queue_free()
 	
 	if not _dirty or points.size() < 2:
@@ -89,7 +91,6 @@ func _build_surface() -> void:
 		var curr_color: Color = start_color.lerp(end_color, 1.0 - t)
 		mesh.surface_set_color(curr_color)
 		var curr_width: Vector3 = widths[i][0] - pow(1.0 - t, scale_acceleration) * widths[i][1]
-	
 		if scale_texture:
 			var t0: float = motion_delta * float(i)
 			var t1: float = motion_delta * float(i + 1)
