@@ -118,15 +118,15 @@ shadow_enabled = true
 [node name="objects" type="Node3D" parent="."]
 
 [node name="Spawn" type="Node3D" parent="objects"]
-transform = Transform3D(0.994267, 0, 0.106923, 0, 1, 0, -0.106923, 0, 0.994267, 10.7364, 1.03872, -315.373)
-
-[node name="SAMs" type="Node3D" parent="objects"]
+transform = Transform3D(0.994267, 0, 0.106923, 0, 1, 0, -0.106923, 0, 0.994267, -501.538, 788.863, -4106.68)
 
 [node name="Jets" type="Node3D" parent="objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -208.903, 0, -4106.68)
 
 [node name="jet1" parent="objects/Jets" instance=ExtResource("6_85mci")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1283.66, 392.874, -2194.77)
 rig_path = NodePath("AIRig")
+aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet1" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 500.0
@@ -152,10 +152,12 @@ metadata/_custom_type_script = "uid://b351wendvw15f"
 [node name="jet2" parent="objects/Jets" instance=ExtResource("6_85mci")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1565.65, 609.661, -2439.83)
 rig_path = NodePath("AIRig")
+aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
+is_expert = true
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet2"]
 transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
@@ -176,10 +178,12 @@ metadata/_custom_type_script = "uid://b351wendvw15f"
 [node name="jet3" parent="objects/Jets" instance=ExtResource("6_85mci")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1271.4, 1115.38, -4768.59)
 rig_path = NodePath("AIRig")
+aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet3" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
+is_expert = true
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet3"]
 transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
@@ -200,10 +204,12 @@ metadata/_custom_type_script = "uid://b351wendvw15f"
 [node name="jet4" parent="objects/Jets" instance=ExtResource("6_85mci")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1572.53, 609.661, -5058.66)
 rig_path = NodePath("AIRig")
+aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet4" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
+is_expert = true
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet4"]
 transform = Transform3D(8.40764, 0, 0, 0, -1.11731, 7.21672e-07, 0, -9.76787e-08, -8.25497, 0, 0, 0)
@@ -224,6 +230,7 @@ metadata/_custom_type_script = "uid://b351wendvw15f"
 [node name="jet_ally" parent="objects/Jets" instance=ExtResource("6_85mci")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -380.45, 767.262, -166.808)
 rig_path = NodePath("AIRig")
+aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet_ally" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 500.0
@@ -248,6 +255,8 @@ script = ExtResource("6_ge04i")
 flare_scene = ExtResource("7_v0qym")
 fire_interval = 8.0
 metadata/_custom_type_script = "uid://b351wendvw15f"
+
+[node name="SAMs" type="Node3D" parent="objects"]
 
 [node name="ui" type="Node3D" parent="."]
 

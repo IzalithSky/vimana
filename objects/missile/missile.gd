@@ -18,6 +18,7 @@ class_name Missile extends RigidBody3D
 
 var fuel: float = 0.0
 var trail: Trail
+var host: RigidBody3D
 
 
 func _ready() -> void:
@@ -70,7 +71,6 @@ func _on_body_entered(body: Node) -> void:
 
 
 func _die() -> void:
-	_spawn_explosion()
 	if trail:
 		trail.node_ttl = trail_ttl_after_death
 		trail = null

@@ -25,7 +25,7 @@ func launch_missile() -> Missile:
 
 	var parent: RigidBody3D = get_parent() as RigidBody3D
 	missile.linear_velocity = parent.linear_velocity
-	missile.angular_velocity = parent.angular_velocity
+	missile.host = parent
 	missile.add_collision_exception_with(parent)
 
 	get_tree().current_scene.add_child(missile)

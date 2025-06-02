@@ -10,7 +10,7 @@ class_name JetAI extends Node
 @export var missile_beam_bank_deg: float = 60.0
 @export var missile_pitch_input: float = 1.0
 @export var missile_throttle: float = 1.0
-@export var fire_cone_deg: float = 60.0
+@export var fire_cone_deg: float = 30.0
 @export var fire_range: float = 1000.0
 @export var missile_launcher: MissileLauncher
 @export var target_group: String = "alpha"
@@ -124,6 +124,9 @@ func evade_missile() -> bool:
 	for n: Node in get_tree().get_nodes_in_group("missiles"):
 		if not (n is RigidBody3D):
 			continue
+		if n.host == vehicle:
+			continue
+
 		var m: RigidBody3D = n
 		
 		var rel_pos: Vector3 = m.global_transform.origin - vehicle.global_transform.origin

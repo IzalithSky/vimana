@@ -22,11 +22,14 @@ func _custom_physics(delta: float) -> void:
 		self, global_position, -global_transform.basis.z,
 		tracking_fov_deg, heat_sensitivity)
 	
+	if new_target != null and new_target == host:
+		return
+	
 	if new_target != target:
 		target = new_target
 		if target != null:
 			last_target_position = target.global_position
-
+	
 	if target != null:
 		var target_velocity: Vector3 = (target.global_position - last_target_position) / delta
 		last_target_position = target.global_position
@@ -52,5 +55,6 @@ func _custom_physics(delta: float) -> void:
 				apply_torque(axis * torque_strength * turn_angle / delta)
 				fuel -= turn_fule_burn_rate * (turn_angle / max_turn) * delta
 	
-	if target != null and global_transform.origin.distance_to(target.global_transform.origin) < proximity_radius:
+	if target != null and target != host and global_transform.origin.distance_to(target.global_transform.origin) < proximity_radius:
+		_spawn_explosion()
 		_die()

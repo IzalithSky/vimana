@@ -6,7 +6,7 @@ class_name Jet extends Vimana
 @export var max_yaw: float = 320.0
 @export var max_roll: float = 120.0
 @export var lift_coefficient: float = 0.1
-@export var stall_aoa_deg: float = 15.0
+@export var stall_aoa_deg: float = 45.0
 @export var trail_ttl_after_stop: float = 1.0
 @export var trail_pitch_threshold: float = 0.2
 @export var trail_speed_thr: float = 100.0

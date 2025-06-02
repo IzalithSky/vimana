@@ -6,26 +6,40 @@ class_name PlayerControls extends Node
 @export var thr_rate: float = 1.5
 @export var thr_decay: float = 3.0
 @export var vehicle_path: NodePath = NodePath("..")
+@export var g_overload_damage_threshold: float = 16.0
+@export var g_overload_damage_per_sec: float = 4.0
 
 @onready var v: Node = get_node(vehicle_path)
-
 @onready var speed_label: Label = $Display/SubViewport/HBoxContainer/VBoxContainer/SpeedLabel
 @onready var throttle_label: Label = $Display/SubViewport/HBoxContainer/VBoxContainer/ThrottleLabel
 @onready var aoa_label: Label = $Display/SubViewport/HBoxContainer/VBoxContainer2/AoALabel
 @onready var gf_label: Label = $Display/SubViewport/HBoxContainer/VBoxContainer2/GForceLabel
+@onready var limiter_label: Label = $Display/SubViewport/HBoxContainer/VBoxContainer2/LimiterLabel
 @onready var throttle_progress_bar: ProgressBar = $FPCameraHolder/Camera3D/CanvasLayer2/HBoxContainer/VBoxContainerT/ThrottleProgressBar
 @onready var vl_progress_bar: ProgressBar = $FPCameraHolder/Camera3D/CanvasLayer2/HBoxContainer/VBoxContainerV/HBoxContainer1/VLProgressBar
 @onready var va_progress_bar: ProgressBar = $FPCameraHolder/Camera3D/CanvasLayer2/HBoxContainer/VBoxContainerV/HBoxContainer1/VAProgressBar
-@onready var health: Node = v.get_node_or_null("Health")
+@onready var health: Health = v.get_node_or_null("Health")
 @onready var hp_label: Label = $FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer2/HpLabel
 @onready var horizon: MeshInstance3D = $Horizon
 @onready var heading_sprite: Sprite3D = $HeadingSprite3D
 @onready var camera: Camera3D = %Camera3D
 @onready var missile_camera: Camera3D = $MissileCamera
+@onready var damage_color_rect: ColorRect = $FPCameraHolder/Camera3D/CanvasLayer1/DamageColorRect
+@export var damage_flash_alpha: float = 0.64
+@export var damage_flash_fade_speed: float = 1.0
 
 const HEADING_BUFFER_SIZE: int = 10
 var _heading_buf: Array[float] = []
 var _prev_heading: Vector3
+
+
+func _ready() -> void:
+	if health and health.has_signal("damaged"):
+		health.damaged.connect(_on_damaged)
+
+
+func _on_damaged(amount: float) -> void:
+	damage_color_rect.color.a = damage_flash_alpha
 
 
 func collect_inputs(delta: float) -> void:
@@ -81,6 +95,13 @@ func _process(delta: float) -> void:
 		aoa_label.add_theme_color_override("font_color", Color.RED)
 	else:
 		aoa_label.add_theme_color_override("font_color", Color.LAWN_GREEN)
+		
+	if v.aoa_limiter:
+		limiter_label.text = "AoA Limiter: ON"
+		limiter_label.add_theme_color_override("font_color", Color.LAWN_GREEN)
+	else:
+		limiter_label.text = "AoA Limiter: OFF"
+		limiter_label.add_theme_color_override("font_color", Color.RED)
 	
 	if health and hp_label:
 		hp_label.text = "HP: %d / %d" % [health.current_hp, health.max_hp]
@@ -121,3 +142,9 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("aoa_limiter"):
 		v.aoa_limiter = not v.aoa_limiter
+		
+	if health and v.smoothed_g > g_overload_damage_threshold:
+		health.take_damage(g_overload_damage_per_sec * delta)
+		
+	damage_color_rect.color.a = move_toward(
+		damage_color_rect.color.a, 0.0, delta * damage_flash_fade_speed)

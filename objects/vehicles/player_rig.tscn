@@ -102,6 +102,14 @@ Mouse: Freelook
 Z: Zoom
 F: Center Camera"
 
+[node name="DamageColorRect" type="ColorRect" parent="FPCameraHolder/Camera3D/CanvasLayer1"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.807843, 0, 0.0784314, 0)
+
 [node name="CanvasLayer2" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer2"]
@@ -258,6 +266,9 @@ text = "222"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
 text = "444"
+
+[node name="LimiterLabel" type="Label" parent="Display/SubViewport/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
 
 [node name="Horizon" type="MeshInstance3D" parent="."]
 material_override = SubResource("StandardMaterial3D_1m05p")

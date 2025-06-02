@@ -388,7 +388,7 @@ metadata/_custom_type_script = "uid://g4cuyhv8kiex"
 [node name="FlareLauncher" type="Node3D" parent="objects/Jets/jet_ally4"]
 script = ExtResource("6_6hha3")
 flare_scene = ExtResource("7_hotsa")
-fire_interval = 8.0
+fire_interval = 2.0
 metadata/_custom_type_script = "uid://b351wendvw15f"
 
 [node name="ui" type="Node3D" parent="."]
