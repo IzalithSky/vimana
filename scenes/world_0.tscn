@@ -129,7 +129,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1283.6
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet1" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 is_expert = true
 
@@ -154,7 +154,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1565.65, 609.661, -2439.83)
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet2"]
@@ -178,7 +178,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1271.4, 1115.38, -4768.59)
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet3" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet3"]
@@ -202,7 +202,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1572.53, 609.661, -5058.66)
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet4" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 
 [node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet4"]
@@ -226,7 +226,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -380.45, 767.262, -166.808)
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet_ally" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-desired_range = 20.0
+desired_range = 500.0
 missile_launcher = NodePath("../MissileLauncher")
 target_group = "bravo"
 ally_group = "alpha"

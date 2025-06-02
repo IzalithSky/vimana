@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dqfc8gb66o1wr" path="res://objects/missile/missile.gd" id="1_owid2"]
 [ext_resource type="PackedScene" uid="uid://b10gv1tbsvpnr" path="res://objects/common/explosion.tscn" id="2_2oy1x"]
-[ext_resource type="PackedScene" uid="uid://bucpax13pgdsw" path="res://objects/missile_trail.tscn" id="3_7amda"]
+[ext_resource type="PackedScene" uid="uid://c8sar8l1jjagi" path="res://objects/flare_trail.tscn" id="3_2oy1x"]
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="4_2oy1x"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
@@ -21,7 +21,7 @@ explosion_radius = 1.0
 explosion_min_damage = 1
 explosion_max_damage = 2
 explosion_scene = ExtResource("2_2oy1x")
-trail_scene = ExtResource("3_7amda")
+trail_scene = ExtResource("3_2oy1x")
 stabilised = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

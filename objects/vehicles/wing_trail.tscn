@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ctrt07xistypv" path="res://objects/common/trail.gd" id="1_5qwyh"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5qwyh"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e83dc"]
 transparency = 1
 blend_mode = 1
 cull_mode = 2
@@ -12,7 +12,7 @@ vertex_color_use_as_albedo = true
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_5qwyh"]
 
 [node name="Trail" type="MeshInstance3D"]
-material_override = SubResource("StandardMaterial3D_5qwyh")
+material_override = SubResource("StandardMaterial3D_e83dc")
 mesh = SubResource("ImmediateMesh_5qwyh")
 script = ExtResource("1_5qwyh")
 from_width = 0.2
