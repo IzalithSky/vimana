@@ -225,10 +225,12 @@ func collect_inputs(_delta: float) -> void:
 	
 	if not vehicle.lift_ok:
 		recover_from_stall()
-	elif avoid_obstacle():
-		if evade_missile():
-			try_fire()
-			return
+		return
+	if evade_missile():
+		try_fire()
+		return
+	if avoid_obstacle():
+		return
 	
 	if target != null:
 		act_on_point(target.global_transform.origin)
