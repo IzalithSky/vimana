@@ -1,6 +1,7 @@
-[gd_scene load_steps=21 format=3 uid="uid://pj624fkwul7"]
+[gd_scene load_steps=22 format=3 uid="uid://pj624fkwul7"]
 
-[ext_resource type="Script" path="res://objects/common/explosion.gd" id="1_17npe"]
+[ext_resource type="Script" uid="uid://b2vluth3hax2o" path="res://objects/common/explosion.gd" id="1_17npe"]
+[ext_resource type="AudioStream" uid="uid://bp5tbvec4odf3" path="res://sounds/DeathFlash.ogg" id="2_5wdij"]
 
 [sub_resource type="Curve" id="Curve_3oo6d"]
 _data = [Vector2(0, 0.359551), 0.0, 0.0, 0, 0, Vector2(0.737069, 1), 0.0, 0.0, 0, 0, Vector2(0.99569, 0.0898877), 0.0, 0.0, 0, 0]
@@ -138,3 +139,6 @@ process_material = SubResource("ParticleProcessMaterial_xfoey")
 draw_pass_1 = SubResource("SphereMesh_cun36")
 
 [node name="ExplosionSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_5wdij")
+unit_size = 500.0
+doppler_tracking = 2

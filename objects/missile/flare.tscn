@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://b3xs5okdiio4j"]
+[gd_scene load_steps=6 format=3 uid="uid://b3xs5okdiio4j"]
 
 [ext_resource type="Script" uid="uid://dqfc8gb66o1wr" path="res://objects/missile/missile.gd" id="1_owid2"]
 [ext_resource type="PackedScene" uid="uid://c8sar8l1jjagi" path="res://objects/flare_trail.tscn" id="3_2oy1x"]
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="4_2oy1x"]
+[ext_resource type="AudioStream" uid="uid://klyoturb21mt" path="res://sounds/underwater_or_space_engine.ogg" id="4_7amda"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
 
@@ -28,3 +29,11 @@ shape = SubResource("SphereShape3D_g63xp")
 [node name="HeatSource" type="Node3D" parent="."]
 script = ExtResource("4_2oy1x")
 metadata/_custom_type_script = "uid://cmb8absq6qrpl"
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_7amda")
+volume_db = -42.0
+unit_size = 100.0
+pitch_scale = 8.0
+autoplay = true
+doppler_tracking = 2

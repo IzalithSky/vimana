@@ -19,6 +19,7 @@ func _ready() -> void:
 	button_lv_d.pressed.connect(func(): _start_game(lvd))
 	exit_button.pressed.connect(func(): _exit_game())
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	randomize()
 
 
 func _start_game(vehicle_scene: PackedScene) -> void:

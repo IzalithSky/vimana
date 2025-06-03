@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://ck71e5phsxvxj"]
+[gd_scene load_steps=10 format=3 uid="uid://ck71e5phsxvxj"]
 
 [ext_resource type="Script" uid="uid://5nop0mdwyr3e" path="res://objects/vehicles/vimana_j/jet.gd" id="1_0qbkc"]
 [ext_resource type="PackedScene" uid="uid://f4a1kaj0eu8o" path="res://objects/vehicles/wing_trail.tscn" id="2_5aqhi"]
-[ext_resource type="PackedScene" uid="uid://b10gv1tbsvpnr" path="res://objects/common/explosion.tscn" id="2_g63xp"]
+[ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_g63xp"]
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="5_j0qix"]
+[ext_resource type="AudioStream" uid="uid://klyoturb21mt" path="res://sounds/underwater_or_space_engine.ogg" id="6_4tmnh"]
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="11_y4ep4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s1d72"]
@@ -48,3 +49,10 @@ mesh = SubResource("ImmediateMesh_j0qix")
 [node name="HeatSource" type="Node3D" parent="."]
 script = ExtResource("5_j0qix")
 metadata/_custom_type_script = "uid://cmb8absq6qrpl"
+
+[node name="PropulsionSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_4tmnh")
+volume_db = -55.0
+unit_size = 100.0
+autoplay = true
+doppler_tracking = 2

@@ -27,6 +27,8 @@ class_name PlayerControls extends Node
 @onready var damage_color_rect: ColorRect = $FPCameraHolder/Camera3D/CanvasLayer1/DamageColorRect
 @export var damage_flash_alpha: float = 0.64
 @export var damage_flash_fade_speed: float = 1.0
+@onready var audio_listener_3d: AudioListener3D = $FPCameraHolder/Camera3D/AudioListener3D
+@onready var aoa_limiter_warning: AudioStreamPlayer3D = $AoALimiterWarning
 
 const HEADING_BUFFER_SIZE: int = 10
 var _heading_buf: Array[float] = []
@@ -36,6 +38,7 @@ var _prev_heading: Vector3
 func _ready() -> void:
 	if health and health.has_signal("damaged"):
 		health.damaged.connect(_on_damaged)
+	audio_listener_3d.add_to_group("audio_listener")
 
 
 func _on_damaged(amount: float) -> void:
@@ -99,9 +102,13 @@ func _process(delta: float) -> void:
 	if v.aoa_limiter:
 		limiter_label.text = "AoA Limiter: ON"
 		limiter_label.add_theme_color_override("font_color", Color.LAWN_GREEN)
+		if aoa_limiter_warning.playing:
+			aoa_limiter_warning.stop()
 	else:
 		limiter_label.text = "AoA Limiter: OFF"
 		limiter_label.add_theme_color_override("font_color", Color.RED)
+		if not aoa_limiter_warning.playing:
+			aoa_limiter_warning.play()
 	
 	if health and hp_label:
 		hp_label.text = "HP: %d / %d" % [health.current_hp, health.max_hp]
@@ -116,8 +123,7 @@ func _process(delta: float) -> void:
 	var cam_pos: Vector3 = $FPCameraHolder.global_transform.origin
 	var heading_dir: Vector3 = (
 		v.linear_velocity.normalized() if v.linear_velocity.length() > 1e-3
-		else ProjectSettings.get_setting("physics/3d/default_gravity_vector").normalized()
-	)
+		else ProjectSettings.get_setting("physics/3d/default_gravity_vector").normalized())
 	heading_sprite.global_transform.origin = cam_pos + heading_dir * 1.5
 	
 	throttle_progress_bar.value = v.throttle_percent
@@ -142,7 +148,7 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("aoa_limiter"):
 		v.aoa_limiter = not v.aoa_limiter
-		
+	
 	if health and v.smoothed_g > g_overload_damage_threshold:
 		health.take_damage(g_overload_damage_per_sec * delta)
 		

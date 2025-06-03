@@ -11,9 +11,11 @@ class_name Jet extends Vimana
 @export var trail_pitch_threshold: float = 0.2
 @export var trail_speed_thr: float = 100.0
 @export var trail_pitch_thr: float = 15.0
+@export var base_pitch_scale: float = 0.6
 
 @onready var trail_l: Trail = $WingL/Trail
 @onready var trail_r: Trail = $WingR/Trail
+@onready var propulsion_sound: AudioStreamPlayer3D = $PropulsionSound
 
 
 func _ready() -> void:
@@ -30,8 +32,17 @@ func _physics_process(delta: float) -> void:
 	apply_lift()
 	apply_air_drag()
 	apply_directional_alignment()
+	
 	throttle_percent = ((throttle_input + 1.0) / 2.0) * 100.0
 	_update_wing_trails()
+	_update_propulsion_sound()
+
+
+func _update_propulsion_sound() -> void:
+	var t: float = throttle_percent / 100.0
+	propulsion_sound.pitch_scale = base_pitch_scale * lerp(1.0, 1.5, t)
+	if not propulsion_sound.playing:
+		propulsion_sound.play()
 
 
 func apply_thrust() -> void:

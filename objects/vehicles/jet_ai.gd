@@ -10,7 +10,7 @@ class_name JetAI extends Node
 @export var missile_beam_bank_deg: float = 60.0
 @export var missile_pitch_input: float = 1.0
 @export var missile_throttle: float = 1.0
-@export var fire_cone_deg: float = 30.0
+@export var fire_cone_deg: float = 60.0
 @export var fire_range: float = 1000.0
 @export var missile_launcher: MissileLauncher
 @export var target_group: String = "alpha"
@@ -163,6 +163,19 @@ func evade_missile() -> bool:
 	return false
 
 
+func _attack_target() -> void:
+	if target == null or not is_instance_valid(target):
+		return
+	var p: Vector3 = target.global_transform.origin
+	var dir: Vector3 = (p - vehicle.global_transform.origin).normalized()
+	var local: Vector3 = vehicle.global_transform.basis.inverse() * dir
+	vehicle.roll_input = clamp(-local.x * roll_gain, -1.0, 1.0)
+	vehicle.pitch_input = clamp(local.y * pitch_gain, -1.0, 1.0)
+	vehicle.yaw_input = clamp(local.x * yaw_gain, -1.0, 1.0)
+	vehicle.throttle_input = 0.8
+	try_fire()
+
+
 func try_fire() -> void:
 	if missile_launcher == null:
 		return
@@ -179,26 +192,9 @@ func try_fire() -> void:
 	if heat_target == null or heat_target.is_in_group(ally_group):
 		return
 	
-	var to_target: Vector3 = heat_target.global_transform.origin - seeker_origin
-	if to_target.length() > fire_range:
-		return
-	
 	missile_launcher.launch_missile()
 	pursuit_timer = 0.0
 	missile_fired_recently = true
-
-
-func act_on_point(p: Vector3) -> void:
-	var d: float = vehicle.global_transform.origin.distance_to(p)
-	if d > desired_range + range_tolerance:
-		move_towards(p)
-		vehicle.throttle_input = 1.0
-	elif d < desired_range - range_tolerance:
-		move_away(p)
-		vehicle.throttle_input = 0.3
-	else:
-		move_towards(p)
-		vehicle.throttle_input = 0.6
 
 
 func collect_inputs(_delta: float) -> void:
@@ -235,13 +231,37 @@ func collect_inputs(_delta: float) -> void:
 	if avoid_obstacle():
 		return
 	
-	if target != null:
+	var seeker_origin: Vector3 = vehicle.global_transform.origin
+	var seeker_fwd: Vector3 = -vehicle.global_transform.basis.z
+	var heat_target: HeatSource = HeatSeekUtils.best_heat_source(
+		self,
+		seeker_origin,
+		seeker_fwd,
+		fire_cone_deg,
+		1e-8)
+	
+	if heat_target != null and not heat_target.is_in_group(ally_group):
+		_attack_target()
+	elif target != null:
 		act_on_point(target.global_transform.origin)
-		try_fire()
-	elif anchor != null:
-		act_on_point(anchor.global_transform.origin)
 	else:
-		vehicle.roll_input = 0.0
-		vehicle.pitch_input = 0.0
-		vehicle.yaw_input = 0.0
-		vehicle.throttle_input = 0.0
+		if anchor != null:
+			act_on_point(anchor.global_transform.origin)
+		else:
+			vehicle.roll_input = 0.0
+			vehicle.pitch_input = 0.0
+			vehicle.yaw_input = 0.0
+			vehicle.throttle_input = 0.0
+
+
+func act_on_point(p: Vector3) -> void:
+	var d: float = vehicle.global_transform.origin.distance_to(p)
+	if d > desired_range + range_tolerance:
+		move_towards(p)
+		vehicle.throttle_input = 1.0
+	elif d < desired_range - range_tolerance:
+		move_away(p)
+		vehicle.throttle_input = 0.3
+	else:
+		move_towards(p)
+		vehicle.throttle_input = 0.6
