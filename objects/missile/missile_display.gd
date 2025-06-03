@@ -34,7 +34,7 @@ func _process(delta: float) -> void:
 		var dist: float = to_me.length()
 		var missile_dir: Vector3 = missile.linear_velocity.normalized()
 	
-		if missile_dir.dot(to_me.normalized()) > 0.85:
+		if missile_dir.dot(to_me.normalized()) > 0.95:
 			var id: int = missile.get_instance_id()
 			updated_ids.append(id)
 	
