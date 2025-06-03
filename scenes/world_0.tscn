@@ -154,7 +154,6 @@ metadata/_custom_type_script = "uid://b351wendvw15f"
 [node name="jet2" parent="objects/Jets" instance=ExtResource("6_85mci")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1565.65, 609.661, -2439.83)
 rig_path = NodePath("AIRig")
-aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 500.0
@@ -180,7 +179,6 @@ metadata/_custom_type_script = "uid://b351wendvw15f"
 [node name="jet3" parent="objects/Jets" instance=ExtResource("6_85mci")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1271.4, 1115.38, -4768.59)
 rig_path = NodePath("AIRig")
-aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet3" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 500.0
@@ -206,7 +204,6 @@ metadata/_custom_type_script = "uid://b351wendvw15f"
 [node name="jet4" parent="objects/Jets" instance=ExtResource("6_85mci")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1572.53, 609.661, -5058.66)
 rig_path = NodePath("AIRig")
-aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet4" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
 desired_range = 500.0

@@ -49,6 +49,12 @@ fov = 85.0
 near = 0.01
 far = 30000.0
 
+[node name="MissileDisplay" type="Node3D" parent="FPCameraHolder/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.16842)
+script = ExtResource("5_xxp4i")
+update_interval_frames = 1
+metadata/_custom_type_script = "uid://digjrqq0dauj1"
+
 [node name="CanvasLayer1" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer1"]
@@ -313,12 +319,6 @@ no_depth_test = true
 fixed_size = true
 texture_filter = 0
 texture = ExtResource("4_fcjbv")
-
-[node name="MissileDisplay" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
-script = ExtResource("5_xxp4i")
-update_interval_frames = 1
-metadata/_custom_type_script = "uid://digjrqq0dauj1"
 
 [node name="TargetTracker" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
 script = ExtResource("9_lgipv")
