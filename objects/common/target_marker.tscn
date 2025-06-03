@@ -9,8 +9,8 @@
 script = ExtResource("1_ybepw")
 
 [node name="Target" type="Sprite3D" parent="."]
-transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, 0)
 modulate = Color(0.814995, 0.701291, 0, 1)
+pixel_size = 0.0032
 billboard = 1
 double_sided = false
 no_depth_test = true
@@ -19,8 +19,8 @@ texture_filter = 0
 texture = ExtResource("2_auwka")
 
 [node name="Lock" type="Sprite3D" parent="."]
-transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, 0)
 modulate = Color(0.919814, 0.059574, 0, 1)
+pixel_size = 0.0032
 billboard = 1
 double_sided = false
 no_depth_test = true
@@ -29,8 +29,8 @@ texture_filter = 0
 texture = ExtResource("4_ylqi5")
 
 [node name="Next" type="Sprite3D" parent="."]
-transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, 0)
 modulate = Color(0.486275, 0.988235, 0, 1)
+pixel_size = 0.0032
 billboard = 1
 double_sided = false
 no_depth_test = true

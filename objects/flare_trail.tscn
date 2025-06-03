@@ -18,5 +18,5 @@ mesh = SubResource("ImmediateMesh_y8fbi")
 script = ExtResource("1_p7vii")
 from_width = 2.0
 to_width = 2.0
-lifespan = 4.0
+lifespan = 1.5
 end_color = Color(1, 1, 1, 0.411765)

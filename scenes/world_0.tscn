@@ -1,6 +1,7 @@
-[gd_scene load_steps=20 format=4 uid="uid://dj47wc5nnm06h"]
+[gd_scene load_steps=21 format=4 uid="uid://dj47wc5nnm06h"]
 
 [ext_resource type="Texture2D" uid="uid://bha6j6pklr1nk" path="res://textures/256x256/Grass/Grass_04-256x256.png" id="2_85mci"]
+[ext_resource type="Texture2D" uid="uid://262c1fhqd110" path="res://textures/kloppenheim_05_puresky_1k.hdr" id="2_v0qym"]
 [ext_resource type="PackedScene" uid="uid://ck71e5phsxvxj" path="res://objects/vehicles/vimana_j/vimana_j.tscn" id="6_85mci"]
 [ext_resource type="Script" uid="uid://b351wendvw15f" path="res://objects/missile/flare_launcher.gd" id="6_ge04i"]
 [ext_resource type="PackedScene" uid="uid://c4fte11vqk3o8" path="res://objects/vehicles/ai_rig.tscn" id="7_85mci"]
@@ -57,10 +58,11 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_7oua0")
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ge04i"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_buokp"]
+panorama = ExtResource("2_v0qym")
 
 [sub_resource type="Sky" id="Sky_85mci"]
-sky_material = SubResource("ProceduralSkyMaterial_ge04i")
+sky_material = SubResource("PanoramaSkyMaterial_buokp")
 
 [sub_resource type="Environment" id="Environment_7oua0"]
 background_mode = 2
@@ -69,8 +71,8 @@ glow_enabled = true
 fog_enabled = true
 fog_light_color = Color(0.605738, 0.825918, 0.994554, 1)
 fog_light_energy = 0.3
-fog_sun_scatter = 0.5
 fog_density = 0.0001
+fog_sky_affect = 0.8
 fog_depth_end = 10000.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ge04i"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=4 uid="uid://bokx8wuhvb2hd"]
 
 [ext_resource type="Script" uid="uid://dyxvmhny5frid" path="res://objects/vehicles/vimana_h/heli.gd" id="1_2yl4s"]
-[ext_resource type="PackedScene" uid="uid://b10gv1tbsvpnr" path="res://objects/common/explosion.tscn" id="2_3gkdx"]
+[ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_3gkdx"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="3_7m1m4"]
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="5_fk3hp"]
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="10_li03w"]

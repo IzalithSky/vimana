@@ -5,17 +5,19 @@
 [node name="MissileMarker" type="Node3D"]
 
 [node name="front" type="Sprite3D" parent="."]
-transform = Transform3D(-0.32, 0, -2.79753e-08, 0, 0.32, 0, 2.79753e-08, 0, -0.32, 0, 0, -0.01)
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, -0.01)
 modulate = Color(0.601075, 0.551266, 0, 0.6)
 double_sided = false
 no_depth_test = true
+fixed_size = true
 texture_filter = 0
 texture = ExtResource("1_y88y7")
 
 [node name="back" type="Sprite3D" parent="."]
-transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0, 0.01)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.01)
 modulate = Color(0.908982, 0.315385, 0, 0.6)
 double_sided = false
 no_depth_test = true
+fixed_size = true
 texture_filter = 0
 texture = ExtResource("1_y88y7")
