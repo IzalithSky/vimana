@@ -29,15 +29,15 @@ var target: Node3D
 var anchor: Node3D
 var pursuit_timer: float = 0.0
 var missile_fired_recently: bool = false
-var heat_seeker: HeatSeeker
+var tracker: HeatSeekerTargetTracker
 
 
 func _ready() -> void:
 	vehicle = get_parent() as Jet
 	if missile_launcher == null and has_node("MissileLauncher"):
 		missile_launcher = $MissileLauncher
-	if heat_seeker == null and vehicle.has_node("HeatSeeker"):
-		heat_seeker = vehicle.get_node("HeatSeeker") as HeatSeeker
+	if tracker == null and vehicle.has_node("HeatSeekerTargetTracker"):
+		tracker = vehicle.get_node("HeatSeekerTargetTracker") as HeatSeekerTargetTracker
 
 	vehicle.add_to_group(ally_group)
 	
@@ -171,10 +171,10 @@ func evade_missile() -> bool:
 
 
 func try_fire() -> void:
-	if missile_launcher == null or heat_seeker == null:
+	if missile_launcher == null or tracker == null:
 		return
 	
-	var heat_target: HeatSource = heat_seeker.get_best_target()
+	var heat_target: HeatSource = tracker.get_target()
 	if heat_target == null:
 		return
 	
@@ -199,15 +199,15 @@ func _attack_target() -> void:
 	vehicle.yaw_input = clamp(local.x * yaw_gain, -1.0, 1.0)
 	vehicle.throttle_input = 0.0
 	
-	if heat_seeker != null and target != null:
-		var seeker_pos: Vector3 = heat_seeker.global_position
+	if tracker != null and target != null:
+		var seeker_pos: Vector3 = tracker.global_position
 		var to_target: Vector3 = (target.global_position - seeker_pos).normalized()
 		var forward: Vector3 = -vehicle.global_transform.basis.z
 		var angle_deg: float = rad_to_deg(forward.angle_to(to_target))
 		
 		if angle_deg <= fire_cone_deg:
 			var new_basis: Basis = Basis().looking_at(to_target, Vector3.UP)
-			heat_seeker.global_transform = Transform3D(new_basis, seeker_pos)
+			tracker.global_transform = Transform3D(new_basis, seeker_pos)
 	
 	try_fire()
 

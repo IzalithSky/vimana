@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="vimana"
-run/main_scene="uid://qk17oqtdr44n"
+run/main_scene="uid://datuy11j0cxkc"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://textures/icon.svg"
 

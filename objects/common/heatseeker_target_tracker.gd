@@ -3,7 +3,7 @@ class_name HeatSeekerTargetTracker extends Node3D
 
 @export var seeker: HeatSeeker
 @export var marker_scene: PackedScene
-@export var lock_time_sec: float = 0.5
+@export var lock_time_sec: float = 1.0
 @export var show_markers: bool = true
 
 var target: HeatSource = null
