@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c4fte11vqk3o8" path="res://objects/vehicles/ai_rig.tscn" id="4_u85gc"]
 [ext_resource type="Script" uid="uid://d2nrb6pxnthli" path="res://objects/missile/missile_launcher.gd" id="5_6lmxt"]
 [ext_resource type="Script" uid="uid://b351wendvw15f" path="res://objects/missile/flare_launcher.gd" id="6_6hha3"]
-[ext_resource type="PackedScene" uid="uid://binjvtutugvoy" path="res://objects/missile/missile_heatseaker.tscn" id="6_l3x8q"]
+[ext_resource type="PackedScene" uid="uid://binjvtutugvoy" path="res://objects/missile/missile_heatseeker.tscn" id="6_l3x8q"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="7_2tbc5"]
 [ext_resource type="PackedScene" uid="uid://b3xs5okdiio4j" path="res://objects/missile/flare.tscn" id="7_hotsa"]
 [ext_resource type="Script" uid="uid://g4cuyhv8kiex" path="res://objects/common/heatseeker_target_tracker.gd" id="8_c4fq5"]

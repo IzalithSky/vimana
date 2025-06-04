@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3 uid="uid://binjvtutugvoy"]
+
+[ext_resource type="Script" uid="uid://duqd0486fbqtd" path="res://objects/missile/missile_heatseeker.gd" id="1_at0o7"]
+[ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_stroq"]
+[ext_resource type="PackedScene" uid="uid://bucpax13pgdsw" path="res://objects/missile_trail.tscn" id="3_ecw3g"]
+[ext_resource type="AudioStream" uid="uid://klyoturb21mt" path="res://sounds/underwater_or_space_engine.ogg" id="4_qksr0"]
+[ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/common/heat_seeker.gd" id="5_at0o7"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
+
+[node name="RigidBody3D" type="RigidBody3D" node_paths=PackedStringArray("seeker")]
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_at0o7")
+seeker = NodePath("HeatSeeker")
+thrust = 2000.0
+torque_strength = 40.0
+max_ang_vel_deg = 360.0
+explosion_scene = ExtResource("2_stroq")
+trail_scene = ExtResource("3_ecw3g")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_g63xp")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_qksr0")
+unit_size = 100.0
+pitch_scale = 8.0
+autoplay = true
+doppler_tracking = 2
+
+[node name="HeatSeeker" type="Node3D" parent="."]
+script = ExtResource("5_at0o7")
+metadata/_custom_type_script = "uid://cnwxl0c06eycl"

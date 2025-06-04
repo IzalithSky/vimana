@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dii7431l7ulys"]
+[gd_scene load_steps=20 format=3 uid="uid://dii7431l7ulys"]
 
 [ext_resource type="Script" uid="uid://bxfpd6lllbosy" path="res://objects/vehicles/player_controls.gd" id="1_lgipv"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="1_w214r"]
@@ -6,7 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="3_lgipv"]
 [ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="4_fcjbv"]
 [ext_resource type="AudioStream" uid="uid://dv25ginp3metu" path="res://sounds/hit.ogg" id="4_xxp4i"]
+[ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/common/heat_seeker.gd" id="5_pf0s1"]
 [ext_resource type="Script" uid="uid://digjrqq0dauj1" path="res://objects/missile/missile_display.gd" id="5_xxp4i"]
+[ext_resource type="Texture2D" uid="uid://dx33u8vdllssr" path="res://textures/marker_v.png" id="6_sbsnl"]
 [ext_resource type="Script" uid="uid://bk4syu2gcjm2n" path="res://objects/common/target_tracker.gd" id="9_lgipv"]
 [ext_resource type="PackedScene" uid="uid://bnqlnpxb47hb" path="res://objects/common/target_marker.tscn" id="10_fcjbv"]
 [ext_resource type="AudioStream" uid="uid://dxs3upvxt0kig" path="res://sounds/alarm.ogg" id="11_sbsnl"]
@@ -51,10 +53,23 @@ fov = 85.0
 near = 0.01
 far = 30000.0
 
+[node name="HeatSeekerTargetTracker" type="Node3D" parent="FPCameraHolder/Camera3D" node_paths=PackedStringArray("seeker")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.331581)
+script = ExtResource("11_xxp4i")
+seeker = NodePath("HeatSeeker")
+marker_scene = ExtResource("10_fcjbv")
+metadata/_custom_type_script = "uid://g4cuyhv8kiex"
+
+[node name="HeatSeeker" type="Node3D" parent="FPCameraHolder/Camera3D/HeatSeekerTargetTracker"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.331581)
+script = ExtResource("5_pf0s1")
+metadata/_custom_type_script = "uid://cnwxl0c06eycl"
+
 [node name="MissileDisplay" type="Node3D" parent="FPCameraHolder/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.16842)
 script = ExtResource("5_xxp4i")
 update_interval_frames = 1
+show_markers = false
 metadata/_custom_type_script = "uid://digjrqq0dauj1"
 
 [node name="CanvasLayer1" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
@@ -119,6 +134,23 @@ grow_vertical = 2
 color = Color(0.807843, 0, 0.0784314, 0)
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
+
+[node name="TextureRect" type="TextureRect" parent="FPCameraHolder/Camera3D/CanvasLayer2"]
+modulate = Color(0.486275, 0.988235, 0, 1)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("6_sbsnl")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer2"]
 anchors_preset = 15
@@ -332,13 +364,9 @@ texture = ExtResource("4_fcjbv")
 script = ExtResource("9_lgipv")
 camera = NodePath("../FPCameraHolder/Camera3D")
 marker_scene = ExtResource("10_fcjbv")
+target_group = "n"
+fov_deg = 60.0
 metadata/_custom_type_script = "uid://bk4syu2gcjm2n"
-
-[node name="HeatSeekerTargetTracker" type="Node3D" parent="." node_paths=PackedStringArray("holder")]
-script = ExtResource("11_xxp4i")
-holder = NodePath("..")
-marker_scene = ExtResource("10_fcjbv")
-metadata/_custom_type_script = "uid://g4cuyhv8kiex"
 
 [node name="MissileCamera" type="Camera3D" parent="."]
 far = 30000.0

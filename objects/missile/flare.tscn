@@ -28,6 +28,7 @@ shape = SubResource("SphereShape3D_g63xp")
 
 [node name="HeatSource" type="Node3D" parent="."]
 script = ExtResource("4_2oy1x")
+use_aspect = false
 metadata/_custom_type_script = "uid://cmb8absq6qrpl"
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]

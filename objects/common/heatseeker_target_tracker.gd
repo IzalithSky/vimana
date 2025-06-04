@@ -1,32 +1,43 @@
 class_name HeatSeekerTargetTracker extends Node3D
 
 
-@export var holder: Node3D
+@export var seeker: HeatSeeker
 @export var marker_scene: PackedScene
-@export var tracking_fov_deg: float = 60.0
-@export var heat_sensitivity: float = 1e-8
+@export var lock_time_sec: float = 0.5
+@export var show_markers: bool = true
 
 var target: HeatSource = null
+var _lock_candidate: HeatSource = null
+var _lock_timer: float = 0.0
 var _markers: Dictionary = {}
 
 
 func _process(delta: float) -> void:
-	if not is_instance_valid(target):
-		target = null
-	if holder == null:
-		return
+	var visible_sources: Array[HeatSource] = seeker.get_visible_sources()
+	var best: HeatSource = seeker.get_best_target()
 	
-	var origin: Vector3 = holder.global_transform.origin
-	var forward: Vector3 = -holder.global_transform.basis.z
-	target = HeatSeekUtils.best_heat_source(self, origin, forward, tracking_fov_deg, heat_sensitivity)
-	_update_markers()
+	if best == _lock_candidate:
+		_lock_timer += delta
+		if _lock_timer >= lock_time_sec:
+			target = _lock_candidate
+	else:
+		_lock_candidate = best
+		_lock_timer = 0.0
+		target = null
+	
+	_update_visuals(visible_sources)
 
 
-func _update_markers() -> void:
+func _update_visuals(visible_sources: Array[HeatSource]) -> void:
+	if show_markers:
+		_update_markers(visible_sources)
+	else:
+		_clear_all_markers()
+
+
+func _update_markers(visible_sources: Array[HeatSource]) -> void:
 	var live: Array[int] = []
-	for hs in get_tree().get_nodes_in_group("heat_sources"):
-		if not hs is HeatSource or not is_instance_valid(hs):
-			continue
+	for hs in visible_sources:
 		var id: int = hs.get_instance_id()
 		live.append(id)
 		var m: TargetMarker = _markers.get(id, null)
@@ -40,7 +51,18 @@ func _update_markers() -> void:
 				m.set_locked()
 			else:
 				m.clear()
+	
 	for id in _markers.keys():
 		if id not in live:
 			_markers[id].queue_free()
 			_markers.erase(id)
+
+
+func _clear_all_markers() -> void:
+	for m in _markers.values():
+		m.queue_free()
+	_markers.clear()
+
+
+func get_target() -> HeatSource:
+	return target

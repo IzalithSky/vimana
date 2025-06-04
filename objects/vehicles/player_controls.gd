@@ -8,6 +8,8 @@ class_name PlayerControls extends Node
 @export var vehicle_path: NodePath = NodePath("..")
 @export var g_overload_damage_threshold: float = 16.0
 @export var g_overload_damage_per_sec: float = 4.0
+@export var damage_flash_alpha: float = 0.64
+@export var damage_flash_fade_speed: float = 1.0
 
 @onready var v: Node = get_node(vehicle_path)
 @onready var speed_label: Label = $Display/SubViewport/HBoxContainer/VBoxContainer/SpeedLabel
@@ -25,20 +27,28 @@ class_name PlayerControls extends Node
 @onready var camera: Camera3D = %Camera3D
 @onready var missile_camera: Camera3D = $MissileCamera
 @onready var damage_color_rect: ColorRect = $FPCameraHolder/Camera3D/CanvasLayer1/DamageColorRect
-@export var damage_flash_alpha: float = 0.64
-@export var damage_flash_fade_speed: float = 1.0
 @onready var audio_listener_3d: AudioListener3D = $FPCameraHolder/Camera3D/AudioListener3D
 @onready var aoa_limiter_warning: AudioStreamPlayer3D = $AoALimiterWarning
+@onready var heat_seeker: HeatSeeker = $FPCameraHolder/Camera3D/HeatSeekerTargetTracker/HeatSeeker
 
 const HEADING_BUFFER_SIZE: int = 10
 var _heading_buf: Array[float] = []
 var _prev_heading: Vector3
+
+var missile_launcher: PlayerMissileLauncher = null
 
 
 func _ready() -> void:
 	if health and health.has_signal("damaged"):
 		health.damaged.connect(_on_damaged)
 	audio_listener_3d.add_to_group("audio_listener")
+	
+	for child in v.get_children():
+		if child is PlayerMissileLauncher:
+			missile_launcher = child
+			break
+	if missile_launcher != null:
+		missile_launcher.seeker = heat_seeker
 
 
 func _on_damaged(amount: float) -> void:
@@ -78,14 +88,28 @@ func collect_inputs(delta: float) -> void:
 	v.throttle_input = clamp(v.throttle_input, -1.0, 1.0)
 
 
+func track_cgpu_offenders() -> void:
+	var ts: Array = get_tree().get_nodes_in_group("trails")
+	print("m: %d, f: %d, t: %d" % [
+		get_tree().get_nodes_in_group("missiles").size(),
+		get_tree().get_nodes_in_group("flares").size(),
+		ts.size()])
+
+
+func print_nearest_enemy_dist() -> void:
+	var nearest_distance := INF
+	for node in get_tree().get_nodes_in_group("bravo"):
+		var dist: float = v.global_position.distance_to(node.global_position)
+		if dist < nearest_distance:
+			nearest_distance = dist
+	print("nearest:", nearest_distance)
+
+
 func _process(delta: float) -> void:
-	#var ts: Array = get_tree().get_nodes_in_group("trails")
-	#print("m: %d, f: %d, t: %d" % [
-		#get_tree().get_nodes_in_group("missiles").size(),
-		#get_tree().get_nodes_in_group("flares").size(),
-		#ts.size()])
-	
+	#print_nearest_enemy_dist()
+	#track_cgpu_offenders()
 	#var speed_kn: float = v.linear_velocity.length() * 1.94384
+	
 	speed_label.text = "Speed: %.1f m/s" % v.linear_velocity.length()
 	throttle_label.text = "Throttle: %.0f%%" % v.throttle_percent
 	aoa_label.text = "AoA: %.1f°" % v.aoa_deg

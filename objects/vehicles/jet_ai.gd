@@ -1,7 +1,7 @@
 class_name JetAI extends Node
 
 
-@export var desired_range: float = 1000.0
+@export var desired_range: float = 500.0
 @export var range_tolerance: float = 100.0
 @export var roll_gain: float = 2.0
 @export var pitch_gain: float = 1.2
@@ -20,7 +20,7 @@ class_name JetAI extends Node
 @export var is_expert: bool = false
 @export var max_pursuit_time: float = 35.0
 @export var obstacle_prediction_horizon: float = 5.0
-@export var attack_range: float = 1200.0
+@export var attack_range: float = 2000.0
 
 @onready var ray: RayCast3D = $RayCast3D
 
@@ -29,15 +29,21 @@ var target: Node3D
 var anchor: Node3D
 var pursuit_timer: float = 0.0
 var missile_fired_recently: bool = false
+var heat_seeker: HeatSeeker
 
 
 func _ready() -> void:
 	vehicle = get_parent() as Jet
 	if missile_launcher == null and has_node("MissileLauncher"):
 		missile_launcher = $MissileLauncher
+	if heat_seeker == null and vehicle.has_node("HeatSeeker"):
+		heat_seeker = vehicle.get_node("HeatSeeker") as HeatSeeker
+
 	vehicle.add_to_group(ally_group)
+	
 	var health: Health = vehicle.get_node("Health") as Health
 	health.died.connect(_on_vehicle_died)
+	
 	randomize()
 
 
@@ -99,7 +105,7 @@ func avoid_obstacle() -> bool:
 	
 	if ray.is_colliding():
 		move_away(ray.get_collision_point())
-		vehicle.throttle_input = 1.0
+		vehicle.throttle_input = 0.0
 		return true
 	return false
 
@@ -127,7 +133,7 @@ func evade_missile() -> bool:
 			continue
 		if n.host == vehicle:
 			continue
-
+	
 		var m: RigidBody3D = n
 		
 		var rel_pos: Vector3 = m.global_transform.origin - vehicle.global_transform.origin
@@ -158,31 +164,25 @@ func evade_missile() -> bool:
 			beam_evade(threat)
 		else:
 			move_away(threat.global_transform.origin)
-			vehicle.throttle_input = 1.0
+			vehicle.throttle_input = 0.0
 		return true
 	
 	return false
 
 
 func try_fire() -> void:
-	if missile_launcher == null:
+	if missile_launcher == null or heat_seeker == null:
 		return
 	
-	var seeker_origin: Vector3 = vehicle.global_transform.origin
-	var seeker_fwd: Vector3 = -vehicle.global_transform.basis.z
-	var heat_target: HeatSource = HeatSeekUtils.best_heat_source(
-		self,
-		seeker_origin,
-		seeker_fwd,
-		fire_cone_deg,
-		1e-8)
-	
-	if heat_target == null or heat_target.is_in_group(ally_group):
-		return
-	if heat_target == null or heat_target.is_in_group("flares"):
+	var heat_target: HeatSource = heat_seeker.get_best_target()
+	if heat_target == null:
 		return
 	
-	missile_launcher.launch_missile()
+	var missile: Missile = missile_launcher.launch_missile()
+	if missile is MissileHeatSeeker:
+		var seeker: MissileHeatSeeker = missile as MissileHeatSeeker
+		seeker.seeker = heat_seeker
+	
 	pursuit_timer = 0.0
 	missile_fired_recently = true
 
@@ -190,21 +190,34 @@ func try_fire() -> void:
 func _attack_target() -> void:
 	if target == null or not is_instance_valid(target):
 		return
+	
 	var p: Vector3 = target.global_transform.origin
 	var dir: Vector3 = (p - vehicle.global_transform.origin).normalized()
 	var local: Vector3 = vehicle.global_transform.basis.inverse() * dir
 	vehicle.roll_input = clamp(-local.x * roll_gain, -1.0, 1.0)
 	vehicle.pitch_input = clamp(local.y * pitch_gain, -1.0, 1.0)
 	vehicle.yaw_input = clamp(local.x * yaw_gain, -1.0, 1.0)
-	vehicle.throttle_input = 0.8
+	vehicle.throttle_input = 0.0
+	
+	if heat_seeker != null and target != null:
+		var seeker_pos: Vector3 = heat_seeker.global_position
+		var to_target: Vector3 = (target.global_position - seeker_pos).normalized()
+		var forward: Vector3 = -vehicle.global_transform.basis.z
+		var angle_deg: float = rad_to_deg(forward.angle_to(to_target))
+		
+		if angle_deg <= fire_cone_deg:
+			var new_basis: Basis = Basis().looking_at(to_target, Vector3.UP)
+			heat_seeker.global_transform = Transform3D(new_basis, seeker_pos)
+	
 	try_fire()
+
 
 func collect_inputs(_delta: float) -> void:
 	if vehicle == null:
 		return
-
+	
 	pursuit_timer += _delta
-
+	
 	if target != null and pursuit_timer > max_pursuit_time and not missile_fired_recently:
 		var prev_target: Node3D = target
 		var candidates: Array[Node3D] = []
@@ -214,16 +227,16 @@ func collect_inputs(_delta: float) -> void:
 		if candidates.size() > 0:
 			target = candidates[randi() % candidates.size()]
 			pursuit_timer = 0.0
-
+	
 	missile_fired_recently = false
-
+	
 	if target == null or not is_instance_valid(target):
 		target = find_nearest(target_group)
 	if target == null or not is_instance_valid(target):
 		anchor = find_nearest(anchor_group)
 	else:
 		anchor = null
-
+	
 	if not vehicle.lift_ok:
 		recover_from_stall()
 		return
@@ -232,7 +245,7 @@ func collect_inputs(_delta: float) -> void:
 		return
 	if avoid_obstacle():
 		return
-
+	
 	if target != null:
 		var d: float = vehicle.global_transform.origin.distance_to(target.global_transform.origin)
 		if d <= attack_range:
@@ -256,7 +269,7 @@ func act_on_point(p: Vector3) -> void:
 		vehicle.throttle_input = 1.0
 	elif d < desired_range - range_tolerance:
 		move_away(p)
-		vehicle.throttle_input = 0.3
+		vehicle.throttle_input = -0.5
 	else:
 		move_towards(p)
-		vehicle.throttle_input = 0.6
+		vehicle.throttle_input = 0.0

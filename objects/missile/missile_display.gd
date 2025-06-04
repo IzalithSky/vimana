@@ -6,6 +6,7 @@ class_name MissileDisplay extends Node3D
 @export var min_pause: float = 0.1
 @export var max_pause: float = 1.5
 @export var detection_range: float = 5000.0
+@export var show_markers: bool = true
 
 @onready var marker_scene: PackedScene = preload("res://objects/missile/missile_marker.tscn")
 @onready var proximity_alarm_sound: AudioStreamPlayer3D = $"../ProximityAlarmSound"
@@ -38,15 +39,16 @@ func _process(delta: float) -> void:
 			var id: int = missile.get_instance_id()
 			updated_ids.append(id)
 	
-			if not markers.has(id):
-				var marker: Node3D = marker_scene.instantiate()
-				add_child(marker)
-				markers[id] = marker
+			if show_markers:
+				if not markers.has(id):
+					var marker: Node3D = marker_scene.instantiate()
+					add_child(marker)
+					markers[id] = marker
 	
-			var marker: Node3D = markers[id]
-			var offset: Vector3 = -to_me.normalized() * orbit_distance
-			marker.global_transform.origin = my_pos + offset
-			marker.look_at(my_pos)
+				var marker: Node3D = markers[id]
+				var offset: Vector3 = -to_me.normalized() * orbit_distance
+				marker.global_transform.origin = my_pos + offset
+				marker.look_at(my_pos)
 	
 			if dist < nearest_dist:
 				nearest_dist = dist

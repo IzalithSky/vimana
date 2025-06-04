@@ -2,7 +2,7 @@ class_name FlareLauncher extends Node3D
 
 
 @export var flare_scene: PackedScene
-@export var fire_interval: float = 3.0
+@export var fire_interval: float = 4.0
 @export var flares_per_burst: int = 6
 @export var spread_angle_deg: float = 70.0
 

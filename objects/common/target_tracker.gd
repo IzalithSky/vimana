@@ -4,6 +4,7 @@ class_name TargetTracker extends Node3D
 @export var camera: Camera3D
 @export var marker_scene: PackedScene
 @export var select_target_action: String = "select_target"
+@export var target_group: String = "bravo"
 @export var fov_deg: float = 45.0
 @export var max_distance: float = 4000.0
 
@@ -33,7 +34,7 @@ func _get_best_target(exclude: Node3D) -> Node3D:
 	var cos_limit: float = cos(deg_to_rad(fov_deg))
 	var best: Node3D = null
 	var best_score: float = INF
-	for n in get_tree().get_nodes_in_group("targets"):
+	for n in get_tree().get_nodes_in_group(target_group):
 		if not n is Node3D or n == exclude:
 			continue
 		var to_vec: Vector3 = n.global_transform.origin - cam_pos
@@ -51,7 +52,7 @@ func _get_best_target(exclude: Node3D) -> Node3D:
 
 func _update_markers() -> void:
 	var live: Array[int] = []
-	for n in get_tree().get_nodes_in_group("targets"):
+	for n in get_tree().get_nodes_in_group(target_group):
 		if not n is Node3D or not is_instance_valid(n):
 			continue
 		var id: int = n.get_instance_id()

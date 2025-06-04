@@ -52,7 +52,7 @@ func _build_player_vehicle(vehicle_scene: PackedScene) -> Vimana:
 	vehicle_root.add_child(pml)
 	pml.camera = rig.camera
 	pml.missile_cam = rig.missile_camera
-	pml.missile_scene = preload("res://objects/missile/missile_heatseaker.tscn")
+	pml.missile_scene = preload("res://objects/missile/missile_heatseeker.tscn")
 	
 	var fll: FlareLauncher = FlareLauncher.new()
 	vehicle_root.add_child(fll)
@@ -68,7 +68,7 @@ func _find_spawn_node(root: Node) -> Node3D:
 	for node in root.get_children():
 		if node is Node3D and node.name == "Spawn":
 			return node
-		var found := _find_spawn_node(node)
+		var found: Node3D = _find_spawn_node(node)
 		if found != null:
 			return found
 	return null

@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="11_y4ep4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s1d72"]
-size = Vector3(1, 1, 4)
+size = Vector3(1.92006, 1, 4)
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_5aqhi"]
 
@@ -24,9 +24,9 @@ script = ExtResource("1_0qbkc")
 explosion_scene = ExtResource("2_g63xp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.999993, -0.0025535, 0.00268034, 0.00255942, 0.999994, -0.00220558, -0.00267469, 0.00221243, 0.999994, 0, 0, -0.0205942)
+transform = Transform3D(0.999993, -0.0025535, 0.00268034, 0.00255942, 0.999994, -0.00220558, -0.00267469, 0.00221243, 0.999994, 0, 0, 0)
 shape = SubResource("BoxShape3D_s1d72")
-debug_color = Color(0, 0.65098, 0.0156863, 0.254902)
+debug_color = Color(0, 0.651, 0.016, 1)
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("11_y4ep4")
