@@ -12,7 +12,8 @@ class_name Vimana extends RigidBody3D
 @export var control_effectiveness_speed: float = 50.0
 
 @export var explosion_scene: PackedScene
-@export var explosive_speed: float = 15.0
+@export var explosive_speed: float = 3.0
+@export var collsion_damage_mult: float = 20.0
 
 @export var aoa_limiter: bool = true
 
@@ -43,8 +44,7 @@ func _on_body_entered(body: Node) -> void:
 	if speed >= explosive_speed:
 		for child in get_children():
 			if child is Health:
-				var dmg: int = int(round(speed))
-				child.take_damage(dmg)
+				child.take_damage(speed * collsion_damage_mult)
 				break
 
 
