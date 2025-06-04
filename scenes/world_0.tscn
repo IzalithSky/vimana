@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://dj47wc5nnm06h"]
+[gd_scene load_steps=22 format=4 uid="uid://dj47wc5nnm06h"]
 
 [ext_resource type="Texture2D" uid="uid://bha6j6pklr1nk" path="res://textures/256x256/Grass/Grass_04-256x256.png" id="2_85mci"]
 [ext_resource type="Texture2D" uid="uid://262c1fhqd110" path="res://textures/kloppenheim_05_puresky_1k.hdr" id="2_v0qym"]
@@ -92,10 +92,6 @@ _surfaces = [{
 "vertex_data": PackedByteArray("3gwGwACAuL0SAhi/bIWyvwCAuL2HK5e/bIWyvwCAuD2HK5e/AAAAAACAuD2uUCw/AAAAAACAuD03VfY+sJvBPQCAuD0SAhg/AAAAAACAuL03VfY+bIWyvwCAuL2HK5e/3gwGwACAuL0SAhi/AAAAAACAuD2uUCw/KPUavwCAuD2HK5c/AAAAAACAuD03VfY+bIWyvwCAuD2HK5e/AAAAAACAuD03VfY+KPUavwCAuD2HK5c/KPUavwCAuL2HK5c/KPUavwCAuD2HK5c/AAAAAACAuD2uUCw/bIWyvwCAuD2HK5e/AAAAAACAuL03VfY+AAAAAACAuD03VfY+bIWyvwCAuD2HK5e/KPUavwCAuD2HK5c/3gwGwACAuD0SAhi/3gwGwACAuD0SAhi/KPUavwCAuD2HK5c/3gwGwACAuL0SAhi/bIWyvwCAuD2HK5e/3gwGwACAuD0SAhi/3gwGwACAuL0SAhi/KPUavwCAuL2HK5c/AAAAAACAuD2uUCw/AAAAAACAuL2uUCw/KPUavwCAuL2HK5c/AAAAAACAuL2uUCw/3gwGwACAuL0SAhi/3gwGwACAuL0SAhi/AAAAAACAuL2uUCw/sJvBPQCAuL0SAhg/3gwGwACAuL0SAhi/sJvBPQCAuL0SAhg/AAAAAACAuL03VfY+3gwGwACAuL0SAhi/KPUavwCAuD2HK5c/KPUavwCAuL2HK5c/bIWyvwCAuL2HK5e/AAAAAACAuL03VfY+bIWyvwCAuD2HK5e/sJvBPQCAuD0SAhg/KPUaPwCAuD2HK5c/AAAAAACAuD2uUCw/3gwGQACAuD0SAhi/KPUaPwCAuD2HK5c/sJvBPQCAuD0SAhg/3gwGQACAuD0SAhi/sJvBPQCAuD0SAhg/AAAAAACAuD03VfY+KPUaPwCAuD2HK5c/3gwGQACAuD0SAhi/KPUaPwCAuL2HK5c/AAAAAACAuD2uUCw/KPUaPwCAuD2HK5c/KPUaPwCAuL2HK5c/AAAAAACAuD03VfY+bIWyPwCAuD2HK5e/3gwGQACAuD0SAhi/3gwGQACAuD0SAhi/bIWyPwCAuD2HK5e/bIWyPwCAuL2HK5e/AAAAAACAuD03VfY+AAAAAACAuL03VfY+bIWyPwCAuD2HK5e/KPUaPwCAuL2HK5c/AAAAAACAuL2uUCw/AAAAAACAuD2uUCw/KPUaPwCAuL2HK5c/sJvBPQCAuL0SAhg/AAAAAACAuL2uUCw/bIWyPwCAuL2HK5e/sJvBPQCAuL0SAhg/KPUaPwCAuL2HK5c/KPUaPwCAuL2HK5c/3gwGQACAuD0SAhi/3gwGQACAuL0SAhi/3gwGQACAuL0SAhi/3gwGQACAuD0SAhi/bIWyPwCAuL2HK5e/KPUaPwCAuL2HK5c/3gwGQACAuL0SAhi/bIWyPwCAuL2HK5e/bIWyPwCAuL2HK5e/bIWyPwCAuD2HK5e/AAAAAACAuL03VfY+AAAAAACAuL03VfY+sJvBPQCAuL0SAhg/bIWyPwCAuL2HK5e/AACYxf9//n8AAJjF/3/+fwAAmMX/f/5//3//////zCL/f//////MIv9//////8wi/38AAP//zCL/fwAA///MIv9/AAD//8wi/3//////zCL/f//////MIv9//////8wi/3//////zCL/f//////MIv9//////8wiZbr/f/9//n9luv9//3/+f2W6/3//f/5///9lugAAMx3//2W6AAAzHf//ZboAADMd/3//////zCL/f//////MIv9//////8wiZjr/fwAAMx1mOv9/AAAzHWY6/38AADMdAACYxf9//n8AAJjF/3/+fwAAmMX/f/5/Zbr/f/9//n9luv9//3/+f2W6/3//f/5//38AAP//zCL/fwAA///MIv9/AAD//8wi/38AAP//zCL/fwAA///MIv9/AAD//8wi/38AAP//zCL/fwAA///MIv9/AAD//8wiZjr/fwAAMx1mOv9/AAAzHWY6/38AADMd//9lugAAMx3//2W6AAAzHf//ZboAADMd/3///wAAzCL/f///AADMIv9///8AAMwi/3///wAAzCL/f///AADMIv9///8AAMwi/3///wAAzCL/f///AADMIv9///8AAMwimMX/f5lF/z+Yxf9/mUX/P5jF/3+ZRf8/mUX/f/9//n+ZRf9//3/+f5lF/3//f/5//3///wAAzCL/f///AADMIv9///8AAMwi//+Yxf9//n///5jF/3/+f///mMX/f/5/AABluplF/z8AAGW6mUX/PwAAZbqZRf8/mUX/f/9//n+ZRf9//3/+f5lF/3//f/5//38AAAAAzCL/fwAAAADMIv9/AAAAAMwi/38AAAAAzCL/fwAAAADMIv9/AAAAAMwimMX/f5lF/z+Yxf9/mUX/P5jF/3+ZRf8///+Yxf9//n///5jF/3/+f///mMX/f/5//38AAAAAzCL/fwAAAADMIv9/AAAAAMwiAABluplF/z8AAGW6mUX/PwAAZbqZRf8//38AAAAAzCL/fwAAAADMIv9/AAAAAMwi")
 }]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_85mci"]
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.537046, 0.589631, 0.0739064, 1)
-
 [node name="world" type="Node3D"]
 
 [node name="level" type="Node3D" parent="."]
@@ -122,51 +118,12 @@ shadow_enabled = true
 [node name="objects" type="Node3D" parent="."]
 
 [node name="Spawn" type="Node3D" parent="objects"]
-transform = Transform3D(0.994267, 0, 0.106923, 0, 1, 0, -0.106923, 0, 0.994267, -501.538, 788.863, -4106.68)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2000)
 
 [node name="Jets" type="Node3D" parent="objects"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -208.903, 0, -4106.68)
-
-[node name="jet1" parent="objects/Jets" instance=ExtResource("6_85mci")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1283.66, 392.874, -2194.77)
-rig_path = NodePath("AIRig")
-aoa_limiter = false
-
-[node name="AIRig" parent="objects/Jets/jet1" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-range_tolerance = 500.0
-missile_launcher = NodePath("../MissileLauncher")
-is_expert = true
-
-[node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet1"]
-transform = Transform3D(2.037, 0, 0, 0, -0.271, 3.01992e-07, 0, -4.09199e-08, -2, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_ge04i")
-mesh = SubResource("ArrayMesh_85mci")
-
-[node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet1"]
-script = ExtResource("8_v0qym")
-missile_scene = ExtResource("8_buokp")
-metadata/_custom_type_script = "uid://d2nrb6pxnthli"
-
-[node name="FlareLauncher" type="Node3D" parent="objects/Jets/jet1"]
-script = ExtResource("6_ge04i")
-flare_scene = ExtResource("7_v0qym")
-fire_interval = 8.0
-metadata/_custom_type_script = "uid://b351wendvw15f"
-
-[node name="HeatSeeker" type="Node3D" parent="objects/Jets/jet1"]
-script = ExtResource("9_buokp")
-metadata/_custom_type_script = "uid://cnwxl0c06eycl"
-
-[node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet1"]
-modulate = Color(0.486275, 0.988235, 0, 1)
-pixel_size = 0.0032
-billboard = 1
-no_depth_test = true
-fixed_size = true
-texture = ExtResource("10_fhkym")
 
 [node name="jet2" parent="objects/Jets" instance=ExtResource("6_85mci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1565.65, 609.661, -2439.83)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
@@ -196,121 +153,6 @@ metadata/_custom_type_script = "uid://cnwxl0c06eycl"
 
 [node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet2"]
 modulate = Color(0.486275, 0.988235, 0, 1)
-pixel_size = 0.0032
-billboard = 1
-no_depth_test = true
-fixed_size = true
-texture = ExtResource("10_fhkym")
-
-[node name="jet3" parent="objects/Jets" instance=ExtResource("6_85mci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1271.4, 1115.38, -4768.59)
-rig_path = NodePath("AIRig")
-
-[node name="AIRig" parent="objects/Jets/jet3" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-range_tolerance = 500.0
-missile_launcher = NodePath("../MissileLauncher")
-is_expert = true
-
-[node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet3"]
-transform = Transform3D(2.037, 0, 0, 0, -0.271, 3.01992e-07, 0, -4.09199e-08, -2, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_ge04i")
-mesh = SubResource("ArrayMesh_85mci")
-
-[node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet3"]
-script = ExtResource("8_v0qym")
-missile_scene = ExtResource("8_buokp")
-metadata/_custom_type_script = "uid://d2nrb6pxnthli"
-
-[node name="FlareLauncher" type="Node3D" parent="objects/Jets/jet3"]
-script = ExtResource("6_ge04i")
-flare_scene = ExtResource("7_v0qym")
-fire_interval = 8.0
-metadata/_custom_type_script = "uid://b351wendvw15f"
-
-[node name="HeatSeeker" type="Node3D" parent="objects/Jets/jet3"]
-script = ExtResource("9_buokp")
-metadata/_custom_type_script = "uid://cnwxl0c06eycl"
-
-[node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet3"]
-modulate = Color(0.486275, 0.988235, 0, 1)
-pixel_size = 0.0032
-billboard = 1
-no_depth_test = true
-fixed_size = true
-texture = ExtResource("10_fhkym")
-
-[node name="jet4" parent="objects/Jets" instance=ExtResource("6_85mci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1572.53, 609.661, -5058.66)
-rig_path = NodePath("AIRig")
-
-[node name="AIRig" parent="objects/Jets/jet4" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-range_tolerance = 500.0
-missile_launcher = NodePath("../MissileLauncher")
-is_expert = true
-
-[node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet4"]
-transform = Transform3D(2.037, 0, 0, 0, -0.271, 3.01992e-07, 0, -4.09199e-08, -2, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_ge04i")
-mesh = SubResource("ArrayMesh_85mci")
-
-[node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet4"]
-script = ExtResource("8_v0qym")
-missile_scene = ExtResource("8_buokp")
-metadata/_custom_type_script = "uid://d2nrb6pxnthli"
-
-[node name="FlareLauncher" type="Node3D" parent="objects/Jets/jet4"]
-script = ExtResource("6_ge04i")
-flare_scene = ExtResource("7_v0qym")
-fire_interval = 8.0
-metadata/_custom_type_script = "uid://b351wendvw15f"
-
-[node name="HeatSeeker" type="Node3D" parent="objects/Jets/jet4"]
-script = ExtResource("9_buokp")
-metadata/_custom_type_script = "uid://cnwxl0c06eycl"
-
-[node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet4"]
-modulate = Color(0.486275, 0.988235, 0, 1)
-pixel_size = 0.0032
-billboard = 1
-no_depth_test = true
-fixed_size = true
-texture = ExtResource("10_fhkym")
-
-[node name="jet_ally" parent="objects/Jets" instance=ExtResource("6_85mci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -380.45, 767.262, -166.808)
-rig_path = NodePath("AIRig")
-aoa_limiter = false
-
-[node name="AIRig" parent="objects/Jets/jet_ally" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-range_tolerance = 500.0
-missile_launcher = NodePath("../MissileLauncher")
-target_group = "bravo"
-ally_group = "alpha"
-is_hostile = false
-is_expert = true
-
-[node name="CSGBakedMeshInstance3D2" type="MeshInstance3D" parent="objects/Jets/jet_ally"]
-transform = Transform3D(2.037, 0, 0, 0, -0.271, 3.01992e-07, 0, -4.09199e-08, -2, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_85mci")
-mesh = SubResource("ArrayMesh_85mci")
-
-[node name="MissileLauncher" type="Node3D" parent="objects/Jets/jet_ally"]
-script = ExtResource("8_v0qym")
-missile_scene = ExtResource("8_buokp")
-metadata/_custom_type_script = "uid://d2nrb6pxnthli"
-
-[node name="FlareLauncher" type="Node3D" parent="objects/Jets/jet_ally"]
-script = ExtResource("6_ge04i")
-flare_scene = ExtResource("7_v0qym")
-fire_interval = 8.0
-metadata/_custom_type_script = "uid://b351wendvw15f"
-
-[node name="HeatSeeker" type="Node3D" parent="objects/Jets/jet_ally"]
-script = ExtResource("9_buokp")
-metadata/_custom_type_script = "uid://cnwxl0c06eycl"
-
-[node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet_ally"]
-modulate = Color(0.273374, 0.490281, 1, 1)
 pixel_size = 0.0032
 billboard = 1
 no_depth_test = true

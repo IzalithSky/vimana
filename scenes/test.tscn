@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://cyuibyvdt6una"]
+
+[ext_resource type="Script" uid="uid://ciydki5nbaqxo" path="res://scenes/test.gd" id="1_iyx0m"]
+[ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/common/heat_seeker.gd" id="2_74lek"]
+[ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="3_j5jx5"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_iyx0m")
+
+[node name="HeatSeeker" type="Node3D" parent="."]
+script = ExtResource("2_74lek")
+metadata/_custom_type_script = "uid://cnwxl0c06eycl"
+
+[node name="CSGBox3D" type="CSGBox3D" parent="HeatSeeker"]
+
+[node name="HeatSource" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -5)
+script = ExtResource("3_j5jx5")
+metadata/_custom_type_script = "uid://cmb8absq6qrpl"
+
+[node name="CSGBox3D" type="CSGBox3D" parent="HeatSource"]
+transform = Transform3D(1, 0, -2.84217e-14, 0, 1, 0, 2.84217e-14, 0, 1, 0, 0, 0)

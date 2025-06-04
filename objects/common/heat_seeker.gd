@@ -4,6 +4,19 @@ class_name HeatSeeker extends Node3D
 @export var tracking_fov_deg: float = 10.0
 @export var heat_sensitivity: float = 0.0
 
+var _debug_ray: RayCast3D
+
+
+func _ready() -> void:
+	_debug_ray = RayCast3D.new()
+	_debug_ray.position = Vector3(0, 0, -1)
+	_debug_ray.target_position = Vector3(0, 0, -1000.0)
+	_debug_ray.collision_mask = 0
+	_debug_ray.collide_with_areas = false
+	_debug_ray.collide_with_bodies = false
+	_debug_ray.debug_shape_custom_color = Color.ORANGE
+	add_child(_debug_ray)
+
 
 func get_best_target() -> HeatSource:
 	var best: HeatSource = null

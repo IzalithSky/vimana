@@ -20,12 +20,12 @@ func _process(delta: float) -> void:
 		var heat_target: HeatSource = seeker.get_best_target()
 		if heat_target == null:
 			return
-	
+
 		var missile: Missile = launch_missile()
 		if missile is MissileHeatSeeker:
-			var heat_missile: MissileHeatSeeker = missile as MissileHeatSeeker
-			heat_missile.seeker = seeker
-	
+			var seeker_missile: MissileHeatSeeker = missile as MissileHeatSeeker
+			seeker_missile.lock_target(heat_target)
+
 		_pending_attach_missile = missile
 		_fire_hold_time = 0.0
 	

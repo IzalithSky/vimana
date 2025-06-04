@@ -17,6 +17,6 @@ func get_magnitude_at(sensor: Node3D) -> float:
 	
 	var to_sensor: Vector3 = (sensor.global_position - global_position).normalized()
 	var rear_dir: Vector3 = global_transform.basis.z
-	var dot: float = clamp(rear_dir.dot(to_sensor), 0.0, 1.0)
+	var dot: float = (1 + rear_dir.dot(to_sensor)) / 2
 	
 	return base * dot

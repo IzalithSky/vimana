@@ -180,8 +180,8 @@ func try_fire() -> void:
 	
 	var missile: Missile = missile_launcher.launch_missile()
 	if missile is MissileHeatSeeker:
-		var seeker: MissileHeatSeeker = missile as MissileHeatSeeker
-		seeker.seeker = heat_seeker
+		var seeker_missile: MissileHeatSeeker = missile as MissileHeatSeeker
+		seeker_missile.lock_target(heat_target)
 	
 	pursuit_timer = 0.0
 	missile_fired_recently = true
