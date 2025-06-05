@@ -142,7 +142,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet1" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-range_tolerance = 500.0
+desired_range = 100.0
 missile_launcher = NodePath("../MissileLauncher")
 is_expert = true
 
@@ -185,7 +185,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 200, 0
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-range_tolerance = 500.0
+desired_range = 100.0
 missile_launcher = NodePath("../MissileLauncher")
 is_expert = true
 
@@ -229,7 +229,7 @@ rig_path = NodePath("AIRig")
 aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet3" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-range_tolerance = 500.0
+desired_range = 100.0
 missile_launcher = NodePath("../MissileLauncher")
 is_expert = true
 
@@ -273,7 +273,7 @@ rig_path = NodePath("AIRig")
 aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet_ally" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-range_tolerance = 500.0
+desired_range = 100.0
 missile_launcher = NodePath("../MissileLauncher")
 target_group = "bravo"
 ally_group = "alpha"
