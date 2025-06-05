@@ -8,12 +8,12 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
 
-[node name="RigidBody3D" type="RigidBody3D" node_paths=PackedStringArray("seeker")]
+[node name="RigidBody3D" type="RigidBody3D" node_paths=PackedStringArray("heatSeeker")]
 continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_at0o7")
-seeker = NodePath("HeatSeeker")
+heatSeeker = NodePath("HeatSeeker")
 thrust = 2000.0
 torque_strength = 40.0
 max_ang_vel_deg = 360.0
