@@ -99,8 +99,8 @@ func avoid_obstacle() -> bool:
 	var cast_distance: float = velocity.length() * obstacle_prediction_horizon
 	var cast_target: Vector3 = vehicle.global_transform.origin + look_dir * cast_distance
 	
-	ray.global_transform = Transform3D(Basis().looking_at(look_dir, Vector3.UP), vehicle.global_transform.origin)
-	ray.target_position = cast_target - vehicle.global_transform.origin
+	ray.global_position = vehicle.global_transform.origin
+	ray.target_position = vehicle.linear_velocity.normalized() * cast_distance
 	ray.force_raycast_update()
 	
 	if ray.is_colliding():
