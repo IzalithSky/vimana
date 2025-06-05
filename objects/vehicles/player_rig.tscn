@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dii7431l7ulys"]
+[gd_scene load_steps=24 format=3 uid="uid://dii7431l7ulys"]
 
 [ext_resource type="Script" uid="uid://bxfpd6lllbosy" path="res://objects/vehicles/player_controls.gd" id="1_lgipv"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="1_w214r"]
@@ -12,9 +12,14 @@
 [ext_resource type="Texture2D" uid="uid://dx33u8vdllssr" path="res://textures/marker_v.png" id="6_sbsnl"]
 [ext_resource type="AudioStream" uid="uid://domw4yubo2r86" path="res://sounds/beep.ogg" id="7_rw3n3"]
 [ext_resource type="Script" uid="uid://bk4syu2gcjm2n" path="res://objects/common/target_tracker.gd" id="9_lgipv"]
+[ext_resource type="Shader" uid="uid://b30jy27kjrgma" path="res://objects/vehicles/g_color_rect.gdshader" id="9_u6qbw"]
 [ext_resource type="PackedScene" uid="uid://bnqlnpxb47hb" path="res://objects/common/target_marker.tscn" id="10_fcjbv"]
 [ext_resource type="AudioStream" uid="uid://dxs3upvxt0kig" path="res://sounds/alarm.ogg" id="11_sbsnl"]
 [ext_resource type="Script" uid="uid://g4cuyhv8kiex" path="res://objects/common/heatseeker_target_tracker.gd" id="11_xxp4i"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_us0ds"]
+shader = ExtResource("9_u6qbw")
+shader_parameter/radius = 0.5
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_0qbkc"]
 viewport_path = NodePath("Display/SubViewport")
@@ -87,6 +92,15 @@ metadata/_custom_type_script = "uid://digjrqq0dauj1"
 
 [node name="CanvasLayer1" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
 
+[node name="DamageColorRect" type="ColorRect" parent="FPCameraHolder/Camera3D/CanvasLayer1"]
+material = SubResource("ShaderMaterial_us0ds")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
 [node name="HBoxContainer" type="HBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer1"]
 anchors_preset = 15
 anchor_right = 1.0
@@ -137,14 +151,6 @@ V: Missile
 Mouse: Freelook
 Z: Zoom
 F: Center Camera"
-
-[node name="DamageColorRect" type="ColorRect" parent="FPCameraHolder/Camera3D/CanvasLayer1"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.807843, 0, 0.0784314, 0)
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
 
