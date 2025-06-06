@@ -4,7 +4,7 @@ class_name Missile extends RigidBody3D
 @export var thrust: float = 1200.0
 @export var drag_coeff: float = 0.005
 @export var torque_strength: float = 20.0
-@export var max_ang_vel_deg: float = 160.0
+@export var max_ang_vel_deg: float = 360.0
 @export var max_fuel: float = 20.0
 @export var proximity_radius: float = 15.0
 @export var explosion_radius: float = 25.0

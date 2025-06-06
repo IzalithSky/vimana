@@ -14,9 +14,6 @@ contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_at0o7")
 heatSeeker = NodePath("HeatSeeker")
-thrust = 2000.0
-torque_strength = 40.0
-max_ang_vel_deg = 360.0
 explosion_scene = ExtResource("2_stroq")
 trail_scene = ExtResource("3_ecw3g")
 

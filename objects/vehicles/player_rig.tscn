@@ -88,8 +88,6 @@ pitch_scale = 0.6
 [node name="MissileDisplay" type="Node3D" parent="FPCameraHolder/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.16842)
 script = ExtResource("5_xxp4i")
-update_interval_frames = 1
-detection_range = 1000.0
 metadata/_custom_type_script = "uid://digjrqq0dauj1"
 
 [node name="CanvasLayer1" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]

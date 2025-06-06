@@ -1,104 +1,80 @@
 class_name MissileHeatSeeker extends Missile
 
 
-@export var maxTurnRateDegrees: float = 90.0
 @export var turnFuelBurnRate: float = 4.0
 @export var trackingFovDegrees: float = 60.0
 @export var proximityFuseActivationDelay: float = 0.5
 @export var slowdownTriggerDistance: float = 100.0
-@export var minimumThrustFactor: float = 0.5
+@export var minimumThrustFactor: float = 0.8
 @export var heatSeeker: HeatSeeker
 
-var timeSinceLaunch: float = 0.0
+var target: HeatSource = null
 var baseThrust: float = 0.0
-var lockedTargetDirection: Vector3
-var previousTargetDirection: Vector3
+var timeSinceLaunch: float = 0.0
 
 
 func _ready() -> void:
 	super._ready()
-	lockedTargetDirection = -global_transform.basis.z
-	previousTargetDirection = lockedTargetDirection
 	baseThrust = thrust
+	heatSeeker.global_transform = global_transform
 
 
 func _custom_physics(delta: float) -> void:
 	timeSinceLaunch += delta
 	
-	update_seeker_orientation(lockedTargetDirection)
-	
-	var target: HeatSource = heatSeeker.get_best_target()
-	if target != null:
-		var directionToTarget: Vector3 = (target.global_position - global_position).normalized()
-		lockedTargetDirection = directionToTarget
-		update_seeker_orientation(lockedTargetDirection)
-	else:
-		return
+	if target != null and is_instance_valid(target):
+		update_seeker_orientation(target)
 	
 	if timeSinceLaunch < proximityFuseActivationDelay:
 		return
 	
-	var distanceToTarget: float = global_position.distance_to(target.global_position)
-	var thrustMultiplier: float = clamp(distanceToTarget / slowdownTriggerDistance, minimumThrustFactor, 1.0)
-	thrust = baseThrust * thrustMultiplier
-	
-	var targetDirectionDelta: Vector3 = (lockedTargetDirection - previousTargetDirection) / delta
-	previousTargetDirection = lockedTargetDirection
-	
-	var missileSpeed: float = max(linear_velocity.length(), 0.1)
-	var predictedDirection: Vector3 = calculate_intercept_direction(-global_transform.basis.z, missileSpeed, lockedTargetDirection, targetDirectionDelta)
-	var currentDirection: Vector3 = -global_transform.basis.z
-	var angleToTurn: float = currentDirection.angle_to(predictedDirection)
-	
-	if angleToTurn > 1e-3:
-		var turnAxis: Vector3 = currentDirection.cross(predictedDirection)
-		if turnAxis.length_squared() > 1e-5:
-			turnAxis = turnAxis.normalized()
-			var maxTurnAngle: float = deg_to_rad(maxTurnRateDegrees) * delta
-			var clampedTurnAngle: float = min(angleToTurn, maxTurnAngle)
-			apply_torque(turnAxis * torque_strength * clampedTurnAngle / delta)
-			fuel -= turnFuelBurnRate * (clampedTurnAngle / maxTurnAngle) * delta
-	
-	if distanceToTarget < proximity_radius:
-		_spawn_explosion()
-		_die()
-
-
-func calculate_intercept_direction(missileDirection: Vector3, missileSpeed: float, targetDirection: Vector3, targetAngularVelocity: Vector3) -> Vector3:
-	var relativeDirection: Vector3 = targetDirection - missileDirection
-	var a: float = targetAngularVelocity.length_squared() - missileSpeed * missileSpeed
-	var b: float = 2.0 * relativeDirection.dot(targetAngularVelocity)
-	var c: float = relativeDirection.length_squared()
-	var interceptTime: float
-	if abs(a) < 1e-3:
-		interceptTime = c / max(b, 1e-3)
-	else:
-		var discriminant: float = b * b - 4.0 * a * c
-		interceptTime = (-b + sqrt(max(discriminant, 0.0))) / (2.0 * a)
-	interceptTime = max(interceptTime, 0.0)
-	var interceptDirection: Vector3 = (targetDirection + targetAngularVelocity * interceptTime).normalized()
-	return interceptDirection
-
-
-func update_seeker_orientation(direction: Vector3) -> void:
-	if heatSeeker == null:
+	var new_target: HeatSource = heatSeeker.get_best_target()
+	if new_target != null:
+		target = new_target
+	elif target == null:
 		return
 	
-	var normalizedDirection: Vector3 = direction.normalized()
-	var missileForward: Vector3 = -global_transform.basis.z
-	var angleToTarget: float = missileForward.angle_to(normalizedDirection)
-	var maxTrackingAngle: float = deg_to_rad(trackingFovDegrees)
+	update_seeker_orientation(target)
 	
-	var seekerDirection: Vector3 = normalizedDirection
-	if angleToTarget > maxTrackingAngle:
-		var rotationAxis: Vector3 = missileForward.cross(normalizedDirection).normalized()
-		seekerDirection = missileForward.rotated(rotationAxis, maxTrackingAngle).normalized()
+	var distance: float = global_position.distance_to(target.global_position)
+	thrust = baseThrust * clamp(distance / slowdownTriggerDistance, minimumThrustFactor, 1.0)
 	
-	var seekerBasis: Basis = Basis().looking_at(seekerDirection, Vector3.UP)
-	heatSeeker.global_transform = Transform3D(seekerBasis, heatSeeker.global_position)
+	if distance < proximity_radius:
+		_spawn_explosion()
+		_die()
+	
+	if target == null or not is_instance_valid(target):
+		return
+	
+	var direction_to_target: Vector3 = (target.global_position - global_position).normalized()
+	var current_dir: Vector3 = -global_transform.basis.z
+	var angle: float = current_dir.angle_to(direction_to_target)
+	if angle > 1e-3:
+		var axis: Vector3 = current_dir.cross(direction_to_target).normalized()
+		var max_turn: float = deg_to_rad(max_ang_vel_deg) * delta
+		var turn_angle: float = min(angle, max_turn)
+		apply_torque(axis * torque_strength * (turn_angle / delta))
+		fuel -= turnFuelBurnRate * (turn_angle / max_turn) * delta
 
 
-func lock_target(target: HeatSource) -> void:
-	lockedTargetDirection = (target.global_position - global_position).normalized()
-	update_seeker_orientation(lockedTargetDirection)
-	previousTargetDirection = lockedTargetDirection
+func update_seeker_orientation(t: HeatSource) -> void:
+	if t == null or not is_instance_valid(t):
+		return
+	
+	var direction: Vector3 = (t.global_position - global_position).normalized()
+	var forward: Vector3 = -global_transform.basis.z
+	var angle_to_target: float = forward.angle_to(direction)
+	var max_tracking_angle: float = deg_to_rad(trackingFovDegrees)
+	
+	var seeker_direction: Vector3 = direction
+	if angle_to_target > max_tracking_angle:
+		var axis: Vector3 = forward.cross(direction).normalized()
+		seeker_direction = forward.rotated(axis, max_tracking_angle).normalized()
+	
+	var seeker_basis: Basis = Basis().looking_at(seeker_direction, Vector3.UP)
+	heatSeeker.global_transform = Transform3D(seeker_basis, heatSeeker.global_position)
+
+
+func lock_target(new_target: HeatSource) -> void:
+	target = new_target
+	update_seeker_orientation(target)
