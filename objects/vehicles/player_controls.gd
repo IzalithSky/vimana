@@ -31,7 +31,8 @@ class_name PlayerControls extends Node
 @onready var audio_listener_3d: AudioListener3D = $FPCameraHolder/Camera3D/AudioListener3D
 @onready var aoa_limiter_warning: AudioStreamPlayer3D = $AoALimiterWarning
 @onready var heat_seeker_target_tracker: HeatSeekerTargetTracker = $FPCameraHolder/Camera3D/HeatSeekerTargetTracker
-@onready var player_gun: PlayerGun = $FPCameraHolder/Camera3D/PlayerGun
+#@onready var player_gun: PlayerGun = $FPCameraHolder/Camera3D/PlayerGun
+#@onready var player_gun: PlayerGun = $PlayerGun
 
 const HEADING_BUFFER_SIZE: int = 10
 var _heading_buf: Array[float] = []
@@ -52,7 +53,7 @@ func _ready() -> void:
 	if missile_launcher != null:
 		missile_launcher.tracker = heat_seeker_target_tracker
 		
-	player_gun.holder = v
+	#player_gun.holder = v
 
 
 func _on_damaged(amount: float) -> void:

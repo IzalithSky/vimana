@@ -64,12 +64,12 @@ shadow_mesh = SubResource("ArrayMesh_7oua0")
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_buokp"]
 panorama = ExtResource("2_v0qym")
 
-[sub_resource type="Sky" id="Sky_85mci"]
+[sub_resource type="Sky" id="Sky_h73pm"]
 sky_material = SubResource("PanoramaSkyMaterial_buokp")
 
 [sub_resource type="Environment" id="Environment_7oua0"]
 background_mode = 2
-sky = SubResource("Sky_85mci")
+sky = SubResource("Sky_h73pm")
 glow_enabled = true
 fog_enabled = true
 fog_light_color = Color(0.605738, 0.825918, 0.994554, 1)
@@ -142,7 +142,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet1" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-desired_range = 100.0
+desired_range = 1000.0
 missile_launcher = NodePath("../MissileLauncher")
 is_expert = true
 
@@ -184,7 +184,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 200, 0
 rig_path = NodePath("AIRig")
 
 [node name="AIRig" parent="objects/Jets/jet2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-desired_range = 100.0
+desired_range = 1000.0
 missile_launcher = NodePath("../MissileLauncher")
 is_expert = true
 
@@ -227,7 +227,7 @@ rig_path = NodePath("AIRig")
 aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet3" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-desired_range = 100.0
+desired_range = 1000.0
 missile_launcher = NodePath("../MissileLauncher")
 is_expert = true
 
@@ -270,7 +270,7 @@ rig_path = NodePath("AIRig")
 aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet_ally" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("7_85mci")]
-desired_range = 100.0
+desired_range = 1000.0
 missile_launcher = NodePath("../MissileLauncher")
 target_group = "bravo"
 ally_group = "alpha"
