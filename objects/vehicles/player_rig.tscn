@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dii7431l7ulys"]
+[gd_scene load_steps=26 format=3 uid="uid://dii7431l7ulys"]
 
 [ext_resource type="Script" uid="uid://bxfpd6lllbosy" path="res://objects/vehicles/player_controls.gd" id="1_lgipv"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="1_w214r"]
@@ -16,6 +16,8 @@
 [ext_resource type="PackedScene" uid="uid://bnqlnpxb47hb" path="res://objects/common/target_marker.tscn" id="10_fcjbv"]
 [ext_resource type="AudioStream" uid="uid://dxs3upvxt0kig" path="res://sounds/alarm.ogg" id="11_sbsnl"]
 [ext_resource type="Script" uid="uid://g4cuyhv8kiex" path="res://objects/common/heatseeker_target_tracker.gd" id="11_xxp4i"]
+[ext_resource type="Script" uid="uid://d28q6x7w542ig" path="res://objects/gun/player_gun.gd" id="12_f157b"]
+[ext_resource type="PackedScene" uid="uid://sji0cuewegqk" path="res://objects/gun/bullet.tscn" id="13_qivai"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_us0ds"]
 shader = ExtResource("9_u6qbw")
@@ -53,6 +55,7 @@ script = ExtResource("1_lgipv")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.331581)
 script = ExtResource("1_w214r")
 fps_label = NodePath("Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer/FpsLabel")
+zoom_as_toggle = true
 
 [node name="Camera3D" type="Camera3D" parent="FPCameraHolder"]
 unique_name_in_owner = true
@@ -275,6 +278,11 @@ current = true
 
 [node name="ProximityAlarmSound" type="AudioStreamPlayer3D" parent="FPCameraHolder/Camera3D"]
 stream = ExtResource("4_xxp4i")
+
+[node name="PlayerGun" type="Node3D" parent="FPCameraHolder/Camera3D"]
+script = ExtResource("12_f157b")
+bullet_scene = ExtResource("13_qivai")
+metadata/_custom_type_script = "uid://d28q6x7w542ig"
 
 [node name="Display" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)

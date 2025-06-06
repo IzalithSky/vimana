@@ -6,8 +6,9 @@ class_name PlayerControls extends Node
 @export var thr_rate: float = 1.5
 @export var thr_decay: float = 3.0
 @export var vehicle_path: NodePath = NodePath("..")
+@export var g_overload_damage: bool = true
 @export var g_overload_damage_threshold: float = 16.0
-@export var g_overload_damage_per_sec: float = 4.0
+@export var g_overload_damage_per_sec: float = 1.0
 @export var damage_flash_alpha: float = 0.64
 @export var damage_flash_fade_speed: float = 1.0
 
@@ -30,7 +31,7 @@ class_name PlayerControls extends Node
 @onready var audio_listener_3d: AudioListener3D = $FPCameraHolder/Camera3D/AudioListener3D
 @onready var aoa_limiter_warning: AudioStreamPlayer3D = $AoALimiterWarning
 @onready var heat_seeker_target_tracker: HeatSeekerTargetTracker = $FPCameraHolder/Camera3D/HeatSeekerTargetTracker
-
+@onready var player_gun: PlayerGun = $FPCameraHolder/Camera3D/PlayerGun
 
 const HEADING_BUFFER_SIZE: int = 10
 var _heading_buf: Array[float] = []
@@ -50,6 +51,8 @@ func _ready() -> void:
 			break
 	if missile_launcher != null:
 		missile_launcher.tracker = heat_seeker_target_tracker
+		
+	player_gun.holder = v
 
 
 func _on_damaged(amount: float) -> void:
@@ -174,7 +177,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("aoa_limiter"):
 		v.aoa_limiter = not v.aoa_limiter
 	
-	if health and v.smoothed_g > g_overload_damage_threshold:
+	if g_overload_damage and health and v.smoothed_g > g_overload_damage_threshold:
 		health.take_damage(g_overload_damage_per_sec * delta)
 		
 	damage_color_rect.color.a = move_toward(

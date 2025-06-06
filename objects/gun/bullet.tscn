@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=4 uid="uid://sji0cuewegqk"]
+
+[ext_resource type="Script" uid="uid://dd8rln0pn4evs" path="res://objects/gun/bullet.gd" id="1_tejl5"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_wkfwf"]
+radius = 0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tejl5"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_gdnky"]
+_surfaces = [{
+"aabb": AABB(-0.04, -0.04, -0.04, 0.08, 0.08, 0.08),
+"attribute_data": PackedByteArray("AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/"),
+"format": 34359738391,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 36,
+"vertex_data": PackedByteArray("CtcjvQrXI70K1yM9CtcjvQrXI70K1yO9CtcjvQrXIz0K1yO9CtcjPQrXI70K1yO9CtcjvQrXI70K1yO9CtcjvQrXI70K1yM9CtcjvQrXIz0K1yO9CtcjvQrXI70K1yO9CtcjPQrXI70K1yO9CtcjvQrXIz0K1yO9CtcjvQrXIz0K1yM9CtcjvQrXI70K1yM9CtcjvQrXI70K1yM9CtcjvQrXIz0K1yM9CtcjPQrXIz0K1yM9CtcjPQrXIz0K1yM9CtcjvQrXIz0K1yM9CtcjvQrXIz0K1yO9CtcjvQrXI70K1yM9CtcjPQrXI70K1yM9CtcjPQrXI70K1yO9CtcjPQrXIz0K1yM9CtcjPQrXI70K1yM9CtcjvQrXI70K1yM9CtcjPQrXI70K1yO9CtcjPQrXI70K1yM9CtcjPQrXIz0K1yM9CtcjPQrXI70K1yO9CtcjPQrXIz0K1yO9CtcjvQrXIz0K1yO9CtcjvQrXIz0K1yO9CtcjPQrXIz0K1yO9CtcjPQrXIz0K1yM9CtcjPQrXIz0K1yM9CtcjPQrXIz0K1yO9CtcjPQrXI70K1yO9AAD/f/9//n8AAP9//3/+fwAA/3//f/5//38AAP//AAD/fwAA//8AAP9/AAD//wAA/////wAA/z//////AAD/P/////8AAP8/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//3//fwAA/z//f/9/AAD/P/9//38AAP8//3//////AAD/f/////8AAP9//////wAA/38AAP//AAD/fwAA//8AAP9/AAD//wAA/3//fwAA/z//f/9/AAD/P/9//38AAP8/////f/9//n////9//3/+f////3//f/5//////wAA/z//////AAD/P/////8AAP8//3//////AAD/f/////8AAP9//////wAA////f/9//n////9//3/+f////3//f/5/")
+}]
+
+[node name="RigidBody3D" type="RigidBody3D"]
+mass = 0.01
+continuous_cd = true
+script = ExtResource("1_tejl5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_wkfwf")
+
+[node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_tejl5")
+mesh = SubResource("ArrayMesh_gdnky")
