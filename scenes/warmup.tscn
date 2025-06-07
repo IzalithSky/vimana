@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=4 uid="uid://datuy11j0cxkc"]
+[gd_scene load_steps=27 format=4 uid="uid://dgu1bthxk8ue8"]
 
 [ext_resource type="Script" uid="uid://bincu12romqfa" path="res://scenes/warmup.gd" id="1_vt3q0"]
 [ext_resource type="Texture2D" uid="uid://bha6j6pklr1nk" path="res://textures/256x256/Grass/Grass_04-256x256.png" id="2_0jo3w"]
@@ -139,6 +139,7 @@ shadow_enabled = true
 [node name="jet1" parent="objects/Jets" instance=ExtResource("4_ikncn")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 rig_path = NodePath("AIRig")
+aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet1" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("5_ue6d0")]
 range_tolerance = 500.0
@@ -183,6 +184,7 @@ metadata/_custom_type_script = "uid://cnwxl0c06eycl"
 [node name="jet2" parent="objects/Jets" instance=ExtResource("4_ikncn")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 200, 0, 0)
 rig_path = NodePath("AIRig")
+aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("5_ue6d0")]
 range_tolerance = 500.0

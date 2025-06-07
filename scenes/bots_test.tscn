@@ -136,6 +136,7 @@ shadow_enabled = true
 [node name="jet1" parent="objects/Jets" instance=ExtResource("3_qydf2")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 rig_path = NodePath("AIRig")
+aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet1" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("4_2a3ep")]
 range_tolerance = 500.0
@@ -180,6 +181,7 @@ metadata/_custom_type_script = "uid://cnwxl0c06eycl"
 [node name="jet2" parent="objects/Jets" instance=ExtResource("3_qydf2")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 200, 0, 0)
 rig_path = NodePath("AIRig")
+aoa_limiter = false
 
 [node name="AIRig" parent="objects/Jets/jet2" node_paths=PackedStringArray("missile_launcher") instance=ExtResource("4_2a3ep")]
 range_tolerance = 500.0
