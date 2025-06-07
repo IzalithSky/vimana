@@ -3,8 +3,15 @@ class_name MissileLauncher extends Node3D
 
 @export var missile_scene: PackedScene
 @export var fire_interval: float = 2.0
+@export var parent: RigidBody3D
 
 var _timer: float = 0.0
+
+
+
+func _ready() -> void:
+	if parent == null:
+		parent = get_parent() as RigidBody3D
 
 
 func _process(delta: float) -> void:
@@ -23,7 +30,6 @@ func launch_missile() -> Missile:
 	missile.add_to_group("missiles")
 	missile.global_transform = global_transform
 
-	var parent: RigidBody3D = get_parent() as RigidBody3D
 	missile.linear_velocity = parent.linear_velocity
 	missile.host = parent
 	missile.add_collision_exception_with(parent)

@@ -38,7 +38,8 @@ const HEADING_BUFFER_SIZE: int = 10
 var _heading_buf: Array[float] = []
 var _prev_heading: Vector3
 
-var missile_launcher: PlayerMissileLauncher = null
+#var missile_launcher: PlayerMissileLauncher = null
+@onready var missile_launcher: PlayerMissileLauncher = $FPCameraHolder/Camera3D/PlayerMissileLauncher
 
 
 func _ready() -> void:
@@ -46,12 +47,14 @@ func _ready() -> void:
 		health.damaged.connect(_on_damaged)
 	audio_listener_3d.add_to_group("audio_listener")
 	
-	for child in v.get_children():
-		if child is PlayerMissileLauncher:
-			missile_launcher = child
-			break
-	if missile_launcher != null:
-		missile_launcher.tracker = heat_seeker_target_tracker
+	#for child in v.get_children():
+		#if child is PlayerMissileLauncher:
+			#missile_launcher = child
+			#break
+	#if missile_launcher != null:
+		#missile_launcher.tracker = heat_seeker_target_tracker
+		
+	missile_launcher.parent = v
 		
 	#player_gun.holder = v
 

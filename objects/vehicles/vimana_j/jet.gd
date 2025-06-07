@@ -53,7 +53,7 @@ func apply_jet_torque(delta: float) -> void:
 	if aoa_limiter:
 		if smoothed_g > warn_g_force:
 			var scale: float = warn_g_force / smoothed_g
-			pitch_input = clamp(pitch_input, -scale, scale)
+			pitch_input = clamp(0.5 * pitch_input, -scale, scale)
 		if not lift_ok:
 			var aoa_frac: float = clamp(1.0 - abs(aoa_deg) / stall_aoa_deg, 0.0, 1.0)
 			pitch_input *= aoa_frac

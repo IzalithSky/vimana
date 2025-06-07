@@ -48,11 +48,11 @@ func _build_player_vehicle(vehicle_scene: PackedScene) -> Vimana:
 	vehicle_root.add_child(rig)
 	vehicle_root.rig_path = vehicle_root.get_path_to(rig)
 	
-	var pml: PlayerMissileLauncher = PlayerMissileLauncher.new()
-	pml.camera = rig.camera
-	pml.missile_cam = rig.missile_camera
-	pml.missile_scene = preload("res://objects/missile/missile_heatseeker.tscn")
-	vehicle_root.add_child(pml)
+	#var pml: PlayerMissileLauncher = PlayerMissileLauncher.new()
+	#pml.camera = rig.camera
+	#pml.missile_cam = rig.missile_camera
+	#pml.missile_scene = preload("res://objects/missile/missile_heatseeker.tscn")
+	#vehicle_root.add_child(pml)
 	
 	#var pg: PlayerGun = PlayerGun.new()
 	#pg.holder = vehicle_root

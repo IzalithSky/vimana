@@ -190,7 +190,7 @@ func try_fire() -> void:
 func _attack_target() -> void:
 	if target == null or not is_instance_valid(target):
 		return
-	
+
 	var p: Vector3 = target.global_transform.origin
 	var dir: Vector3 = (p - vehicle.global_transform.origin).normalized()
 	var local: Vector3 = vehicle.global_transform.basis.inverse() * dir
@@ -198,17 +198,15 @@ func _attack_target() -> void:
 	vehicle.pitch_input = clamp(local.y * pitch_gain, -1.0, 1.0)
 	vehicle.yaw_input = clamp(local.x * yaw_gain, -1.0, 1.0)
 	vehicle.throttle_input = 0.0
-	
-	if tracker != null and target != null:
+
+	if tracker != null:
 		var seeker_pos: Vector3 = tracker.global_position
 		var to_target: Vector3 = (target.global_position - seeker_pos).normalized()
-		var forward: Vector3 = -vehicle.global_transform.basis.z
-		var angle_deg: float = rad_to_deg(forward.angle_to(to_target))
-		
-		if angle_deg <= fire_cone_deg:
-			var new_basis: Basis = Basis().looking_at(to_target, Vector3.UP)
-			tracker.global_transform = Transform3D(new_basis, seeker_pos)
-	
+		var new_basis: Basis = Basis().looking_at(to_target, Vector3.UP)
+		var new_transform: Transform3D = Transform3D(new_basis, seeker_pos)
+		tracker.global_transform = new_transform
+		missile_launcher.global_transform = new_transform
+
 	try_fire()
 
 
