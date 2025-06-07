@@ -73,7 +73,7 @@ shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.998893, 0.0235183, -0.0407348, -0.0147223, 0.978837, 0.204113, 0.0446731, -0.203287, 0.978099, 1.3319, 3.58332, 10)
-fov = 60.0
+fov = 45.0
 
 [node name="RigidBody3D" type="RigidBody3D" parent="."]
 gravity_scale = 0.0
@@ -89,6 +89,7 @@ shape = SubResource("SphereShape3D_iyx0m")
 [node name="PlayerGun" type="Node3D" parent="RigidBody3D" node_paths=PackedStringArray("holder")]
 script = ExtResource("2_bl13t")
 bullet_scene = ExtResource("3_iyx0m")
+attack_speed = 0.1
 holder = NodePath("..")
 metadata/_custom_type_script = "uid://d28q6x7w542ig"
 
@@ -97,7 +98,7 @@ script = ExtResource("4_74lek")
 metadata/_custom_type_script = "uid://dxfwciqw71xsy"
 
 [node name="Node3D" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.31937)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -200)
 gravity_scale = 0.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D"]
@@ -111,3 +112,10 @@ skeleton = NodePath("../..")
 [node name="Health" type="Node" parent="Node3D"]
 script = ExtResource("4_74lek")
 metadata/_custom_type_script = "uid://dxfwciqw71xsy"
+
+[node name="Area3D" type="Area3D" parent="Node3D"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Area3D"]
+shape = SubResource("BoxShape3D_j5jx5")

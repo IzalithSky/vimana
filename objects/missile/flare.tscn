@@ -7,7 +7,8 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
 
 [node name="RigidBody3D" type="RigidBody3D"]
-collision_mask = 2
+collision_layer = 0
+collision_mask = 0
 continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 1
