@@ -17,6 +17,9 @@ class_name Vimana extends RigidBody3D
 
 @export var aoa_limiter: bool = true
 
+@onready var heat_source: HeatSource = $HeatSource
+
+
 var rig: Node
 var roll_input: float = 0.0
 var pitch_input: float = 0.0

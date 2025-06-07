@@ -104,4 +104,5 @@ func _physics_process(delta: float) -> void:
 	apply_controls(delta)
 	apply_air_drag()
 	
+	heat_source.multiplier = abs(throttle_input) * 2.0
 	throttle_percent = throttle_input * 100.0

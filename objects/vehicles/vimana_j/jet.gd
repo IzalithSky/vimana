@@ -34,6 +34,7 @@ func _physics_process(delta: float) -> void:
 	apply_air_drag()
 	apply_directional_alignment()
 	
+	heat_source.multiplier = throttle_input + 1.0
 	throttle_percent = ((throttle_input + 1.0) / 2.0) * 100.0
 	_update_wing_trails()
 	_update_propulsion_sound()

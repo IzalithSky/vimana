@@ -2,7 +2,7 @@ class_name HeatSeeker extends Node3D
 
 
 @export var tracking_fov_deg: float = 10.0
-@export var heat_sensitivity: float = 0.0
+@export var heat_sensitivity: float = 0.00025
 
 var _debug_ray: RayCast3D
 

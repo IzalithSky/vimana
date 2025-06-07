@@ -159,6 +159,8 @@ metadata/_custom_type_script = "uid://d2nrb6pxnthli"
 [node name="FlareLauncher" type="Node3D" parent="objects/Jets/jet1"]
 script = ExtResource("6_ge04i")
 flare_scene = ExtResource("7_v0qym")
+fire_interval = 8.0
+flares_per_burst = 6
 metadata/_custom_type_script = "uid://b351wendvw15f"
 
 [node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet1"]
@@ -201,6 +203,8 @@ metadata/_custom_type_script = "uid://d2nrb6pxnthli"
 [node name="FlareLauncher" type="Node3D" parent="objects/Jets/jet2"]
 script = ExtResource("6_ge04i")
 flare_scene = ExtResource("7_v0qym")
+fire_interval = 8.0
+flares_per_burst = 6
 metadata/_custom_type_script = "uid://b351wendvw15f"
 
 [node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet2"]
@@ -244,6 +248,8 @@ metadata/_custom_type_script = "uid://d2nrb6pxnthli"
 [node name="FlareLauncher" type="Node3D" parent="objects/Jets/jet3"]
 script = ExtResource("6_ge04i")
 flare_scene = ExtResource("7_v0qym")
+fire_interval = 8.0
+flares_per_burst = 6
 metadata/_custom_type_script = "uid://b351wendvw15f"
 
 [node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet3"]
@@ -289,6 +295,8 @@ metadata/_custom_type_script = "uid://d2nrb6pxnthli"
 [node name="FlareLauncher" type="Node3D" parent="objects/Jets/jet_ally"]
 script = ExtResource("6_ge04i")
 flare_scene = ExtResource("7_v0qym")
+fire_interval = 8.0
+flares_per_burst = 6
 metadata/_custom_type_script = "uid://b351wendvw15f"
 
 [node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet_ally"]
