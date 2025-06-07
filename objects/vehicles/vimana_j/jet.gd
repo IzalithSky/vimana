@@ -12,6 +12,7 @@ class_name Jet extends Vimana
 @export var trail_speed_thr: float = 100.0
 @export var trail_pitch_thr: float = 15.0
 @export var base_pitch_scale: float = 0.6
+@export var glimiter_scale: float = 0.3
 
 @onready var trail_l: Trail = $WingL/Trail
 @onready var trail_r: Trail = $WingR/Trail
@@ -52,8 +53,8 @@ func apply_thrust() -> void:
 func apply_jet_torque(delta: float) -> void:
 	if aoa_limiter:
 		if smoothed_g > warn_g_force:
-			var scale: float = warn_g_force / smoothed_g
-			pitch_input = clamp(0.5 * pitch_input, -scale, scale)
+			var scale: float = glimiter_scale * warn_g_force / smoothed_g
+			pitch_input = clamp(pitch_input, -scale, scale)
 		if not lift_ok:
 			var aoa_frac: float = clamp(1.0 - abs(aoa_deg) / stall_aoa_deg, 0.0, 1.0)
 			pitch_input *= aoa_frac

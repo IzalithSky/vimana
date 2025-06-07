@@ -8,7 +8,7 @@ class_name Vimana extends RigidBody3D
 @export var drag_side: float = 0.025
 @export var alignment_strength: float = 4.0
 
-@export var warn_g_force: float = 6.0
+@export var warn_g_force: float = 8.0
 @export var control_effectiveness_speed: float = 50.0
 
 @export var explosion_scene: PackedScene
