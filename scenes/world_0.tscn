@@ -99,7 +99,7 @@ albedo_color = Color(0.752941, 0.317647, 0.94902, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n7kk8"]
 vertex_color_use_as_albedo = true
-albedo_color = Color(0.751827, 0.317659, 0.949883, 1)
+albedo_color = Color(0.798083, 0.185036, 0, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eqyee"]
 vertex_color_use_as_albedo = true
@@ -169,6 +169,7 @@ pixel_size = 0.0032
 billboard = 1
 no_depth_test = true
 fixed_size = true
+texture_filter = 0
 texture = ExtResource("10_fhkym")
 
 [node name="HeatSeekerTargetTracker" type="Node3D" parent="objects/Jets/jet1" node_paths=PackedStringArray("seeker")]
@@ -213,6 +214,7 @@ pixel_size = 0.0032
 billboard = 1
 no_depth_test = true
 fixed_size = true
+texture_filter = 0
 texture = ExtResource("10_fhkym")
 
 [node name="HeatSeekerTargetTracker" type="Node3D" parent="objects/Jets/jet2" node_paths=PackedStringArray("seeker")]
@@ -258,6 +260,7 @@ pixel_size = 0.0032
 billboard = 1
 no_depth_test = true
 fixed_size = true
+texture_filter = 0
 texture = ExtResource("10_fhkym")
 
 [node name="HeatSeekerTargetTracker" type="Node3D" parent="objects/Jets/jet3" node_paths=PackedStringArray("seeker")]
@@ -305,6 +308,7 @@ pixel_size = 0.0032
 billboard = 1
 no_depth_test = true
 fixed_size = true
+texture_filter = 0
 texture = ExtResource("10_fhkym")
 
 [node name="HeatSeekerTargetTracker" type="Node3D" parent="objects/Jets/jet_ally" node_paths=PackedStringArray("seeker")]

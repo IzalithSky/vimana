@@ -11,4 +11,5 @@ billboard = 1
 double_sided = false
 no_depth_test = true
 fixed_size = true
+texture_filter = 0
 texture = ExtResource("1_by6gq")
