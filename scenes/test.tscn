@@ -1,9 +1,11 @@
 [gd_scene load_steps=15 format=4 uid="uid://cyuibyvdt6una"]
 
 [ext_resource type="Script" uid="uid://ciydki5nbaqxo" path="res://scenes/test.gd" id="1_iyx0m"]
-[ext_resource type="Script" uid="uid://d28q6x7w542ig" path="res://objects/gun/player_gun.gd" id="2_bl13t"]
-[ext_resource type="PackedScene" uid="uid://sji0cuewegqk" path="res://objects/gun/bullet.tscn" id="3_iyx0m"]
-[ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="4_74lek"]
+[ext_resource type="Script" uid="uid://b28v7lt37mwvw" path="res://objects/common/radar_beam.gd" id="3_74lek"]
+[ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="3_at5dv"]
+[ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/common/radar_target.gd" id="4_j5jx5"]
+[ext_resource type="Shader" uid="uid://b30jy27kjrgma" path="res://objects/vehicles/g_color_rect.gdshader" id="4_jcd4p"]
+[ext_resource type="Script" uid="uid://ct1jhkyov3ta7" path="res://scenes/test_target_1.gd" id="4_lpvoh"]
 [ext_resource type="Texture2D" uid="uid://262c1fhqd110" path="res://textures/kloppenheim_05_puresky_1k.hdr" id="5_j5jx5"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lpvoh"]
@@ -23,40 +25,25 @@ fog_density = 0.0001
 fog_sky_affect = 0.8
 fog_depth_end = 10000.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iyx0m"]
-shading_mode = 0
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.480249, 0.605738, 0, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uacia"]
+shader = ExtResource("4_jcd4p")
+shader_parameter/radius = 0.5
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_iyx0m"]
-_surfaces = [{
-"aabb": AABB(-0.5, -0.5, -0.5, 1, 1, 1),
-"attribute_data": PackedByteArray("AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/"),
-"format": 34359738391,
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 36,
-"vertex_data": PackedByteArray("AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAD8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAPwAAAL8AAAC/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//38AAP//AAD/fwAA//8AAP9/AAD//wAA/////wAA/z//////AAD/P/////8AAP8/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//3//fwAA/z//f/9/AAD/P/9//38AAP8//3//////AAD/f/////8AAP9//////wAA/38AAP//AAD/fwAA//8AAP9/AAD//wAA/3//fwAA/z//f/9/AAD/P/9//38AAP8/////f/9//n////9//3/+f////3//f/5//////wAA/z//////AAD/P/////8AAP8//3//////AAD/f/////8AAP9//////wAA////f/9//n////9//3/+f////3//f/5/")
-}]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_iyx0m"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_j5jx5"]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_j5jx5"]
+data = PackedVector3Array(-100, -100, 0.5, -100, -100, -0.5, -100, 100, -0.5, 100, -100, -0.5, -100, -100, -0.5, -100, -100, 0.5, -100, 100, -0.5, -100, -100, -0.5, 100, -100, -0.5, -100, 100, -0.5, -100, 100, 0.5, -100, -100, 0.5, -100, -100, 0.5, -100, 100, 0.5, 100, 100, 0.5, 100, 100, 0.5, -100, 100, 0.5, -100, 100, -0.5, -100, -100, 0.5, 100, -100, 0.5, 100, -100, -0.5, 100, 100, 0.5, 100, -100, 0.5, -100, -100, 0.5, 100, -100, -0.5, 100, -100, 0.5, 100, 100, 0.5, 100, -100, -0.5, 100, 100, -0.5, -100, 100, -0.5, -100, 100, -0.5, 100, 100, -0.5, 100, 100, 0.5, 100, 100, 0.5, 100, 100, -0.5, 100, -100, -0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j5jx5"]
-shading_mode = 0
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.896179, 0.182403, 0.367254, 1)
+albedo_color = Color(0.115148, 0.281356, 0.100276, 1)
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_lpvoh"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_j5jx5"]
 _surfaces = [{
-"aabb": AABB(-0.5, -0.5, -0.5, 1, 1, 1),
+"aabb": AABB(-100, -100, -0.5, 200, 200, 1),
 "attribute_data": PackedByteArray("AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/"),
 "format": 34359738391,
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 36,
-"vertex_data": PackedByteArray("AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAD8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAPwAAAL8AAAC/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//38AAP//AAD/fwAA//8AAP9/AAD//wAA/////wAA/z//////AAD/P/////8AAP8/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//3//fwAA/z//f/9/AAD/P/9//38AAP8//3//////AAD/f/////8AAP9//////wAA/38AAP//AAD/fwAA//8AAP9/AAD//wAA/3//fwAA/z//f/9/AAD/P/9//38AAP8/////f/9//n////9//3/+f////3//f/5//////wAA/z//////AAD/P/////8AAP8//3//////AAD/f/////8AAP9//////wAA////f/9//n////9//3/+f////3//f/5/")
+"vertex_data": PackedByteArray("AADIwgAAyMIAAAA/AADIwgAAyMIAAAC/AADIwgAAyEIAAAC/AADIQgAAyMIAAAC/AADIwgAAyMIAAAC/AADIwgAAyMIAAAA/AADIwgAAyEIAAAC/AADIwgAAyMIAAAC/AADIQgAAyMIAAAC/AADIwgAAyEIAAAC/AADIwgAAyEIAAAA/AADIwgAAyMIAAAA/AADIwgAAyMIAAAA/AADIwgAAyEIAAAA/AADIQgAAyEIAAAA/AADIQgAAyEIAAAA/AADIwgAAyEIAAAA/AADIwgAAyEIAAAC/AADIwgAAyMIAAAA/AADIQgAAyMIAAAA/AADIQgAAyMIAAAC/AADIQgAAyEIAAAA/AADIQgAAyMIAAAA/AADIwgAAyMIAAAA/AADIQgAAyMIAAAC/AADIQgAAyMIAAAA/AADIQgAAyEIAAAA/AADIQgAAyMIAAAC/AADIQgAAyEIAAAC/AADIwgAAyEIAAAC/AADIwgAAyEIAAAC/AADIQgAAyEIAAAC/AADIQgAAyEIAAAA/AADIQgAAyEIAAAA/AADIQgAAyEIAAAC/AADIQgAAyMIAAAC/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//38AAP//AAD/fwAA//8AAP9/AAD//wAA/////wAA/z//////AAD/P/////8AAP8/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//3//fwAA/z//f/9/AAD/P/9//38AAP8//3//////AAD/f/////8AAP9//////wAA/38AAP//AAD/fwAA//8AAP9/AAD//wAA/3//fwAA/z//f/9/AAD/P/9//38AAP8/////f/9//n////9//3/+f////3//f/5//////wAA/z//////AAD/P/////8AAP8//3//////AAD/f/////8AAP9//////wAA////f/9//n////9//3/+f////3//f/5/")
 }]
 
 [node name="Node3D" type="Node3D"]
@@ -71,51 +58,119 @@ environment = SubResource("Environment_at5dv")
 transform = Transform3D(0.803192, 0.303667, -0.512513, 0, 0.860324, 0.509747, 0.59572, -0.409425, 0.691005, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.998893, 0.0235183, -0.0407348, -0.0147223, 0.978837, 0.204113, 0.0446731, -0.203287, 0.978099, 1.3319, 3.58332, 10)
+[node name="FPCameraHolder" type="Node3D" parent="." node_paths=PackedStringArray("fps_label")]
+transform = Transform3D(1, -1.86265e-09, -3.72529e-09, -9.31323e-10, 1, 0, 0, 0, 1, 1.3319, 3.58332, 10)
+script = ExtResource("3_at5dv")
+fps_label = NodePath("Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer/FpsLabel")
+normal_fov = 45.0
+zoomed_fov = 25.0
+zoom_as_toggle = true
+
+[node name="Camera3D" type="Camera3D" parent="FPCameraHolder"]
+unique_name_in_owner = true
 fov = 45.0
+near = 0.01
 
-[node name="RigidBody3D" type="RigidBody3D" parent="."]
-gravity_scale = 0.0
+[node name="CanvasLayer1" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
 
-[node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
-material_override = SubResource("StandardMaterial3D_iyx0m")
-mesh = SubResource("ArrayMesh_iyx0m")
-skeleton = NodePath("../..")
+[node name="DamageColorRect" type="ColorRect" parent="FPCameraHolder/Camera3D/CanvasLayer1"]
+material = SubResource("ShaderMaterial_uacia")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
-shape = SubResource("SphereShape3D_iyx0m")
+[node name="HBoxContainer" type="HBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer1"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="PlayerGun" type="Node3D" parent="RigidBody3D" node_paths=PackedStringArray("holder")]
-script = ExtResource("2_bl13t")
-bullet_scene = ExtResource("3_iyx0m")
-attack_speed = 0.1
-holder = NodePath("..")
-metadata/_custom_type_script = "uid://d28q6x7w542ig"
+[node name="VBoxContainer2" type="VBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer"]
+layout_mode = 2
 
-[node name="Health" type="Node" parent="RigidBody3D"]
-script = ExtResource("4_74lek")
-metadata/_custom_type_script = "uid://dxfwciqw71xsy"
+[node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 6
 
-[node name="Node3D" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -200)
-gravity_scale = 0.0
+[node name="HpLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+text = "111"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D"]
-shape = SubResource("BoxShape3D_j5jx5")
+[node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+[node name="VBoxContainer" type="VBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="FpsLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+text = "111"
+
+[node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="LegendLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "W/S: Pitch
+A/D: Roll
+Q/E: Yaw
+Shift/Space: Throttle
+C/Scroll: Flares
+G: AoA Limiter
+M2: Missile
+Mouse: Freelook
+Z: Zoom
+F: Center Camera"
+
+[node name="radar" type="CSGBox3D" parent="."]
+
+[node name="RadarBeam" type="Node3D" parent="radar"]
+script = ExtResource("3_74lek")
+metadata/_custom_type_script = "uid://b28v7lt37mwvw"
+
+[node name="target1" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -333)
+
+[node name="RadarTarget" type="Node3D" parent="target1"]
+script = ExtResource("4_j5jx5")
+metadata/_custom_type_script = "uid://diotgcgm0qcsn"
+
+[node name="target2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -764.963)
+script = ExtResource("4_lpvoh")
+amplitude = 10.0
+speed = 8.0
+
+[node name="RadarTarget" type="Node3D" parent="target2"]
+script = ExtResource("4_j5jx5")
+metadata/_custom_type_script = "uid://diotgcgm0qcsn"
+
+[node name="terrain" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -999)
+collision_layer = 9
+collision_mask = 0
+
+[node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="terrain"]
+shape = SubResource("ConcavePolygonShape3D_j5jx5")
+
+[node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="terrain"]
 material_override = SubResource("StandardMaterial3D_j5jx5")
-mesh = SubResource("ArrayMesh_lpvoh")
+mesh = SubResource("ArrayMesh_j5jx5")
 skeleton = NodePath("../..")
 
-[node name="Health" type="Node" parent="Node3D"]
-script = ExtResource("4_74lek")
-metadata/_custom_type_script = "uid://dxfwciqw71xsy"
-
-[node name="Area3D" type="Area3D" parent="Node3D"]
-collision_layer = 4
-collision_mask = 4
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Area3D"]
-shape = SubResource("BoxShape3D_j5jx5")
+[node name="RayCast3D" type="RayCast3D" parent="terrain"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.429608, 0.796104)
+collision_mask = 8
+collide_with_areas = true
+collide_with_bodies = false

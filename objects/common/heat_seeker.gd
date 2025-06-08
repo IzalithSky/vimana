@@ -4,8 +4,8 @@ class_name HeatSeeker extends Node3D
 @export var tracking_fov_deg: float = 10.0
 @export var heat_sensitivity: float = 5
 
-var _debug_ray: RayCast3D
 var sens: float
+var _debug_ray: RayCast3D
 
 
 func _ready() -> void:
