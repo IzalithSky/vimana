@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=4 uid="uid://cyuibyvdt6una"]
+[gd_scene load_steps=17 format=4 uid="uid://cyuibyvdt6una"]
 
 [ext_resource type="Script" uid="uid://ciydki5nbaqxo" path="res://scenes/test.gd" id="1_iyx0m"]
 [ext_resource type="Script" uid="uid://b28v7lt37mwvw" path="res://objects/common/radar_beam.gd" id="3_74lek"]
@@ -7,6 +7,8 @@
 [ext_resource type="Shader" uid="uid://b30jy27kjrgma" path="res://objects/vehicles/g_color_rect.gdshader" id="4_jcd4p"]
 [ext_resource type="Script" uid="uid://ct1jhkyov3ta7" path="res://scenes/test_target_1.gd" id="4_lpvoh"]
 [ext_resource type="Texture2D" uid="uid://262c1fhqd110" path="res://textures/kloppenheim_05_puresky_1k.hdr" id="5_j5jx5"]
+[ext_resource type="Script" uid="uid://squqqv8qatax" path="res://objects/common/radar_echo_tracker.gd" id="5_jcd4p"]
+[ext_resource type="PackedScene" uid="uid://qd8phs5buioq" path="res://objects/common/radar_echo_marker.tscn" id="6_uacia"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lpvoh"]
 panorama = ExtResource("5_j5jx5")
@@ -62,7 +64,6 @@ shadow_enabled = true
 transform = Transform3D(1, -1.86265e-09, -3.72529e-09, -9.31323e-10, 1, 0, 0, 0, 1, 1.3319, 3.58332, 10)
 script = ExtResource("3_at5dv")
 fps_label = NodePath("Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer/FpsLabel")
-normal_fov = 45.0
 zoomed_fov = 25.0
 zoom_as_toggle = true
 
@@ -133,9 +134,17 @@ Mouse: Freelook
 Z: Zoom
 F: Center Camera"
 
-[node name="radar" type="CSGBox3D" parent="."]
+[node name="radar" type="CSGBox3D" parent="FPCameraHolder/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -4)
 
-[node name="RadarBeam" type="Node3D" parent="radar"]
+[node name="RadarEchoTracker" type="Node3D" parent="FPCameraHolder/Camera3D/radar" node_paths=PackedStringArray("radar")]
+script = ExtResource("5_jcd4p")
+radar = NodePath("RadarBeam")
+marker_scene = ExtResource("6_uacia")
+metadata/_custom_type_script = "uid://squqqv8qatax"
+
+[node name="RadarBeam" type="Node3D" parent="FPCameraHolder/Camera3D/radar/RadarEchoTracker"]
+unique_name_in_owner = true
 script = ExtResource("3_74lek")
 metadata/_custom_type_script = "uid://b28v7lt37mwvw"
 
@@ -147,17 +156,17 @@ script = ExtResource("4_j5jx5")
 metadata/_custom_type_script = "uid://diotgcgm0qcsn"
 
 [node name="target2" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -764.963)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -333)
 script = ExtResource("4_lpvoh")
 amplitude = 10.0
-speed = 8.0
+speed = 13.0
 
 [node name="RadarTarget" type="Node3D" parent="target2"]
 script = ExtResource("4_j5jx5")
 metadata/_custom_type_script = "uid://diotgcgm0qcsn"
 
 [node name="terrain" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -999)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -333)
 collision_layer = 9
 collision_mask = 0
 
@@ -170,6 +179,39 @@ mesh = SubResource("ArrayMesh_j5jx5")
 skeleton = NodePath("../..")
 
 [node name="RayCast3D" type="RayCast3D" parent="terrain"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.429608, 0.796104)
+collision_mask = 8
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="target3" type="CSGBox3D" parent="."]
+transform = Transform3D(0.122839, 0, 0.992427, 0, 1, 0, -0.992427, 0, 0.122839, -2460.79, 0, 646.847)
+
+[node name="RadarTarget" type="Node3D" parent="target3"]
+script = ExtResource("4_j5jx5")
+metadata/_custom_type_script = "uid://diotgcgm0qcsn"
+
+[node name="target4" type="CSGBox3D" parent="."]
+transform = Transform3D(0.122839, 0, 0.992427, 0, 1, 0, -0.992427, 0, 0.122839, -2263.59, 0, 626.998)
+
+[node name="RadarTarget" type="Node3D" parent="target4"]
+script = ExtResource("4_j5jx5")
+metadata/_custom_type_script = "uid://diotgcgm0qcsn"
+
+[node name="terrain2" type="Area3D" parent="."]
+transform = Transform3D(0.122839, 0, 0.992427, 0, 1, 0, -0.992427, 0, 0.122839, -2897.71, 0, 636.922)
+collision_layer = 9
+collision_mask = 0
+
+[node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="terrain2"]
+shape = SubResource("ConcavePolygonShape3D_j5jx5")
+
+[node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="terrain2"]
+material_override = SubResource("StandardMaterial3D_j5jx5")
+mesh = SubResource("ArrayMesh_j5jx5")
+skeleton = NodePath("../..")
+
+[node name="RayCast3D" type="RayCast3D" parent="terrain2"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.429608, 0.796104)
 collision_mask = 8
 collide_with_areas = true

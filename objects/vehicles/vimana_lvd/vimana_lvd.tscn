@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=4 uid="uid://cg1rl1irjyc6q"]
+[gd_scene load_steps=9 format=4 uid="uid://cg1rl1irjyc6q"]
 
 [ext_resource type="Script" uid="uid://bgyhgxmmogsmq" path="res://objects/vehicles/vimana_lvd/vimana_lvd.gd" id="1_3juvv"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_k03oh"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="3_y6qys"]
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="5_3pkc8"]
+[ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/common/radar_target.gd" id="6_qno0u"]
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="10_hkbin"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
@@ -86,3 +87,8 @@ metadata/_custom_type_script = "uid://dxfwciqw71xsy"
 script = ExtResource("5_3pkc8")
 background = 20.0
 metadata/_custom_type_script = "uid://cmb8absq6qrpl"
+
+[node name="RadarTarget" type="Node3D" parent="."]
+script = ExtResource("6_qno0u")
+rcs = 2.0
+metadata/_custom_type_script = "uid://diotgcgm0qcsn"

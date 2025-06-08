@@ -73,7 +73,6 @@ func _update_markers(visible_sources: Array[HeatSource]) -> void:
 		var m: TargetMarker = _markers.get(id, null)
 		if m == null and marker_scene != null:
 			m = marker_scene.instantiate() as TargetMarker
-			#m.add_to_group("targets")
 			add_child(m)
 			_markers[id] = m
 		if m != null:

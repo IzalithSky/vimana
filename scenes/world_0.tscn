@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=4 uid="uid://dj47wc5nnm06h"]
+[gd_scene load_steps=25 format=4 uid="uid://dj47wc5nnm06h"]
 
 [ext_resource type="Texture2D" uid="uid://bha6j6pklr1nk" path="res://textures/256x256/Grass/Grass_04-256x256.png" id="2_85mci"]
 [ext_resource type="Texture2D" uid="uid://262c1fhqd110" path="res://textures/kloppenheim_05_puresky_1k.hdr" id="2_v0qym"]
@@ -10,7 +10,6 @@
 [ext_resource type="Script" uid="uid://d2nrb6pxnthli" path="res://objects/missile/missile_launcher.gd" id="8_v0qym"]
 [ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/common/heat_seeker.gd" id="9_buokp"]
 [ext_resource type="PackedScene" uid="uid://bwqjbnwmus3ka" path="res://scenes/pause_menu.tscn" id="9_v0qym"]
-[ext_resource type="Texture2D" uid="uid://dx33u8vdllssr" path="res://textures/marker_v.png" id="10_fhkym"]
 [ext_resource type="Script" uid="uid://g4cuyhv8kiex" path="res://objects/common/heatseeker_target_tracker.gd" id="10_h73pm"]
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_85mci"]
@@ -110,6 +109,7 @@ albedo_color = Color(0.286886, 0.660013, 0.147926, 1)
 [node name="level" type="Node3D" parent="."]
 
 [node name="terrain" type="StaticBody3D" parent="level"]
+collision_layer = 9
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="level/terrain"]
 shape = SubResource("ConcavePolygonShape3D_85mci")
@@ -164,15 +164,6 @@ fire_interval = 8.0
 flares_per_burst = 6
 metadata/_custom_type_script = "uid://b351wendvw15f"
 
-[node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet1"]
-modulate = Color(0.486275, 0.988235, 0, 1)
-pixel_size = 0.0032
-billboard = 1
-no_depth_test = true
-fixed_size = true
-texture_filter = 0
-texture = ExtResource("10_fhkym")
-
 [node name="HeatSeekerTargetTracker" type="Node3D" parent="objects/Jets/jet1" node_paths=PackedStringArray("seeker")]
 script = ExtResource("10_h73pm")
 seeker = NodePath("HeatSeeker")
@@ -210,15 +201,6 @@ fire_interval = 8.0
 flares_per_burst = 6
 metadata/_custom_type_script = "uid://b351wendvw15f"
 
-[node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet2"]
-modulate = Color(0.486275, 0.988235, 0, 1)
-pixel_size = 0.0032
-billboard = 1
-no_depth_test = true
-fixed_size = true
-texture_filter = 0
-texture = ExtResource("10_fhkym")
-
 [node name="HeatSeekerTargetTracker" type="Node3D" parent="objects/Jets/jet2" node_paths=PackedStringArray("seeker")]
 script = ExtResource("10_h73pm")
 seeker = NodePath("HeatSeeker")
@@ -255,15 +237,6 @@ flare_scene = ExtResource("7_v0qym")
 fire_interval = 8.0
 flares_per_burst = 6
 metadata/_custom_type_script = "uid://b351wendvw15f"
-
-[node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet3"]
-modulate = Color(0.486275, 0.988235, 0, 1)
-pixel_size = 0.0032
-billboard = 1
-no_depth_test = true
-fixed_size = true
-texture_filter = 0
-texture = ExtResource("10_fhkym")
 
 [node name="HeatSeekerTargetTracker" type="Node3D" parent="objects/Jets/jet3" node_paths=PackedStringArray("seeker")]
 script = ExtResource("10_h73pm")
@@ -303,15 +276,6 @@ flare_scene = ExtResource("7_v0qym")
 fire_interval = 8.0
 flares_per_burst = 6
 metadata/_custom_type_script = "uid://b351wendvw15f"
-
-[node name="Sprite3D" type="Sprite3D" parent="objects/Jets/jet_ally"]
-modulate = Color(0.218527, 0.588029, 0.912741, 1)
-pixel_size = 0.0032
-billboard = 1
-no_depth_test = true
-fixed_size = true
-texture_filter = 0
-texture = ExtResource("10_fhkym")
 
 [node name="HeatSeekerTargetTracker" type="Node3D" parent="objects/Jets/jet_ally" node_paths=PackedStringArray("seeker")]
 script = ExtResource("10_h73pm")

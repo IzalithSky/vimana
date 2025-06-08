@@ -1,8 +1,8 @@
 extends Node3D
 
 
-@onready var radar_beam: RadarBeam = $radar/RadarBeam
 @onready var ray: RayCast3D = $terrain/RayCast3D
+@onready var radar_beam: RadarBeam = %RadarBeam
 
 
 func _physics_process(delta: float) -> void:
@@ -16,3 +16,10 @@ func _physics_process(delta: float) -> void:
 		#var hit_obj = ray.get_collider()
 		#if hit_obj: 
 			#print("Hit terrain:", hit_obj)
+	
+	#print(radar_beam.get_targets())
+	
+	var e: RadarEcho = RadarEcho.new()
+	e.radial_velocity_bin = 0
+	e.range_bin = 1
+	print(radar_beam.get_target_for_echo(e))

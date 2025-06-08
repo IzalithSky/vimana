@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://qd8phs5buioq"]
+
+[ext_resource type="Texture2D" uid="uid://dx33u8vdllssr" path="res://textures/marker_v.png" id="1_7u4h5"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+modulate = Color(0.486275, 0.988235, 0, 1)
+pixel_size = 0.0032
+billboard = 1
+no_depth_test = true
+fixed_size = true
+texture_filter = 0
+texture = ExtResource("1_7u4h5")
