@@ -84,4 +84,5 @@ metadata/_custom_type_script = "uid://dxfwciqw71xsy"
 
 [node name="HeatSource" type="Node3D" parent="."]
 script = ExtResource("5_fk3hp")
+background = 20.0
 metadata/_custom_type_script = "uid://cmb8absq6qrpl"

@@ -48,6 +48,7 @@ mesh = SubResource("ImmediateMesh_j0qix")
 
 [node name="HeatSource" type="Node3D" parent="."]
 script = ExtResource("5_j0qix")
+background = 20.0
 metadata/_custom_type_script = "uid://cmb8absq6qrpl"
 
 [node name="PropulsionSound" type="AudioStreamPlayer3D" parent="."]

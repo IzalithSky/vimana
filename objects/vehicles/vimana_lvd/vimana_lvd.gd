@@ -20,7 +20,7 @@ func apply_throttle(throttle_value: float) -> void:
 
 func apply_directional_alignment() -> void:
 	var velocity: Vector3 = linear_velocity
-	if velocity.length() < 0.0011:
+	if velocity.length() < 0.001:
 		return
 	var forward: Vector3 = -transform.basis.z
 	var vel_dir: Vector3 = velocity.normalized()
