@@ -66,10 +66,11 @@ fov = 85.0
 near = 0.01
 far = 30000.0
 
-[node name="HeatSeekerTargetTracker" type="Node3D" parent="FPCameraHolder/Camera3D" node_paths=PackedStringArray("seeker", "locking_sound", "locked_sound")]
+[node name="HeatSeekerTargetTracker" type="Node3D" parent="FPCameraHolder/Camera3D" node_paths=PackedStringArray("seeker", "seeker_bg", "locking_sound", "locked_sound")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 script = ExtResource("11_xxp4i")
 seeker = NodePath("HeatSeeker")
+seeker_bg = NodePath("HeatSeekerBg")
 marker_scene = ExtResource("10_fcjbv")
 play_sounds = true
 locking_sound = NodePath("LockingSound")
@@ -88,6 +89,11 @@ volume_db = -30.0
 stream = ExtResource("7_rw3n3")
 volume_db = -30.0
 pitch_scale = 0.6
+
+[node name="HeatSeekerBg" type="Node3D" parent="FPCameraHolder/Camera3D/HeatSeekerTargetTracker"]
+script = ExtResource("5_pf0s1")
+tracking_fov_deg = 180.0
+metadata/_custom_type_script = "uid://cnwxl0c06eycl"
 
 [node name="MissileDisplay" type="Node3D" parent="FPCameraHolder/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
@@ -288,14 +294,14 @@ tracker = NodePath("../HeatSeekerTargetTracker")
 missile_scene = ExtResource("13_qivai")
 metadata/_custom_type_script = "uid://ca3q1n33gqkgg"
 
-[node name="RadarEchoTracker" type="Node3D" parent="FPCameraHolder/Camera3D" node_paths=PackedStringArray("radar")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.331581)
+[node name="RadarEchoTracker" type="Node3D" parent="." node_paths=PackedStringArray("radar")]
 script = ExtResource("19_65j3t")
 radar = NodePath("RadarBeam")
 marker_scene = ExtResource("20_3o10w")
+min_draw_distance = 320.0
 metadata/_custom_type_script = "uid://squqqv8qatax"
 
-[node name="RadarBeam" type="Node3D" parent="FPCameraHolder/Camera3D/RadarEchoTracker"]
+[node name="RadarBeam" type="Node3D" parent="RadarEchoTracker"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -2)
 script = ExtResource("14_qivai")
 metadata/_custom_type_script = "uid://b28v7lt37mwvw"
