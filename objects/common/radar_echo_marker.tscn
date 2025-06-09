@@ -12,3 +12,16 @@ no_depth_test = true
 fixed_size = true
 texture_filter = 0
 texture = ExtResource("1_7u4h5")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0184157, -0.520513, 0)
+billboard = 1
+double_sided = false
+no_depth_test = true
+fixed_size = true
+texture_filter = 5
+modulate = Color(0.486275, 0.988235, 0, 1)
+text = "111
+222"
+font_size = 8
+outline_size = 0

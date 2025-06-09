@@ -314,6 +314,7 @@ metadata/_custom_type_script = "uid://b28v7lt37mwvw"
 
 [node name="Display" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+visible = false
 material_override = SubResource("StandardMaterial3D_nhwor")
 mesh = SubResource("QuadMesh_0qbkc")
 skeleton = NodePath("../..")
@@ -372,6 +373,7 @@ text = "444"
 layout_mode = 2
 
 [node name="Horizon" type="MeshInstance3D" parent="."]
+visible = false
 material_override = SubResource("StandardMaterial3D_1m05p")
 mesh = SubResource("SphereMesh_0qbkc")
 skeleton = NodePath("../..")
@@ -397,6 +399,7 @@ script = ExtResource("2_vluwj")
 
 [node name="NoseSprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+visible = false
 modulate = Color(0.486275, 0.988235, 0, 1)
 pixel_size = 0.0032
 billboard = 1
@@ -407,6 +410,7 @@ texture = ExtResource("3_lgipv")
 
 [node name="HeadingSprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+visible = false
 modulate = Color(0.486275, 0.988235, 0, 1)
 pixel_size = 0.0032
 billboard = 1

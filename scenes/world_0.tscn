@@ -131,7 +131,7 @@ shadow_enabled = true
 [node name="objects" type="Node3D" parent="."]
 
 [node name="Spawn" type="Node3D" parent="objects"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6000)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4000)
 
 [node name="SAMs" type="Node3D" parent="objects"]
 
