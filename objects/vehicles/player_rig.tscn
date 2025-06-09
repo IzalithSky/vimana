@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://dii7431l7ulys"]
+[gd_scene load_steps=30 format=3 uid="uid://dii7431l7ulys"]
 
 [ext_resource type="Script" uid="uid://bxfpd6lllbosy" path="res://objects/vehicles/player_controls.gd" id="1_lgipv"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="1_w214r"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://g4cuyhv8kiex" path="res://objects/common/heatseeker_target_tracker.gd" id="11_xxp4i"]
 [ext_resource type="Script" uid="uid://ca3q1n33gqkgg" path="res://objects/missile/player_missile_launcher.gd" id="12_f157b"]
 [ext_resource type="PackedScene" uid="uid://binjvtutugvoy" path="res://objects/missile/missile_heatseeker.tscn" id="13_qivai"]
+[ext_resource type="Script" uid="uid://cfr6sfdj27xqg" path="res://objects/common/radar.gd" id="14_3o10w"]
 [ext_resource type="Script" uid="uid://b28v7lt37mwvw" path="res://objects/common/radar_beam.gd" id="14_qivai"]
 [ext_resource type="Script" uid="uid://squqqv8qatax" path="res://objects/common/radar_echo_tracker.gd" id="19_65j3t"]
 [ext_resource type="PackedScene" uid="uid://qd8phs5buioq" path="res://objects/common/radar_echo_marker.tscn" id="20_3o10w"]
@@ -294,14 +295,19 @@ tracker = NodePath("../HeatSeekerTargetTracker")
 missile_scene = ExtResource("13_qivai")
 metadata/_custom_type_script = "uid://ca3q1n33gqkgg"
 
-[node name="RadarEchoTracker" type="Node3D" parent="." node_paths=PackedStringArray("radar")]
+[node name="Radar" type="Node3D" parent="." node_paths=PackedStringArray("beam")]
+script = ExtResource("14_3o10w")
+beam = NodePath("RadarBeam")
+metadata/_custom_type_script = "uid://cfr6sfdj27xqg"
+
+[node name="RadarEchoTracker" type="Node3D" parent="Radar" node_paths=PackedStringArray("radar")]
 script = ExtResource("19_65j3t")
-radar = NodePath("RadarBeam")
+radar = NodePath("..")
 marker_scene = ExtResource("20_3o10w")
 min_draw_distance = 320.0
 metadata/_custom_type_script = "uid://squqqv8qatax"
 
-[node name="RadarBeam" type="Node3D" parent="RadarEchoTracker"]
+[node name="RadarBeam" type="Node3D" parent="Radar"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -2)
 script = ExtResource("14_qivai")
 metadata/_custom_type_script = "uid://b28v7lt37mwvw"

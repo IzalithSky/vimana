@@ -13,9 +13,13 @@ func _ready() -> void:
 
 
 func apply_throttle(throttle_value: float) -> void:
-	if camera:
-		var forward_force = -camera.global_transform.basis.z * throttle_value * thrust_power
-		apply_central_force(forward_force)
+	var forward_force: Vector3
+	if Input.is_action_pressed("pitch_up"):
+		forward_force = camera.global_transform.basis.y * throttle_value * thrust_power
+	else:
+		forward_force = -camera.global_transform.basis.z * throttle_value * thrust_power
+	apply_central_force(forward_force)
+
 
 
 func apply_directional_alignment() -> void:

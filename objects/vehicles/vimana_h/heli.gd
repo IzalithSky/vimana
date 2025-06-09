@@ -1,8 +1,8 @@
 class_name Heli extends Vimana
 
 
-@export var thrust_power = 4000.0
-@export var torque_power = 300.0
+@export var thrust_power = 3000.0
+@export var torque_power = 800.0
 @export var spin_threshold = 1
 
 
@@ -98,7 +98,7 @@ func apply_directional_alignment() -> void:
 
 func _physics_process(delta: float) -> void:
 	rig.collect_inputs(delta)
-	
+	compute_control_state(delta)
 	apply_directional_alignment()
 	stabilise_rotation(delta)
 	apply_controls(delta)

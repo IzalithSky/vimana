@@ -1,56 +1,60 @@
 class_name RadarEchoTracker extends Node3D
 
 
-@export var radar: RadarBeam
+@export var radar: Radar
 @export var marker_scene: PackedScene
 @export var show_markers: bool = true
 @export var min_draw_distance: float = 640.0
 
-var _markers: Dictionary = {}
+
+var _markers: Dictionary[int, Node3D] = {}
+var _marker_ttls: Dictionary[int, int] = {}
+var _last_scanned_bar: int = -1
 
 
 func _process(_delta: float) -> void:
-	var echoes: Array[RadarEcho] = radar.get_echoes()
-	if show_markers:
-		_update_markers(echoes)
-	else:
+	if not show_markers:
 		_clear_all_markers()
+		return
+	var echoes: Array[RadarEcho] = radar.get_echoes()
+	_update_markers(echoes)
+	if radar.current_bar != _last_scanned_bar:
+		_decrement_ttls()
+		_last_scanned_bar = radar.current_bar
 
 
 func _update_markers(echoes: Array[RadarEcho]) -> void:
-	var live_ids: Array[int] = []
+	var beam: RadarBeam = radar.beam
+	var range_step: float = beam.range_bin_size
+	var origin: Vector3 = beam.global_position
+	var direction: Vector3 = -beam.global_transform.basis.z
 	for echo in echoes:
-		var center_range: float = (float(echo.range_bin) + 0.5) * radar.range_resolution
-		if center_range < min_draw_distance:
+		var center_distance: float = (echo.range_bin + 0.5) * range_step
+		if center_distance < min_draw_distance:
 			continue
-	
-		var id: int = hash(int(echo.range_bin) << 8 | int(echo.radial_velocity_bin))
-		live_ids.append(id)
-	
-		var marker: Node3D = _markers.get(id, null)
-		if marker == null:
-			if marker_scene == null:
-				continue
-			marker = marker_scene.instantiate()
-			if marker == null:
-				continue
-			add_child(marker)
-			_markers[id] = marker
-	
-		var direction: Vector3 = -radar.global_transform.basis.z.normalized()
-		var position: Vector3 = radar.global_position + direction * center_range
-		marker.global_position = position
-	
-	for id in _markers.keys():
-		if id not in live_ids:
-			var marker: Node3D = _markers[id]
-			if marker != null:
-				marker.queue_free()
-			_markers.erase(id)
+		var key: int = hash((echo.range_bin << 8) | int(echo.radial_velocity_bin))
+		if not _markers.has(key) and marker_scene:
+			var m: Node3D = marker_scene.instantiate() as Node3D
+			add_child(m)
+			_markers[key] = m
+		if _markers.has(key):
+			var marker: Node3D = _markers[key]
+			marker.global_position = origin + direction * center_distance
+			_marker_ttls[key] = radar.bars
+
+
+func _decrement_ttls() -> void:
+	for key in _marker_ttls.keys():
+		_marker_ttls[key] -= 1
+		if _marker_ttls[key] <= 0:
+			if _markers.has(key):
+				_markers[key].queue_free()
+				_markers.erase(key)
+			_marker_ttls.erase(key)
 
 
 func _clear_all_markers() -> void:
-	for marker in _markers.values():
-		if marker != null:
-			marker.queue_free()
+	for m in _markers.values():
+		m.queue_free()
 	_markers.clear()
+	_marker_ttls.clear()
