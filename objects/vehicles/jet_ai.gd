@@ -22,6 +22,9 @@ class_name JetAI extends Node
 @export var obstacle_prediction_horizon: float = 5.0
 @export var attack_range: float = 2000.0
 
+enum AIState { IDLE, ANCHOR, APPROACH, ATTACK, EVADE, RECOVER, AVOID }
+var state: AIState = AIState.IDLE
+
 @onready var ray: RayCast3D = $RayCast3D
 
 var vehicle: Jet
@@ -210,54 +213,83 @@ func _attack_target() -> void:
 	try_fire()
 
 
+func _update_state() -> void:
+        if not vehicle.lift_ok:
+                state = AIState.RECOVER
+                return
+
+        if evade_missile():
+                state = AIState.EVADE
+                try_fire()
+                return
+
+        if avoid_obstacle():
+                state = AIState.AVOID
+                return
+
+        if target != null:
+                var d: float = vehicle.global_transform.origin.distance_to(target.global_transform.origin)
+                if d <= attack_range:
+                        state = AIState.ATTACK
+                else:
+                        state = AIState.APPROACH
+        elif anchor != null:
+                state = AIState.ANCHOR
+        else:
+                state = AIState.IDLE
+
+
+func _process_state() -> void:
+        match state:
+                AIState.RECOVER:
+                        recover_from_stall()
+                AIState.EVADE:
+                        pass
+                AIState.AVOID:
+                        pass
+                AIState.ATTACK:
+                        _attack_target()
+                AIState.APPROACH:
+                        if target != null:
+                                act_on_point(target.global_transform.origin)
+                                try_fire()
+                AIState.ANCHOR:
+                        if anchor != null:
+                                act_on_point(anchor.global_transform.origin)
+                AIState.IDLE:
+                        vehicle.roll_input = 0.0
+                        vehicle.pitch_input = 0.0
+                        vehicle.yaw_input = 0.0
+                        vehicle.throttle_input = 0.0
+
+
 func collect_inputs(_delta: float) -> void:
-	if vehicle == null:
-		return
-	
-	pursuit_timer += _delta
-	
-	if target != null and pursuit_timer > max_pursuit_time and not missile_fired_recently:
-		var prev_target: Node3D = target
-		var candidates: Array[Node3D] = []
-		for candidate: Node in get_tree().get_nodes_in_group(target_group):
-			if candidate is Node3D and candidate != vehicle and candidate != prev_target:
-				candidates.append(candidate as Node3D)
-		if candidates.size() > 0:
-			target = candidates[randi() % candidates.size()]
-			pursuit_timer = 0.0
-	
-	missile_fired_recently = false
-	
-	if target == null or not is_instance_valid(target):
-		target = find_nearest(target_group)
-	if target == null or not is_instance_valid(target):
-		anchor = find_nearest(anchor_group)
-	else:
-		anchor = null
-	
-	if not vehicle.lift_ok:
-		recover_from_stall()
-		return
-	if evade_missile():
-		try_fire()
-		return
-	if avoid_obstacle():
-		return
-	
-	if target != null:
-		var d: float = vehicle.global_transform.origin.distance_to(target.global_transform.origin)
-		if d <= attack_range:
-			_attack_target()
-		else:
-			act_on_point(target.global_transform.origin)
-			try_fire()
-	elif anchor != null:
-		act_on_point(anchor.global_transform.origin)
-	else:
-		vehicle.roll_input = 0.0
-		vehicle.pitch_input = 0.0
-		vehicle.yaw_input = 0.0
-		vehicle.throttle_input = 0.0
+        if vehicle == null:
+                return
+
+        pursuit_timer += _delta
+
+        if target != null and pursuit_timer > max_pursuit_time and not missile_fired_recently:
+                var prev_target: Node3D = target
+                var candidates: Array[Node3D] = []
+                for candidate: Node in get_tree().get_nodes_in_group(target_group):
+                        if candidate is Node3D and candidate != vehicle and candidate != prev_target:
+                                candidates.append(candidate as Node3D)
+                if candidates.size() > 0:
+                        target = candidates[randi() % candidates.size()]
+                        pursuit_timer = 0.0
+
+        missile_fired_recently = false
+
+        if target == null or not is_instance_valid(target):
+                target = find_nearest(target_group)
+        if target == null or not is_instance_valid(target):
+                anchor = find_nearest(anchor_group)
+        else:
+                anchor = null
+
+        _update_state()
+        _process_state()
 
 
 func act_on_point(p: Vector3) -> void:
