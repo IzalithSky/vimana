@@ -300,11 +300,12 @@ script = ExtResource("14_3o10w")
 beam = NodePath("RadarBeam")
 metadata/_custom_type_script = "uid://cfr6sfdj27xqg"
 
-[node name="RadarEchoTracker" type="Node3D" parent="Radar" node_paths=PackedStringArray("radar")]
+[node name="RadarEchoTracker" type="Node3D" parent="Radar" node_paths=PackedStringArray("radar", "camera")]
 script = ExtResource("19_65j3t")
 radar = NodePath("..")
 marker_scene = ExtResource("20_3o10w")
 min_draw_distance = 320.0
+camera = NodePath("../../FPCameraHolder/Camera3D")
 metadata/_custom_type_script = "uid://squqqv8qatax"
 
 [node name="RadarBeam" type="Node3D" parent="Radar"]
