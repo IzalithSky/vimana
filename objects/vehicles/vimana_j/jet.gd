@@ -5,8 +5,8 @@ class_name Jet extends Vimana
 @export var max_pitch: float = 800.0
 @export var max_yaw: float = 800.0
 @export var max_roll: float = 400.0
-@export var lift_coefficient: float = 0.4
-@export var stall_aoa_deg: float = 45.0
+@export var lift_coefficient: float = 0.0
+@export var stall_aoa_deg: float = 30.0
 @export var trail_ttl_after_stop: float = 1.0
 @export var trail_pitch_threshold: float = 0.2
 @export var trail_speed_thr: float = 100.0
@@ -70,7 +70,7 @@ func apply_lift() -> void:
 		return
 	var aoa: float = deg_to_rad(aoa_deg)
 	var cl: float = lift_coefficient + (2.0 * PI * aoa)
-	lift_ok = abs(aoa_deg) < stall_aoa_deg and cl > 0.0
+	lift_ok = abs(aoa_deg) < stall_aoa_deg
 	if not lift_ok:
 		return
 	var lift: float = 0.5 * velocity.length_squared() * cl

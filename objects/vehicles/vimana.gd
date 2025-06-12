@@ -9,7 +9,7 @@ class_name Vimana extends RigidBody3D
 @export var alignment_strength: float = 4.0
 
 @export var warn_g_force: float = 8.0
-@export var control_effectiveness_speed: float = 50.0
+@export var control_effectiveness_speed: float = 80.0
 
 @export var explosion_scene: PackedScene
 @export var explosive_speed: float = 3.0
