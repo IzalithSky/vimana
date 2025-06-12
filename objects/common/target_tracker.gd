@@ -1,77 +1,168 @@
-class_name TargetTracker extends Node3D
+class_name TargetTracker
+extends Node3D
 
-
+@export var radar: Radar
 @export var camera: Camera3D
+@export var seeker: HeatSeeker
+@export var seeker_bg: HeatSeeker
 @export var marker_scene: PackedScene
-@export var select_target_action: String = "select_target"
-@export var target_group: String = "bravo"
-@export var fov_deg: float = 45.0
-@export var max_distance: float = 4000.0
+@export var lock_time_sec: float = 1.0
+@export var show_markers: bool = true
+@export var play_sounds: bool = false
+@export var locking_sound: AudioStreamPlayer3D
+@export var locked_sound: AudioStreamPlayer3D
 
-var target: Node3D = null
-var target_next: Node3D = null
-var _markers: Dictionary = {}
+var heat_locked: HeatSource = null
+var heat_candidate: HeatSource = null
+var heat_timer: float = 0.0
 
+var radar_locked: RadarTarget = null
+var radar_candidate: RadarTarget = null
+var radar_timer: float = 0.0
+
+var _markers: Dictionary[int, TargetMarker] = {}
+var _heat_live_ids: Array[int] = []
+var _radar_live_ids: Array[int] = []
 
 func _process(delta: float) -> void:
-	if not is_instance_valid(target):
-		target = null
-	if not is_instance_valid(target_next):
-		target_next = null
-	target_next = _get_best_target(target)
-	if Input.is_action_just_pressed(select_target_action):
-		var nt: Node3D = _get_best_target(target)
-		if nt != null:
-			target = nt
-	_update_markers()
+	_heat_live_ids = _handle_heat_logic(delta)
+	_radar_live_ids = _handle_radar_logic(delta)
+	var all_live_ids: Array[int] = _heat_live_ids + _radar_live_ids
+	_mark_unused(all_live_ids)
+	_update_sound_state()
+	_purge_unused_markers()
 
+func _handle_heat_logic(delta: float) -> Array[int]:
+	if seeker == null:
+		return []
+	var seeker_sources: Array[HeatSource] = seeker.get_visible_sources()
+	var best: HeatSource = seeker.get_best_target()
+	if seeker_sources.size() == 1 and best == heat_candidate:
+		heat_timer += delta
+		if heat_timer >= lock_time_sec:
+			heat_locked = heat_candidate
+	else:
+		heat_candidate = best if seeker_sources.size() == 1 else null
+		heat_timer = 0.0
+		heat_locked = null
+	var visible_sources: Array[HeatSource] = seeker_bg.get_visible_sources() if seeker_bg != null else []
+	return _update_heat_markers(visible_sources)
 
-func _get_best_target(exclude: Node3D) -> Node3D:
-	if camera == null:
-		return null
-	var cam_pos: Vector3 = camera.global_transform.origin
+func _handle_radar_logic(delta: float) -> Array[int]:
+	if radar == null or camera == null:
+		return []
+	var radar_targets: Array[RadarTarget] = radar.get_targets()
+	var best_angle: float = INF
+	var best: RadarTarget = null
 	var cam_dir: Vector3 = -camera.global_transform.basis.z
-	var cos_limit: float = cos(deg_to_rad(fov_deg))
-	var best: Node3D = null
-	var best_score: float = INF
-	for n in get_tree().get_nodes_in_group(target_group):
-		if not n is Node3D or n == exclude:
+	for t in radar_targets:
+		if not is_instance_valid(t):
 			continue
-		var to_vec: Vector3 = n.global_transform.origin - cam_pos
-		var dist: float = to_vec.length()
-		if dist > max_distance:
-			continue
-		var ang_cos: float = cam_dir.dot(to_vec.normalized())
-		if ang_cos >= cos_limit:
-			var score: float = 1.0 - ang_cos
-			if score < best_score:
-				best_score = score
-				best = n
-	return best
+		var angle: float = acos(cam_dir.dot((t.global_position - camera.global_position).normalized()))
+		if angle < best_angle:
+			best_angle = angle
+			best = t
+	if best == radar_candidate:
+		radar_timer += delta
+		if radar_timer >= lock_time_sec:
+			radar_locked = radar_candidate
+	else:
+		radar_candidate = best
+		radar_timer = 0.0
+		radar_locked = null
+	return _update_radar_markers(radar_targets)
 
-
-func _update_markers() -> void:
-	var live: Array[int] = []
-	for n in get_tree().get_nodes_in_group(target_group):
-		if not n is Node3D or not is_instance_valid(n):
+func _update_heat_markers(sources: Array[HeatSource]) -> Array[int]:
+	var live_ids: Array[int] = []
+	for hs in sources:
+		if not is_instance_valid(hs):
 			continue
-		var id: int = n.get_instance_id()
-		live.append(id)
-		var m: Node3D = _markers.get(id, null)
-		if m == null and marker_scene != null:
-			m = marker_scene.instantiate() as Node3D
-			add_child(m)
-			_markers[id] = m
-		if m != null:
-			m.global_transform.origin = n.global_transform.origin
-			m.look_at(global_transform.origin)
-			if n == target:
-				m.call("set_locked")
-			elif n == target_next:
-				m.call("set_next")
-			else:
-				m.call("clear")
+		var id: int = hs.get_instance_id()
+		live_ids.append(id)
+		var marker := _get_or_create_marker(id)
+		if marker != null:
+			marker.global_position = hs.global_position
+			marker.heat()
+			marker.clear()
+	if heat_locked != null and is_instance_valid(heat_locked):
+		var id: int = heat_locked.get_instance_id()
+		var marker := _get_or_create_marker(id)
+		if marker != null:
+			marker.global_position = heat_locked.global_position
+			marker.heat()
+			marker.set_locked()
+		if id not in live_ids:
+			live_ids.append(id)
+	return live_ids
+
+func _update_radar_markers(targets: Array[RadarTarget]) -> Array[int]:
+	var live_ids: Array[int] = []
+	for rt in targets:
+		if not is_instance_valid(rt):
+			continue
+		var id: int = rt.get_instance_id()
+		live_ids.append(id)
+		var marker := _get_or_create_marker(id)
+		if marker != null:
+			marker.global_position = rt.global_position
+			marker.radar()
+			marker.clear()
+	if radar_locked != null and is_instance_valid(radar_locked):
+		var id: int = radar_locked.get_instance_id()
+		var marker := _get_or_create_marker(id)
+		if marker != null:
+			marker.global_position = radar_locked.global_position
+			marker.radar()
+			marker.set_locked()
+		if id not in live_ids:
+			live_ids.append(id)
+	return live_ids
+
+func _get_or_create_marker(id: int) -> TargetMarker:
+	var marker: TargetMarker = _markers.get(id, null)
+	if marker == null and marker_scene != null:
+		marker = marker_scene.instantiate() as TargetMarker
+		if marker != null:
+			add_child(marker)
+			_markers[id] = marker
+	return marker
+
+func _mark_unused(live_ids: Array[int]) -> void:
 	for id in _markers.keys():
-		if id not in live:
-			_markers[id].queue_free()
+		if id not in live_ids:
+			if is_instance_valid(_markers[id]):
+				_markers[id].queue_free()
 			_markers.erase(id)
+
+func _purge_unused_markers() -> void:
+	for id in _markers.keys():
+		if not is_instance_valid(_markers[id]):
+			_markers.erase(id)
+
+func _clear_all_markers() -> void:
+	for m in _markers.values():
+		if is_instance_valid(m):
+			m.queue_free()
+	_markers.clear()
+
+func _update_sound_state() -> void:
+	if not play_sounds or seeker == null:
+		if locking_sound: locking_sound.stop()
+		if locked_sound: locked_sound.stop()
+		return
+	var seeker_sources: Array[HeatSource] = seeker.get_visible_sources()
+	if heat_locked != null:
+		if locking_sound: locking_sound.stop()
+		if locked_sound and not locked_sound.playing: locked_sound.play()
+	elif seeker_sources.size() == 1:
+		if locked_sound: locked_sound.stop()
+		if locking_sound and not locking_sound.playing: locking_sound.play()
+	else:
+		if locking_sound: locking_sound.stop()
+		if locked_sound: locked_sound.stop()
+
+func get_heat_target() -> HeatSource:
+	return heat_locked
+
+func get_radar_target() -> RadarTarget:
+	return radar_locked

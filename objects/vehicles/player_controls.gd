@@ -30,7 +30,6 @@ class_name PlayerControls extends Node
 @onready var damage_color_rect: ColorRect = $FPCameraHolder/Camera3D/CanvasLayer1/DamageColorRect
 @onready var audio_listener_3d: AudioListener3D = $FPCameraHolder/Camera3D/AudioListener3D
 @onready var aoa_limiter_warning: AudioStreamPlayer3D = $AoALimiterWarning
-@onready var heat_seeker_target_tracker: HeatSeekerTargetTracker = $FPCameraHolder/Camera3D/HeatSeekerTargetTracker
 #@onready var player_gun: PlayerGun = $FPCameraHolder/Camera3D/PlayerGun
 #@onready var player_gun: PlayerGun = $PlayerGun
 

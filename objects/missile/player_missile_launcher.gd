@@ -6,7 +6,7 @@ class_name PlayerMissileLauncher extends MissileLauncher
 @export var missile_cam: Camera3D
 @export var fire_attach_threshold: float = 0.3
 @export var follow_distance: float = 4.0
-@export var tracker: HeatSeekerTargetTracker
+@export var tracker: TargetTracker
 
 var _followed_missile: Node3D = null
 var _pending_attach_missile: Node3D = null
@@ -17,7 +17,7 @@ func _process(delta: float) -> void:
 	super._process(delta)
 	
 	if Input.is_action_just_pressed(fire_action):
-		var heat_target: HeatSource = tracker.get_target()
+		var heat_target: HeatSource = tracker.get_heat_target()
 		if heat_target == null:
 			return
 	
