@@ -2,7 +2,6 @@ extends Node3D
 
 
 @onready var ray: RayCast3D = $terrain/RayCast3D
-@onready var radar_beam: RadarBeam = %RadarBeam
 
 
 #func _physics_process(delta: float) -> void:

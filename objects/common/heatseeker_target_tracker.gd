@@ -53,10 +53,12 @@ func _update_markers(visible_sources: Array[HeatSource]) -> void:
 		var marker: TargetMarker = _markers.get(id, null)
 		if marker == null and marker_scene != null:
 			marker = marker_scene.instantiate() as TargetMarker
-			add_child(marker)
-			_markers[id] = marker
+			if marker != null:
+				add_child(marker)
+				_markers[id] = marker
 		if marker != null:
 			marker.global_position = hs.global_position
+			marker.heat()
 			marker.clear()
 	
 	if target != null:
@@ -64,17 +66,20 @@ func _update_markers(visible_sources: Array[HeatSource]) -> void:
 		var marker: TargetMarker = _markers.get(id, null)
 		if marker == null and marker_scene != null:
 			marker = marker_scene.instantiate() as TargetMarker
-			add_child(marker)
-			_markers[id] = marker
+			if marker != null:
+				add_child(marker)
+				_markers[id] = marker
 		if marker != null:
 			marker.global_position = target.global_position
+			marker.heat()
 			marker.set_locked()
 		if id not in live:
 			live.append(id)
 	
 	for id in _markers.keys():
 		if id not in live:
-			_markers[id].queue_free()
+			if is_instance_valid(_markers[id]):
+				_markers[id].queue_free()
 			_markers.erase(id)
 
 

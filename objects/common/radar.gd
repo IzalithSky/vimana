@@ -1,65 +1,90 @@
 class_name Radar extends Node3D
 
+@export var cone_half_angle_deg: float = 60.0
+@export var detection_sensitivity_db: float = 8.0
+@export var range_bin_size: float = 320.0
+@export var radial_bin_size: float = 20.0
+@export var max_detection_range: float = 40_000.0
+@export_flags_3d_physics var terrain_collision_mask: int = 8
+@export var raycast_count: int = 16
 
-@export var beam: RadarBeam
-@export var bars: int = 4
-@export var vertical_overlap: float = 0.1
-@export var horizontal_overlap: float = 0.1
-@export var sweep_width_deg: float = 60.0
-@export var sweep_rate_deg: float = 60.0
-@export var center_pitch_deg: float = 0.0
-
-var bar_spacing_deg: float
-var horizontal_step_rad: float
-var base_pitch_rad: float
-var azimuth_rad: float = 0.0
-var azimuth_dir: int = 1
-var current_bar: int = 0
-var half_sweep_rad: float
-var last_scan_azimuth: float = INF
-var last_scan_bar: int = -1
-
+var cone_half_angle_rad: float
+var detection_threshold: float
+var terrain_rays: Array[RayCast3D] = []
+var visible_targets: Array[RadarTarget] = []
+var own_velocity: Vector3 = Vector3.ZERO
+var previous_position: Vector3
 
 func _ready() -> void:
-	var full_bw_deg := beam.beam_half_angle_deg * 2.0
-	bar_spacing_deg = full_bw_deg * (1.0 - vertical_overlap)
-	horizontal_step_rad = deg_to_rad(full_bw_deg * (1.0 - horizontal_overlap))
-	base_pitch_rad = deg_to_rad(center_pitch_deg)
-	half_sweep_rad = deg_to_rad(sweep_width_deg) * 0.5
+	previous_position = global_position
+	cone_half_angle_rad = deg_to_rad(cone_half_angle_deg)
+	detection_threshold = pow(10.0, -detection_sensitivity_db)
 
+	for i in raycast_count:
+		var ray := RayCast3D.new()
+		ray.collision_mask = terrain_collision_mask
+		ray.collide_with_areas = true
+		ray.collide_with_bodies = false
+		add_child(ray)
+		terrain_rays.append(ray)
 
 func _physics_process(delta: float) -> void:
-	azimuth_rad += azimuth_dir * deg_to_rad(sweep_rate_deg) * delta
-	if abs(azimuth_rad) >= half_sweep_rad:
-		azimuth_rad = sign(azimuth_rad) * half_sweep_rad
-		azimuth_dir *= -1
-		current_bar = (current_bar + 1) % bars
-	
-	var pitch_rad := base_pitch_rad + deg_to_rad(bar_spacing_deg) * current_bar
-	beam.rotation = Vector3(pitch_rad, azimuth_rad, 0.0)
-	var need_scan := false
-	if current_bar != last_scan_bar:
-		need_scan = true
-	elif abs(azimuth_rad - last_scan_azimuth) >= horizontal_step_rad:
-		need_scan = true
-	
-	if need_scan:
-		_perform_scan()
+	own_velocity = (global_position - previous_position) / delta
+	previous_position = global_position
+	perform_scan()
 
+func perform_scan() -> void:
+	visible_targets.clear()
+	var forward: Vector3 = -global_transform.basis.z
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	var bins := {}
+	var ray_index: int = 0
 
-func _perform_scan() -> void:
-	beam.scan()
-	last_scan_azimuth = azimuth_rad
-	last_scan_bar = current_bar
+	for node in get_tree().get_nodes_in_group("radar_targets"):
+		var target: RadarTarget = node
+		var offset: Vector3 = target.global_position - global_position
+		var forward_projection: float = offset.dot(forward)
+		if forward_projection <= 0.0:
+			continue
 
+		var distance: float = offset.length()
+		if distance > max_detection_range:
+			continue
 
-func get_echoes() -> Array[RadarEcho]:
-	return beam.get_echoes()
+		var angle_offset: float = (offset - forward * forward_projection).length()
+		if angle_offset > forward_projection * tan(cone_half_angle_rad):
+			continue
 
+		if target.get_magnitude_at(self) < detection_threshold:
+			continue
+
+		var range_bin: int = round(distance / range_bin_size)
+		var relative_radial_velocity: float = (target.velocity - own_velocity).dot(forward)
+		var radial_bin: int = round(relative_radial_velocity / radial_bin_size)
+
+		var ray: RayCast3D = terrain_rays[ray_index]
+		ray_index += 1
+		ray.position = Vector3.ZERO
+		ray.target_position = global_transform.basis.inverse() * offset.normalized() * max_detection_range
+		ray.enabled = true
+		ray.force_raycast_update()
+
+		if ray.is_colliding():
+			var terrain_distance: float = global_position.distance_to(ray.get_collision_point())
+			if terrain_distance <= distance:
+				continue
+			if radial_bin == 0 and terrain_distance - distance <= range_bin_size:
+				continue
+
+		var bin_key := Vector2i(range_bin, radial_bin)
+		bins[bin_key] = (bins.get(bin_key, []) + [target])
+
+	for target_list in bins.values():
+		visible_targets.append(target_list[rng.randi_range(0, target_list.size() - 1)])
+
+	for i in range(ray_index, raycast_count):
+		terrain_rays[i].enabled = false
 
 func get_targets() -> Array[RadarTarget]:
-	return beam.get_targets()
-
-
-func get_target_for_echo(echo: RadarEcho) -> RadarTarget:
-	return beam.get_target_for_echo(echo)
+	return visible_targets

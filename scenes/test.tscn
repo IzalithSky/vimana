@@ -1,7 +1,6 @@
-[gd_scene load_steps=18 format=4 uid="uid://cyuibyvdt6una"]
+[gd_scene load_steps=17 format=4 uid="uid://cyuibyvdt6una"]
 
 [ext_resource type="Script" uid="uid://ciydki5nbaqxo" path="res://scenes/test.gd" id="1_iyx0m"]
-[ext_resource type="Script" uid="uid://b28v7lt37mwvw" path="res://objects/common/radar_beam.gd" id="3_74lek"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="3_at5dv"]
 [ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/common/radar_target.gd" id="4_j5jx5"]
 [ext_resource type="Shader" uid="uid://b30jy27kjrgma" path="res://objects/vehicles/g_color_rect.gdshader" id="4_jcd4p"]
@@ -139,11 +138,6 @@ F: Center Camera"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -4)
 script = ExtResource("5_yk7ts")
 
-[node name="RadarBeam" type="Node3D" parent="FPCameraHolder/Camera3D/radar"]
-unique_name_in_owner = true
-script = ExtResource("3_74lek")
-metadata/_custom_type_script = "uid://b28v7lt37mwvw"
-
 [node name="RadarEchoTracker" type="Node3D" parent="FPCameraHolder/Camera3D/radar" node_paths=PackedStringArray("radar")]
 script = ExtResource("5_jcd4p")
 radar = NodePath("..")
@@ -151,14 +145,14 @@ marker_scene = ExtResource("6_uacia")
 metadata/_custom_type_script = "uid://squqqv8qatax"
 
 [node name="target1" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1946.64, 0, -333)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -333)
 
 [node name="RadarTarget" type="Node3D" parent="target1"]
 script = ExtResource("4_j5jx5")
 metadata/_custom_type_script = "uid://diotgcgm0qcsn"
 
 [node name="target2" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1926.64, 0, -333)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -333)
 script = ExtResource("4_lpvoh")
 amplitude = 10.0
 speed = 13.0
@@ -168,7 +162,7 @@ script = ExtResource("4_j5jx5")
 metadata/_custom_type_script = "uid://diotgcgm0qcsn"
 
 [node name="terrain" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1936.64, 0, -333)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -344.537)
 collision_layer = 9
 collision_mask = 0
 
