@@ -2,6 +2,7 @@ class_name MissileLauncher extends Node3D
 
 
 @export var missile_scene: PackedScene
+@export var missile_type: String = "heat"
 @export var fire_interval: float = 2.0
 @export var parent: RigidBody3D
 

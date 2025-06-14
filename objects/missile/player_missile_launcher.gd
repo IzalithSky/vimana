@@ -17,17 +17,16 @@ func _process(delta: float) -> void:
 	super._process(delta)
 	
 	if Input.is_action_just_pressed(fire_action):
-		var heat_target: HeatSource = tracker.get_heat_target()
-		if heat_target == null:
+		var target: Node3D = _select_target()
+		if target == null:
 			return
 	
 		var missile: Missile = launch_missile()
-		if missile is MissileHeatSeeker:
-			var seeker_missile: MissileHeatSeeker = missile as MissileHeatSeeker
-			seeker_missile.lock_target(heat_target)
-	
-		_pending_attach_missile = missile
-		_fire_hold_time = 0.0
+		if missile is GuidedMissile:
+			var guided: GuidedMissile = missile as GuidedMissile
+			guided.lock_target(target)
+			_pending_attach_missile = guided
+			_fire_hold_time = 0.0
 	
 	if Input.is_action_pressed(fire_action):
 		_fire_hold_time += delta
@@ -43,8 +42,16 @@ func _process(delta: float) -> void:
 	if _followed_missile != null and is_instance_valid(_followed_missile):
 		var behind: Vector3 = _followed_missile.global_transform.basis.z * -follow_distance
 		missile_cam.global_transform.origin = _followed_missile.global_transform.origin + behind
-		var fwd: Vector3 = -_followed_missile.global_transform.basis.z
-		missile_cam.look_at(missile_cam.global_transform.origin + fwd)
+		var forward: Vector3 = -_followed_missile.global_transform.basis.z
+		missile_cam.look_at(missile_cam.global_transform.origin + forward)
+
+
+func _select_target() -> Node3D:
+	if missile_type == "heat":
+		return tracker.get_heat_target()
+	if missile_type == "radar":
+		return tracker.get_radar_target()
+	return null
 
 
 func _attach_camera_to(missile: Node3D) -> void:

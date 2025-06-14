@@ -6,9 +6,8 @@
 [ext_resource type="Shader" uid="uid://b30jy27kjrgma" path="res://objects/vehicles/g_color_rect.gdshader" id="4_jcd4p"]
 [ext_resource type="Script" uid="uid://ct1jhkyov3ta7" path="res://scenes/test_target_1.gd" id="4_lpvoh"]
 [ext_resource type="Texture2D" uid="uid://262c1fhqd110" path="res://textures/kloppenheim_05_puresky_1k.hdr" id="5_j5jx5"]
-[ext_resource type="Script" uid="uid://squqqv8qatax" path="res://objects/common/radar_echo_tracker.gd" id="5_jcd4p"]
 [ext_resource type="Script" uid="uid://cfr6sfdj27xqg" path="res://objects/common/radar.gd" id="5_yk7ts"]
-[ext_resource type="PackedScene" uid="uid://qd8phs5buioq" path="res://objects/common/radar_echo_marker.tscn" id="6_uacia"]
+[ext_resource type="PackedScene" uid="uid://bnqlnpxb47hb" path="res://objects/common/target_marker.tscn" id="7_uacia"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lpvoh"]
 panorama = ExtResource("5_j5jx5")
@@ -30,6 +29,102 @@ fog_depth_end = 10000.0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uacia"]
 shader = ExtResource("4_jcd4p")
 shader_parameter/radius = 0.5
+
+[sub_resource type="GDScript" id="GDScript_jcd4p"]
+script/source = "class_name RadarEchoTracker
+extends Node3D
+
+@export var radar: Radar
+@export var camera: Camera3D
+@export var marker_scene: PackedScene
+@export var lock_time_sec: float = 1.0
+@export var show_markers: bool = true
+
+var locked_target: RadarTarget = null
+var _lock_candidate: RadarTarget = null
+var _lock_timer: float = 0.0
+var _markers: Dictionary = {}
+
+func _process(delta: float) -> void:
+	var radar_targets: Array[RadarTarget] = radar.get_targets()
+
+	var best: RadarTarget = null
+	var best_angle: float = INF
+	if camera != null:
+		var cam_dir: Vector3 = -camera.global_transform.basis.z
+		for t in radar_targets:
+			if not is_instance_valid(t):
+				continue
+			var to_target: Vector3 = (t.global_position - camera.global_position).normalized()
+			var angle: float = acos(cam_dir.dot(to_target))
+			if angle < best_angle:
+				best_angle = angle
+				best = t
+
+	if best == _lock_candidate:
+		_lock_timer += delta
+		if _lock_timer >= lock_time_sec:
+			locked_target = _lock_candidate
+	else:
+		_lock_candidate = best
+		_lock_timer = 0.0
+		locked_target = null
+
+	_update_visuals(radar_targets)
+
+func _update_visuals(visible_targets: Array[RadarTarget]) -> void:
+	if show_markers:
+		_update_markers(visible_targets)
+	else:
+		_clear_all_markers()
+
+func _update_markers(visible_targets: Array[RadarTarget]) -> void:
+	var live: Array[int] = []
+	
+	for t in visible_targets:
+		if not is_instance_valid(t):
+			continue
+		var id: int = t.get_instance_id()
+		live.append(id)
+	
+		var marker = _markers.get(id, null)
+		if marker == null and marker_scene != null:
+			marker = marker_scene.instantiate()
+			if marker != null:
+				add_child(marker)
+				_markers[id] = marker
+		if marker != null:
+			marker.global_position = t.global_position
+			marker.radar()
+			marker.clear()
+	
+	if locked_target != null:
+		var id: int = locked_target.get_instance_id()
+		var marker = _markers.get(id, null)
+		if marker == null and marker_scene != null:
+			marker = marker_scene.instantiate()
+			if marker != null:
+				add_child(marker)
+				_markers[id] = marker
+		if marker != null:
+			marker.global_position = locked_target.global_position
+			marker.radar()
+			marker.set_locked()
+		if id not in live:
+			live.append(id)
+
+	for id in _markers.keys():
+		if id not in live:
+			if is_instance_valid(_markers[id]):
+				_markers[id].queue_free()
+			_markers.erase(id)
+
+
+func _clear_all_markers() -> void:
+	for m in _markers.values():
+		m.queue_free()
+	_markers.clear()
+"
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_j5jx5"]
 data = PackedVector3Array(-100, -100, 0.5, -100, -100, -0.5, -100, 100, -0.5, 100, -100, -0.5, -100, -100, -0.5, -100, -100, 0.5, -100, 100, -0.5, -100, -100, -0.5, 100, -100, -0.5, -100, 100, -0.5, -100, 100, 0.5, -100, -100, 0.5, -100, -100, 0.5, -100, 100, 0.5, 100, 100, 0.5, 100, 100, 0.5, -100, 100, 0.5, -100, 100, -0.5, -100, -100, 0.5, 100, -100, 0.5, 100, -100, -0.5, 100, 100, 0.5, 100, -100, 0.5, -100, -100, 0.5, 100, -100, -0.5, 100, -100, 0.5, 100, 100, 0.5, 100, -100, -0.5, 100, 100, -0.5, -100, 100, -0.5, -100, 100, -0.5, 100, 100, -0.5, 100, 100, 0.5, 100, 100, 0.5, 100, 100, -0.5, 100, -100, -0.5)
@@ -137,11 +232,13 @@ F: Center Camera"
 [node name="radar" type="CSGBox3D" parent="FPCameraHolder/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -4)
 script = ExtResource("5_yk7ts")
+angular_bin_size_deg = 25.0
 
-[node name="RadarEchoTracker" type="Node3D" parent="FPCameraHolder/Camera3D/radar" node_paths=PackedStringArray("radar")]
-script = ExtResource("5_jcd4p")
+[node name="RadarEchoTracker" type="Node3D" parent="FPCameraHolder/Camera3D/radar" node_paths=PackedStringArray("radar", "camera")]
+script = SubResource("GDScript_jcd4p")
 radar = NodePath("..")
-marker_scene = ExtResource("6_uacia")
+camera = NodePath("../..")
+marker_scene = ExtResource("7_uacia")
 metadata/_custom_type_script = "uid://squqqv8qatax"
 
 [node name="target1" type="CSGBox3D" parent="."]
@@ -181,7 +278,7 @@ collide_with_areas = true
 collide_with_bodies = false
 
 [node name="target3" type="CSGBox3D" parent="."]
-transform = Transform3D(0.122839, 0, 0.992427, 0, 1, 0, -0.992427, 0, 0.122839, -2460.79, 0, 646.847)
+transform = Transform3D(0.122839, 0, 0.992427, 0, 1, 0, -0.992427, 0, 0.122839, -2263.59, 0, 813.78)
 
 [node name="RadarTarget" type="Node3D" parent="target3"]
 script = ExtResource("4_j5jx5")

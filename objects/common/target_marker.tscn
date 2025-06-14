@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bnqlnpxb47hb"]
+[gd_scene load_steps=7 format=3 uid="uid://bnqlnpxb47hb"]
 
 [ext_resource type="Script" uid="uid://tbhaklp2dvwo" path="res://objects/common/target_marker.gd" id="1_ybepw"]
 [ext_resource type="Texture2D" uid="uid://yohk3urt0e0a" path="res://textures/marker_a.png" id="2_auwka"]
 [ext_resource type="Texture2D" uid="uid://dc75xp38jffuu" path="res://textures/next_sprite.png" id="3_17ybv"]
 [ext_resource type="Texture2D" uid="uid://dx33u8vdllssr" path="res://textures/marker_v.png" id="3_ylqi5"]
 [ext_resource type="Texture2D" uid="uid://cff6sjyic4j1s" path="res://textures/lock_sprite.png" id="4_ylqi5"]
+[ext_resource type="Texture2D" uid="uid://dqbybcbqu6jjt" path="res://textures/marker_x.png" id="6_ylqi5"]
 
 [node name="TargetMarker" type="Node3D"]
 script = ExtResource("1_ybepw")
@@ -48,3 +49,13 @@ no_depth_test = true
 fixed_size = true
 texture_filter = 0
 texture = ExtResource("3_17ybv")
+
+[node name="t" type="Sprite3D" parent="."]
+visible = false
+pixel_size = 0.0032
+billboard = 1
+double_sided = false
+no_depth_test = true
+fixed_size = true
+texture_filter = 0
+texture = ExtResource("6_ylqi5")

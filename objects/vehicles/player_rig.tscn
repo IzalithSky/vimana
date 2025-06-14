@@ -16,8 +16,8 @@
 [ext_resource type="PackedScene" uid="uid://bnqlnpxb47hb" path="res://objects/common/target_marker.tscn" id="10_fcjbv"]
 [ext_resource type="AudioStream" uid="uid://dxs3upvxt0kig" path="res://sounds/alarm.ogg" id="11_sbsnl"]
 [ext_resource type="Script" uid="uid://ca3q1n33gqkgg" path="res://objects/missile/player_missile_launcher.gd" id="12_f157b"]
-[ext_resource type="PackedScene" uid="uid://binjvtutugvoy" path="res://objects/missile/missile_heatseeker.tscn" id="13_qivai"]
 [ext_resource type="Script" uid="uid://cfr6sfdj27xqg" path="res://objects/common/radar.gd" id="14_3o10w"]
+[ext_resource type="PackedScene" uid="uid://86ck740jpn2w" path="res://objects/missile/missile_semi_active_radar.tscn" id="14_f157b"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_us0ds"]
 shader = ExtResource("9_u6qbw")
@@ -74,6 +74,8 @@ lock_time_sec = 0.5
 play_sounds = true
 locking_sound = NodePath("LockingSound")
 locked_sound = NodePath("LockedSound")
+enable_heat_markers = true
+enable_radar_markers = true
 metadata/_custom_type_script = "uid://bk4syu2gcjm2n"
 
 [node name="HeatSeeker" type="Node3D" parent="FPCameraHolder/Camera3D/TargetTracker"]
@@ -299,7 +301,8 @@ script = ExtResource("12_f157b")
 camera = NodePath("..")
 missile_cam = NodePath("../../../MissileCamera")
 tracker = NodePath("../TargetTracker")
-missile_scene = ExtResource("13_qivai")
+missile_scene = ExtResource("14_f157b")
+missile_type = "radar"
 metadata/_custom_type_script = "uid://ca3q1n33gqkgg"
 
 [node name="Display" type="MeshInstance3D" parent="."]
@@ -404,12 +407,6 @@ no_depth_test = true
 fixed_size = true
 texture_filter = 0
 texture = ExtResource("4_fcjbv")
-
-[node name="TargetTracker" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
-script = ExtResource("9_lgipv")
-camera = NodePath("../FPCameraHolder/Camera3D")
-marker_scene = ExtResource("10_fcjbv")
-metadata/_custom_type_script = "uid://bk4syu2gcjm2n"
 
 [node name="MissileCamera" type="Camera3D" parent="."]
 far = 30000.0

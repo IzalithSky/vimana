@@ -30,8 +30,8 @@ class_name PlayerControls extends Node
 @onready var damage_color_rect: ColorRect = $FPCameraHolder/Camera3D/CanvasLayer1/DamageColorRect
 @onready var audio_listener_3d: AudioListener3D = $FPCameraHolder/Camera3D/AudioListener3D
 @onready var aoa_limiter_warning: AudioStreamPlayer3D = $AoALimiterWarning
-#@onready var player_gun: PlayerGun = $FPCameraHolder/Camera3D/PlayerGun
-#@onready var player_gun: PlayerGun = $PlayerGun
+@onready var tracker: TargetTracker = $FPCameraHolder/Camera3D/TargetTracker
+
 
 const HEADING_BUFFER_SIZE: int = 10
 var _heading_buf: Array[float] = []
@@ -185,3 +185,12 @@ func _process(delta: float) -> void:
 		
 	damage_color_rect.color.a = move_toward(
 		damage_color_rect.color.a, 0.0, delta * damage_flash_fade_speed)
+		
+	if Input.is_action_just_pressed("option_1"):
+		tracker.enable_heat_locking = not tracker.enable_heat_locking
+	if Input.is_action_just_pressed("option_2"):
+		tracker.enable_radar_locking = not tracker.enable_radar_locking
+	if Input.is_action_just_pressed("option_3"):
+		tracker.enable_heat_markers = not tracker.enable_heat_markers
+	if Input.is_action_just_pressed("option_4"):
+		tracker.enable_radar_markers = not tracker.enable_radar_markers
