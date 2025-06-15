@@ -19,14 +19,31 @@ class_name Jet extends Vimana
 @onready var trail_r: Trail = $WingR/Trail
 @onready var propulsion_sound: AudioStreamPlayer3D = $PropulsionSound
 
+var death_mode: bool = false
+
 
 func _ready() -> void:
 	rig = get_node(rig_path)
 	self.body_entered.connect(_on_body_entered)
 	throttle_input = 0.0
 
+	var health: Health = get_node("Health")
+	health.died.connect(_on_died)
+
+
+func _on_died(cause: Health.DeathCause) -> void:
+	if cause == Health.DeathCause.COLLISION:
+		queue_free()
+	else:
+		death_mode = true
+
 
 func _physics_process(delta: float) -> void:
+	if death_mode:
+		apply_air_drag()
+		apply_directional_alignment()
+		return
+	
 	rig.collect_inputs(delta)
 	compute_control_state(delta)
 	apply_thrust()
@@ -63,13 +80,9 @@ func apply_jet_torque(delta: float) -> void:
 	else:
 		speed_factor = 1.0 / (1.0 + pow(t, 2.0 * 0.8))
 	
-	var p_in: float = pitch_input
-	var y_in: float = yaw_input
-	var r_in: float = roll_input
-	
-	p_in *= speed_factor
-	y_in *= speed_factor
-	r_in *= speed_factor
+	var p_in: float = pitch_input * speed_factor
+	var y_in: float = yaw_input * speed_factor
+	var r_in: float = roll_input * speed_factor
 	
 	apply_torque(transform.basis.x * p_in * q * max_pitch)
 	apply_torque(transform.basis.y * y_in * q * max_yaw)
@@ -80,19 +93,22 @@ func apply_lift() -> void:
 	var vel: Vector3 = linear_velocity
 	if vel.length() < 1e-3:
 		return
+	
 	var dynamic_pressure: float = 0.5 * vel.length_squared()
 	var vertical_cl: float = lift_coefficient + (2.0 * PI * deg_to_rad(aoa_deg))
 	var lateral_cl: float = -2.0 * PI * deg_to_rad(horizontal_aoa_deg)
+	
 	lift_ok = abs(aoa_deg) < stall_aoa_deg and abs(horizontal_aoa_deg) < stall_aoa_deg
 	if not lift_ok:
 		return
+	
 	var vertical_lift: float = dynamic_pressure * vertical_cl
 	var lateral_lift: float = dynamic_pressure * lateral_cl
 	apply_central_force(transform.basis.y * vertical_lift)
 	apply_central_force(transform.basis.x * lateral_lift)
 
 
-func _update_wing_trails() -> void:	
+func _update_wing_trails() -> void:
 	var local_ang_vel: Vector3 = global_transform.basis.inverse() * angular_velocity
 	var local_velocity: Vector3 = global_transform.basis.inverse() * linear_velocity
 	var pitch_rate: float = abs(local_ang_vel.x)
@@ -100,7 +116,6 @@ func _update_wing_trails() -> void:
 	
 	var pitch_ok: bool = pitch_rate > deg_to_rad(trail_pitch_thr)
 	var speed_ok: bool = forward_speed > trail_speed_thr
-	
 	var active: bool = pitch_ok and speed_ok
 	
 	trail_l.trail_enabled = active

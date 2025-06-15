@@ -38,7 +38,7 @@ func _ready() -> void:
 		missile_launcher = $MissileLauncher
 	if tracker == null and vehicle.has_node("HeatSeekerTargetTracker"):
 		tracker = vehicle.get_node("HeatSeekerTargetTracker") as HeatSeekerTargetTracker
-
+	
 	vehicle.add_to_group(ally_group)
 	
 	var health: Health = vehicle.get_node("Health") as Health
@@ -47,15 +47,23 @@ func _ready() -> void:
 	randomize()
 
 
-func _on_vehicle_died() -> void:
-	vehicle.queue_free()
+func _on_vehicle_died(cause: Health.DeathCause) -> void:
+	if cause == Health.DeathCause.COLLISION:
+		vehicle.queue_free()
 
 
-func find_nearest(g: String) -> Node3D:
+func _health_alive(n: Node3D) -> bool:
+	var h: Health = n.get_node("Health") as Health
+	return h.current_hp > 0.0
+
+
+func find_nearest(group_name: String) -> Node3D:
 	var best: Node3D = null
 	var best_d: float = INF
-	for n: Node in get_tree().get_nodes_in_group(g):
+	for n: Node in get_tree().get_nodes_in_group(group_name):
 		if n is Node3D and n != vehicle:
+			if not _health_alive(n):
+				continue
 			var d: float = (n as Node3D).global_transform.origin.distance_to(vehicle.global_transform.origin)
 			if d < best_d:
 				best_d = d
@@ -188,9 +196,9 @@ func try_fire() -> void:
 
 
 func _attack_target() -> void:
-	if target == null or not is_instance_valid(target):
+	if target == null or not is_instance_valid(target) or not _health_alive(target):
 		return
-
+	
 	var p: Vector3 = target.global_transform.origin
 	var dir: Vector3 = (p - vehicle.global_transform.origin).normalized()
 	var local: Vector3 = vehicle.global_transform.basis.inverse() * dir
@@ -198,7 +206,7 @@ func _attack_target() -> void:
 	vehicle.pitch_input = clamp(local.y * pitch_gain, -1.0, 1.0)
 	vehicle.yaw_input = clamp(local.x * yaw_gain, -1.0, 1.0)
 	vehicle.throttle_input = 0.0
-
+	
 	if tracker != null:
 		var seeker_pos: Vector3 = tracker.global_position
 		var to_target: Vector3 = (target.global_position - seeker_pos).normalized()
@@ -206,35 +214,30 @@ func _attack_target() -> void:
 		var new_transform: Transform3D = Transform3D(new_basis, seeker_pos)
 		tracker.global_transform = new_transform
 		missile_launcher.global_transform = new_transform
-
+		
 	try_fire()
 
 
-func collect_inputs(_delta: float) -> void:
+func collect_inputs(delta: float) -> void:
 	if vehicle == null:
 		return
-	
-	pursuit_timer += _delta
-	
+	pursuit_timer += delta
 	if target != null and pursuit_timer > max_pursuit_time and not missile_fired_recently:
 		var prev_target: Node3D = target
 		var candidates: Array[Node3D] = []
-		for candidate: Node in get_tree().get_nodes_in_group(target_group):
-			if candidate is Node3D and candidate != vehicle and candidate != prev_target:
-				candidates.append(candidate as Node3D)
+		for c: Node in get_tree().get_nodes_in_group(target_group):
+			if c is Node3D and c != vehicle and c != prev_target and _health_alive(c):
+				candidates.append(c as Node3D)
 		if candidates.size() > 0:
 			target = candidates[randi() % candidates.size()]
 			pursuit_timer = 0.0
-	
 	missile_fired_recently = false
-	
-	if target == null or not is_instance_valid(target):
+	if target == null or not is_instance_valid(target) or not _health_alive(target):
 		target = find_nearest(target_group)
-	if target == null or not is_instance_valid(target):
+	if target == null:
 		anchor = find_nearest(anchor_group)
 	else:
 		anchor = null
-	
 	if not vehicle.lift_ok:
 		recover_from_stall()
 		return
@@ -243,7 +246,6 @@ func collect_inputs(_delta: float) -> void:
 		return
 	if avoid_obstacle():
 		return
-	
 	if target != null:
 		var d: float = vehicle.global_transform.origin.distance_to(target.global_transform.origin)
 		if d <= attack_range:

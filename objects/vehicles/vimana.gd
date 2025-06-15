@@ -13,12 +13,11 @@ class_name Vimana extends RigidBody3D
 
 @export var explosion_scene: PackedScene
 @export var explosive_speed: float = 3.0
-@export var collsion_damage_mult: float = 20.0
+@export var collision_damage_mult: float = 20.0
 
 @export var aoa_limiter: bool = true
 
 @onready var heat_source: HeatSource = $HeatSource
-
 
 var rig: Node
 var roll_input: float = 0.0
@@ -38,16 +37,15 @@ var lift_ok: bool = true
 
 func _on_body_entered(body: Node) -> void:
 	var speed: float = linear_velocity.length()
-	
-	if speed >= explosive_speed and explosion_scene:
-		var explosion: Node3D = explosion_scene.instantiate()
-		get_tree().current_scene.add_child(explosion)
-		explosion.global_transform.origin = global_transform.origin
-	
 	if speed >= explosive_speed:
+		if explosion_scene:
+			var explosion: Node3D = explosion_scene.instantiate()
+			get_tree().current_scene.add_child(explosion)
+			explosion.global_transform.origin = global_transform.origin
+		
 		for child in get_children():
 			if child is Health:
-				child.take_damage(speed * collsion_damage_mult)
+				child.take_damage(speed * collision_damage_mult, Health.DeathCause.COLLISION)
 				break
 
 

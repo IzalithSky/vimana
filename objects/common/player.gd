@@ -13,10 +13,11 @@ func _ready() -> void:
 	get_parent().add_to_group("anchors")
 
 
-func _on_player_died() -> void:
-	if game_over_menu_scene_path:
-		var scene: PackedScene = load(game_over_menu_scene_path)
-		var game_over_instance: Node = scene.instantiate()
-		get_tree().root.add_child(game_over_instance)
-		get_tree().current_scene.queue_free()
-		get_tree().current_scene = game_over_instance
+func _on_player_died(cause: Health.DeathCause) -> void:
+	if cause == Health.DeathCause.COLLISION:
+		if game_over_menu_scene_path:
+			var scene: PackedScene = load(game_over_menu_scene_path)
+			var game_over_instance: Node = scene.instantiate()
+			get_tree().root.add_child(game_over_instance)
+			get_tree().current_scene.queue_free()
+			get_tree().current_scene = game_over_instance
