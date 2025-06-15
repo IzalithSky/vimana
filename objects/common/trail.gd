@@ -4,7 +4,6 @@ class_name Trail extends MeshInstance3D
 var points: Array[Vector3] = []
 var widths: Array = []
 var life_points: Array[float] = []
-var _dirty: bool = false
 var old_pos: Vector3
 var node_ttl: float = -1.0
 
@@ -27,44 +26,51 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if not permanent and node_ttl >= 0.0:
+		node_ttl -= delta
+		if node_ttl <= 0.0:
+			queue_free()
+			return
+	
 	var moved: bool = (old_pos - global_transform.origin).length() > motion_delta
 	if trail_enabled and moved:
 		_append_point()
 		old_pos = global_transform.origin
-		_dirty = true
 	
-	var p: int = 0
-	var max_points: int = points.size()
-	while p < max_points:
-		life_points[p] += delta
-		if life_points[p] > lifespan:
-			_remove_point(p)
-			p -= 1
-			if p < 0:
-				p = 0
-			max_points = points.size()
-			_dirty = true
-		p += 1
+	var i: int = 0
+	while i < points.size():
+		life_points[i] += delta
+		if life_points[i] > lifespan:
+			_remove_point(i)
+			continue
+		i += 1
 	
-	if points.size() == 1 and life_points[0] > lifespan:
-		_remove_point(0)
-		_dirty = true
-	
-	if points.size() >= 2:
-		_dirty = true
-	
-	if not permanent and node_ttl >= 0.0:
-		node_ttl -= delta
-		_dirty = true
-		if node_ttl <= 0.0:
-			queue_free()
-	
-	if not _dirty or points.size() < 2:
+	mesh.clear_surfaces()
+	if points.size() < 2:
 		return
 	
-	_dirty = false
-	mesh.clear_surfaces()
-	_build_surface()
+	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
+	var count: int = points.size()
+	for j in range(count):
+		var t: float = float(j) / float(count - 1)
+		mesh.surface_set_color(start_color.lerp(end_color, 1.0 - t))
+		
+		var scale: float = pow(1.0 - t, scale_acceleration)
+		var w_from: Vector3 = widths[j][0] as Vector3
+		var w_to: Vector3 = widths[j][1] as Vector3
+		var w: Vector3 = w_from - scale * w_to
+		
+		if scale_texture:
+			mesh.surface_set_uv(Vector2(motion_delta * j, 0.0))
+			mesh.surface_add_vertex(to_local(points[j] + w))
+			mesh.surface_set_uv(Vector2(motion_delta * (j + 1), 1.0))
+			mesh.surface_add_vertex(to_local(points[j] - w))
+		else:
+			mesh.surface_set_uv(Vector2(t, 0.0))
+			mesh.surface_add_vertex(to_local(points[j] + w))
+			mesh.surface_set_uv(Vector2(t, 1.0))
+			mesh.surface_add_vertex(to_local(points[j] - w))
+	mesh.surface_end()
 
 
 func _append_point() -> void:

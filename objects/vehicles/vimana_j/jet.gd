@@ -1,7 +1,7 @@
 class_name Jet extends Vimana
 
 
-@export var max_thrust: float = 3000.0
+@export var max_thrust: float = 5000.0
 @export var max_pitch: float = 0.8
 @export var max_yaw: float = 0.1
 @export var max_roll: float = 1.0

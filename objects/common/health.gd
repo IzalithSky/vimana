@@ -2,7 +2,7 @@ class_name Health
 extends Node
 
 
-@export var max_hp: float = 1000
+@export var max_hp: float = 100
 var current_hp: float = max_hp
 
 signal died
