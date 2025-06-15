@@ -125,7 +125,7 @@ func _process(delta: float) -> void:
 	gf_label.add_theme_color_override("font_color",
 		Color.RED if v.smoothed_g >= v.warn_g_force else Color.LAWN_GREEN)
 	
-	if v.control_effectiveness < 1.0 or not v.lift_ok:
+	if not v.lift_ok:
 		aoa_label.add_theme_color_override("font_color", Color.RED)
 	else:
 		aoa_label.add_theme_color_override("font_color", Color.LAWN_GREEN)

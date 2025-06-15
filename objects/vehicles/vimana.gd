@@ -9,7 +9,7 @@ class_name Vimana extends RigidBody3D
 @export var alignment_strength: float = 4.0
 
 @export var warn_g_force: float = 8.0
-@export var control_effectiveness_speed: float = 80.0
+@export var control_effectiveness_speed: float = 50.0
 
 @export var explosion_scene: PackedScene
 @export var explosive_speed: float = 3.0
@@ -31,7 +31,7 @@ var _g_force_buffer: Array[float] = []
 var _prev_velocity: Vector3 = Vector3.ZERO
 var smoothed_g: float = 0.0
 var aoa_deg: float = 0.0
-var control_effectiveness: float = 0.0
+var horizontal_aoa_deg: float = 0.0
 var throttle_percent: float = 0.0
 var lift_ok: bool = true
 
@@ -65,19 +65,20 @@ func compute_aoa() -> void:
 	var v: Vector3 = linear_velocity
 	if v.length() < 0.001:
 		aoa_deg = 0.0
+		horizontal_aoa_deg = 0.0
 		return
 	
-	var forward: Vector3 = -transform.basis.z
+	var fwd: Vector3 = -transform.basis.z
 	var up: Vector3 = transform.basis.y
+	var right: Vector3 = transform.basis.x
 	var vel_dir: Vector3 = v.normalized()
 	
-	var aoa: float = -atan2(vel_dir.dot(up), vel_dir.dot(forward))
-	aoa_deg = rad_to_deg(aoa)
+	aoa_deg = rad_to_deg(-atan2(vel_dir.dot(up), vel_dir.dot(fwd)))
+	horizontal_aoa_deg = rad_to_deg(atan2(vel_dir.dot(right), vel_dir.dot(fwd)))
 
 
 func compute_control_state(delta: float) -> void:
 	var forward_speed: float = linear_velocity.dot(-transform.basis.z)
-	control_effectiveness = clamp(forward_speed / control_effectiveness_speed, 0.0, 1.0)
 	compute_aoa()
 	update_g_force(delta)
 

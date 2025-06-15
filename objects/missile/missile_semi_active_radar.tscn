@@ -1,18 +1,19 @@
-[gd_scene load_steps=6 format=3 uid="uid://86ck740jpn2w"]
+[gd_scene load_steps=7 format=3 uid="uid://86ck740jpn2w"]
 
 [ext_resource type="Script" uid="uid://dpfq3h3552wwx" path="res://objects/missile/missile_semi_active_radar.gd" id="1_fxxuq"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_v8707"]
 [ext_resource type="PackedScene" uid="uid://bucpax13pgdsw" path="res://objects/missile_trail.tscn" id="3_4n5gx"]
 [ext_resource type="AudioStream" uid="uid://klyoturb21mt" path="res://sounds/underwater_or_space_engine.ogg" id="4_0peu1"]
+[ext_resource type="Script" uid="uid://b8tsq83yhtgll" path="res://objects/common/echo_seeker.gd" id="5_4n5gx"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
 
-[node name="RigidBody3D" type="RigidBody3D" node_paths=PackedStringArray("seeker_node")]
+[node name="RigidBody3D" type="RigidBody3D" node_paths=PackedStringArray("echo_seeker")]
 continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_fxxuq")
-seeker_node = NodePath("Node3D")
+echo_seeker = NodePath("EchoSeeker")
 max_fuel = 20.0
 explosion_scene = ExtResource("2_v8707")
 trail_scene = ExtResource("3_4n5gx")
@@ -27,4 +28,6 @@ pitch_scale = 8.0
 autoplay = true
 doppler_tracking = 2
 
-[node name="Node3D" type="Node3D" parent="."]
+[node name="EchoSeeker" type="Node3D" parent="."]
+script = ExtResource("5_4n5gx")
+metadata/_custom_type_script = "uid://b8tsq83yhtgll"

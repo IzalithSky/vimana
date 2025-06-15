@@ -2,7 +2,9 @@ class_name FPCameraHolder extends Node3D
 
 
 @export var sensitivity: float = 0.002
-@export var pitch_limit: float = 80.0
+@export var pitch_limit: float = 120.0
+@export var yaw_limit: float = 120.0
+@export var yaw_limit_enabled: bool = true
 @export var fps_label: Label
 @export var normal_fov: float = 90.0
 @export var zoomed_fov: float = 32.0
@@ -32,8 +34,14 @@ func _input(event: InputEvent) -> void:
 		var motion: InputEventMouseMotion = event
 		current_yaw -= motion.relative.x * sensitivity
 		current_pitch -= motion.relative.y * sensitivity
+		
 		var pitch_limit_rad: float = deg_to_rad(pitch_limit)
 		current_pitch = clamp(current_pitch, -pitch_limit_rad, pitch_limit_rad)
+		
+		if yaw_limit_enabled:
+			var yaw_limit_rad: float = deg_to_rad(yaw_limit)
+			current_yaw = clamp(current_yaw, -yaw_limit_rad, yaw_limit_rad)
+		
 		camera.rotation = Vector3(current_pitch, current_yaw, 0.0)
 	
 	if zoom_as_toggle and event.is_action_pressed("zoom"):

@@ -21,8 +21,8 @@ var heat_locked: HeatSource = null
 var heat_candidate: HeatSource = null
 var heat_timer: float = 0.0
 
-var radar_locked: RadarTarget = null
-var radar_candidate: RadarTarget = null
+var radar_locked: TargetMarker = null
+var radar_candidate: TargetMarker = null
 var radar_timer: float = 0.0
 
 var _markers: Dictionary[int, TargetMarker] = {}
@@ -69,24 +69,25 @@ func _handle_heat_logic(delta: float) -> Array[int]:
 
 
 func _handle_radar_logic(delta: float) -> Array[int]:
-	if radar == null or camera == null:
+	if camera == null:
 		return []
-	
-	var radar_targets: Array[RadarTarget] = []
+
+	var marker_targets: Array[TargetMarker] = []
 	if enable_radar_markers:
-		radar_targets = radar.get_targets()
-	
+		for node in get_tree().get_nodes_in_group("radar_echoes"):
+			if node is TargetMarker and is_instance_valid(node):
+				marker_targets.append(node)
+
 	if enable_radar_locking:
+		var best: TargetMarker = null
 		var best_angle: float = INF
-		var best: RadarTarget = null
 		var cam_dir: Vector3 = -camera.global_transform.basis.z
-		for t in radar_targets:
-			if not is_instance_valid(t):
-				continue
-			var angle: float = acos(cam_dir.dot((t.global_position - camera.global_position).normalized()))
+		for marker in marker_targets:
+			var to_marker: Vector3 = (marker.global_position - camera.global_position).normalized()
+			var angle: float = acos(cam_dir.dot(to_marker))
 			if angle < best_angle:
 				best_angle = angle
-				best = t
+				best = marker
 		if best == radar_candidate:
 			radar_timer += delta
 			if radar_timer >= lock_time_sec:
@@ -99,8 +100,9 @@ func _handle_radar_logic(delta: float) -> Array[int]:
 		radar_locked = null
 		radar_candidate = null
 		radar_timer = 0.0
-	
+
 	if enable_radar_markers:
+		var radar_targets: Array[RadarTarget] = radar.get_targets() if radar != null else []
 		return _update_radar_markers(radar_targets)
 	return []
 
@@ -210,5 +212,5 @@ func get_heat_target() -> HeatSource:
 	return heat_locked
 
 
-func get_radar_target() -> RadarTarget:
+func get_radar_target() -> TargetMarker:
 	return radar_locked

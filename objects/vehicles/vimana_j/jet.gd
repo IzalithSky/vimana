@@ -2,9 +2,9 @@ class_name Jet extends Vimana
 
 
 @export var max_thrust: float = 3000.0
-@export var max_pitch: float = 800.0
-@export var max_yaw: float = 800.0
-@export var max_roll: float = 400.0
+@export var max_pitch: float = 0.8
+@export var max_yaw: float = 0.1
+@export var max_roll: float = 0.4
 @export var lift_coefficient: float = 0.0
 @export var stall_aoa_deg: float = 30.0
 @export var trail_ttl_after_stop: float = 1.0
@@ -13,6 +13,7 @@ class_name Jet extends Vimana
 @export var trail_pitch_thr: float = 15.0
 @export var base_pitch_scale: float = 0.6
 @export var glimiter_scale: float = 0.3
+@export var speed_assist: float = 0.5
 
 @onready var trail_l: Trail = $WingL/Trail
 @onready var trail_r: Trail = $WingR/Trail
@@ -52,29 +53,48 @@ func apply_thrust() -> void:
 
 
 func apply_jet_torque(delta: float) -> void:
+	var forward_speed: float = linear_velocity.dot(-transform.basis.z)
+	var q: float = 0.5 * forward_speed * forward_speed
+	
+	var speed_factor: float = 1.0
+	if aoa_limiter and forward_speed > control_effectiveness_speed:
+		speed_factor = speed_assist * control_effectiveness_speed / forward_speed
+	
+	var p_in: float = pitch_input
+	var y_in: float = yaw_input
+	var r_in: float = roll_input
+	
 	if aoa_limiter:
 		if smoothed_g > warn_g_force:
-			var scale: float = glimiter_scale * warn_g_force / smoothed_g
-			pitch_input = clamp(pitch_input, -scale, scale)
+			var s: float = glimiter_scale * warn_g_force / smoothed_g
+			p_in = clamp(p_in, -s, s)
 		if not lift_ok:
-			var aoa_frac: float = clamp(1.0 - abs(aoa_deg) / stall_aoa_deg, 0.0, 1.0)
-			pitch_input *= aoa_frac
-	apply_torque(transform.basis.x * pitch_input * control_effectiveness * max_pitch)
-	apply_torque(transform.basis.y * yaw_input * control_effectiveness * max_yaw)
-	apply_torque(transform.basis.z * roll_input * control_effectiveness * max_roll)
+			var f: float = clamp(1.0 - abs(aoa_deg) / stall_aoa_deg, 0.0, 1.0)
+			p_in *= f
+	
+	p_in *= speed_factor
+	y_in *= speed_factor
+	r_in *= speed_factor
+	
+	apply_torque(transform.basis.x * p_in * q * max_pitch)
+	apply_torque(transform.basis.y * y_in * q * max_yaw)
+	apply_torque(transform.basis.z * r_in * q * max_roll)
 
 
 func apply_lift() -> void:
-	var velocity: Vector3 = linear_velocity
-	if velocity.length() < 1e-3:
+	var vel: Vector3 = linear_velocity
+	if vel.length() < 1e-3:
 		return
-	var aoa: float = deg_to_rad(aoa_deg)
-	var cl: float = lift_coefficient + (2.0 * PI * aoa)
-	lift_ok = abs(aoa_deg) < stall_aoa_deg
+	var dynamic_pressure: float = 0.5 * vel.length_squared()
+	var vertical_cl: float = lift_coefficient + (2.0 * PI * deg_to_rad(aoa_deg))
+	var lateral_cl: float = -2.0 * PI * deg_to_rad(horizontal_aoa_deg)
+	lift_ok = abs(aoa_deg) < stall_aoa_deg and abs(horizontal_aoa_deg) < stall_aoa_deg
 	if not lift_ok:
 		return
-	var lift: float = 0.5 * velocity.length_squared() * cl
-	apply_central_force(transform.basis.y * lift)
+	var vertical_lift: float = dynamic_pressure * vertical_cl
+	var lateral_lift: float = dynamic_pressure * lateral_cl
+	apply_central_force(transform.basis.y * vertical_lift)
+	apply_central_force(transform.basis.x * lateral_lift)
 
 
 func _update_wing_trails() -> void:	
