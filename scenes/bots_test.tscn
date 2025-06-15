@@ -314,6 +314,8 @@ metadata/_custom_type_script = "uid://cnwxl0c06eycl"
 [node name="FPCameraHolder" type="Node3D" parent="objects/Jets/jet_ally" node_paths=PackedStringArray("fps_label")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4769, 9.76111)
 script = ExtResource("12_c017y")
+pitch_limit = 180.0
+yaw_limit = 180.0
 fps_label = NodePath("Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer/FpsLabel")
 
 [node name="Camera3D" type="Camera3D" parent="objects/Jets/jet_ally/FPCameraHolder"]

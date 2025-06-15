@@ -4,7 +4,7 @@ class_name Jet extends Vimana
 @export var max_thrust: float = 3000.0
 @export var max_pitch: float = 0.8
 @export var max_yaw: float = 0.1
-@export var max_roll: float = 0.4
+@export var max_roll: float = 1.0
 @export var lift_coefficient: float = 0.0
 @export var stall_aoa_deg: float = 30.0
 @export var trail_ttl_after_stop: float = 1.0
@@ -13,7 +13,7 @@ class_name Jet extends Vimana
 @export var trail_pitch_thr: float = 15.0
 @export var base_pitch_scale: float = 0.6
 @export var glimiter_scale: float = 0.3
-@export var speed_assist: float = 0.5
+@export var speed_assist: float = 1.4
 
 @onready var trail_l: Trail = $WingL/Trail
 @onready var trail_r: Trail = $WingR/Trail
@@ -57,20 +57,15 @@ func apply_jet_torque(delta: float) -> void:
 	var q: float = 0.5 * forward_speed * forward_speed
 	
 	var speed_factor: float = 1.0
-	if aoa_limiter and forward_speed > control_effectiveness_speed:
-		speed_factor = speed_assist * control_effectiveness_speed / forward_speed
+	var t: float = max(0.0, forward_speed) / control_effectiveness_speed
+	if aoa_limiter:
+		speed_factor = 1.0 / (1.0 + pow(t, 2.0 * speed_assist))
+	else:
+		speed_factor = 1.0 / (1.0 + pow(t, 2.0 * 0.8))
 	
 	var p_in: float = pitch_input
 	var y_in: float = yaw_input
 	var r_in: float = roll_input
-	
-	if aoa_limiter:
-		if smoothed_g > warn_g_force:
-			var s: float = glimiter_scale * warn_g_force / smoothed_g
-			p_in = clamp(p_in, -s, s)
-		if not lift_ok:
-			var f: float = clamp(1.0 - abs(aoa_deg) / stall_aoa_deg, 0.0, 1.0)
-			p_in *= f
 	
 	p_in *= speed_factor
 	y_in *= speed_factor
