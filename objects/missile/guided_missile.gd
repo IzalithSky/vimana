@@ -98,6 +98,5 @@ func lock_target(new_target: Node3D) -> void:
 
 
 func _disable_guidance() -> void:
-	print("target_lost")
 	is_guidance_active = false
 	target = null
