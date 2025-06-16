@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=4 uid="uid://cg1rl1irjyc6q"]
+[gd_scene load_steps=10 format=4 uid="uid://cg1rl1irjyc6q"]
 
 [ext_resource type="Script" uid="uid://bgyhgxmmogsmq" path="res://objects/vehicles/vimana_lvd/vimana_lvd.gd" id="1_3juvv"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_k03oh"]
+[ext_resource type="PackedScene" uid="uid://bfllwwoabp1rs" path="res://objects/common/flame_trail.tscn" id="3_rfc7d"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="3_y6qys"]
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="5_3pkc8"]
 [ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/common/radar_target.gd" id="6_qno0u"]
@@ -29,6 +30,7 @@ max_contacts_reported = 5
 angular_damp = 3.0
 script = ExtResource("1_3juvv")
 explosion_scene = ExtResource("2_k03oh")
+flame_trail_scene = ExtResource("3_rfc7d")
 
 [node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.520594)

@@ -4,10 +4,7 @@ class_name LvD extends Heli
 var camera: Node3D
 
 
-func _ready() -> void:
-	rig = get_node(rig_path)
-	self.body_entered.connect(_on_body_entered)
-	
+func on_ready_enabled() -> void:
 	if rig is PlayerControls:
 		camera = rig.camera
 
@@ -19,7 +16,6 @@ func apply_throttle(throttle_value: float) -> void:
 	else:
 		forward_force = -camera.global_transform.basis.z * throttle_value * thrust_power
 	apply_central_force(forward_force)
-
 
 
 func apply_directional_alignment() -> void:

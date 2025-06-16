@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=4 uid="uid://bokx8wuhvb2hd"]
+[gd_scene load_steps=10 format=4 uid="uid://bokx8wuhvb2hd"]
 
 [ext_resource type="Script" uid="uid://dyxvmhny5frid" path="res://objects/vehicles/vimana_h/heli.gd" id="1_2yl4s"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_3gkdx"]
 [ext_resource type="Material" uid="uid://bw6qspkyps87o" path="res://textures/256x256/Roofs/Roofs_01-256x256.tres" id="3_7m1m4"]
+[ext_resource type="PackedScene" uid="uid://bfllwwoabp1rs" path="res://objects/common/flame_trail.tscn" id="3_i0yoh"]
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="5_fk3hp"]
 [ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/common/radar_target.gd" id="6_4s83o"]
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="10_li03w"]
@@ -29,6 +30,7 @@ max_contacts_reported = 5
 angular_damp = 3.0
 script = ExtResource("1_2yl4s")
 explosion_scene = ExtResource("2_3gkdx")
+flame_trail_scene = ExtResource("3_i0yoh")
 
 [node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.520594)

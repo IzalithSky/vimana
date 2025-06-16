@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://ck71e5phsxvxj"]
+[gd_scene load_steps=12 format=3 uid="uid://ck71e5phsxvxj"]
 
 [ext_resource type="Script" uid="uid://5nop0mdwyr3e" path="res://objects/vehicles/vimana_j/jet.gd" id="1_0qbkc"]
 [ext_resource type="PackedScene" uid="uid://f4a1kaj0eu8o" path="res://objects/vehicles/wing_trail.tscn" id="2_5aqhi"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_g63xp"]
+[ext_resource type="PackedScene" uid="uid://bfllwwoabp1rs" path="res://objects/common/flame_trail.tscn" id="3_8lg35"]
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="5_j0qix"]
 [ext_resource type="AudioStream" uid="uid://klyoturb21mt" path="res://sounds/underwater_or_space_engine.ogg" id="6_4tmnh"]
 [ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/common/radar_target.gd" id="6_7srhj"]
@@ -23,6 +24,7 @@ max_contacts_reported = 5
 angular_damp = 3.0
 script = ExtResource("1_0qbkc")
 explosion_scene = ExtResource("2_g63xp")
+flame_trail_scene = ExtResource("3_8lg35")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.999993, -0.0025535, 0.00268034, 0.00255942, 0.999994, -0.00220558, -0.00267469, 0.00221243, 0.999994, 0, 0, 0)

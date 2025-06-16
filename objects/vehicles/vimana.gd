@@ -12,6 +12,7 @@ class_name Vimana extends RigidBody3D
 @export var control_effectiveness_speed: float = 50.0
 
 @export var explosion_scene: PackedScene
+@export var flame_trail_scene: PackedScene
 @export var explosive_speed: float = 3.0
 @export var collision_damage_mult: float = 20.0
 
@@ -33,6 +34,47 @@ var aoa_deg: float = 0.0
 var horizontal_aoa_deg: float = 0.0
 var throttle_percent: float = 0.0
 var lift_ok: bool = true
+var is_disabled: bool = false
+var flame_trail_instance: Node3D
+
+
+func _ready() -> void:
+	rig = get_node(rig_path)
+	self.body_entered.connect(_on_body_entered)
+	throttle_input = 0.0
+	
+	var health: Health = get_node("Health")
+	health.died.connect(_on_disabled)
+	on_ready_enabled()
+
+
+func _physics_process(delta: float) -> void:
+	if is_disabled:
+		apply_air_drag()
+		apply_directional_alignment()
+	else:
+		on_enabled_physics_process(delta)
+
+
+func _on_disabled(cause: Health.DeathCause) -> void:
+	if cause == Health.DeathCause.COLLISION:
+		queue_free()
+		return
+	
+	is_disabled = true
+	
+	if flame_trail_scene:
+		flame_trail_instance = flame_trail_scene.instantiate()
+		add_child(flame_trail_instance)
+		flame_trail_instance.global_transform = global_transform
+
+
+func on_ready_enabled() -> void:
+	pass
+
+
+func on_enabled_physics_process(delta: float) -> void:
+	pass
 
 
 func _on_body_entered(body: Node) -> void:

@@ -19,31 +19,8 @@ class_name Jet extends Vimana
 @onready var trail_r: Trail = $WingR/Trail
 @onready var propulsion_sound: AudioStreamPlayer3D = $PropulsionSound
 
-var death_mode: bool = false
 
-
-func _ready() -> void:
-	rig = get_node(rig_path)
-	self.body_entered.connect(_on_body_entered)
-	throttle_input = 0.0
-
-	var health: Health = get_node("Health")
-	health.died.connect(_on_died)
-
-
-func _on_died(cause: Health.DeathCause) -> void:
-	if cause == Health.DeathCause.COLLISION:
-		queue_free()
-	else:
-		death_mode = true
-
-
-func _physics_process(delta: float) -> void:
-	if death_mode:
-		apply_air_drag()
-		apply_directional_alignment()
-		return
-	
+func on_enabled_physics_process(delta: float) -> void:
 	rig.collect_inputs(delta)
 	compute_control_state(delta)
 	apply_thrust()
@@ -51,7 +28,7 @@ func _physics_process(delta: float) -> void:
 	apply_lift()
 	apply_air_drag()
 	apply_directional_alignment()
-	
+
 	heat_source.multiplier = throttle_input + 1.0
 	throttle_percent = ((throttle_input + 1.0) / 2.0) * 100.0
 	_update_wing_trails()

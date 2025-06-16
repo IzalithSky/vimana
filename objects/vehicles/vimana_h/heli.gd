@@ -6,9 +6,17 @@ class_name Heli extends Vimana
 @export var spin_threshold = 1
 
 
-func _ready() -> void:
-	rig = get_node(rig_path)
-	self.body_entered.connect(_on_body_entered)
+
+func on_enabled_physics_process(delta: float) -> void:
+	rig.collect_inputs(delta)
+	compute_control_state(delta)
+	apply_directional_alignment()
+	stabilise_rotation(delta)
+	apply_controls(delta)
+	apply_air_drag()
+	
+	heat_source.multiplier = abs(throttle_input) * 2.0
+	throttle_percent = throttle_input * 100.0
 
 
 func apply_throttle(throttle_value: float) -> void:
@@ -74,35 +82,23 @@ func apply_directional_alignment() -> void:
 	var v: Vector3 = linear_velocity
 	if v.length() < 0.001:
 		return
-
+	
 	var up: Vector3 = transform.basis.y
 	var forward: Vector3 = -transform.basis.z
-
+	
 	var horiz_vel: Vector3 = v - up * v.dot(up)
 	if horiz_vel.length() < 0.001:
 		return
 	var vel_dir: Vector3 = horiz_vel.normalized()
-
+	
 	var horiz_forward: Vector3 = forward - up * forward.dot(up)
 	if horiz_forward.length() < 0.001:
 		return
 	var fwd_dir: Vector3 = horiz_forward.normalized()
-
+	
 	var sin_ang: float = up.dot(fwd_dir.cross(vel_dir))
 	var cos_ang: float = fwd_dir.dot(vel_dir)
 	var angle: float = atan2(sin_ang, cos_ang)
-
+	
 	if abs(angle) > 0.01:
 		apply_torque(up * angle * alignment_strength * v.length())
-
-
-func _physics_process(delta: float) -> void:
-	rig.collect_inputs(delta)
-	compute_control_state(delta)
-	apply_directional_alignment()
-	stabilise_rotation(delta)
-	apply_controls(delta)
-	apply_air_drag()
-	
-	heat_source.multiplier = abs(throttle_input) * 2.0
-	throttle_percent = throttle_input * 100.0
