@@ -154,17 +154,29 @@ grow_vertical = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 6
 
-[node name="HpLabel" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer2"]
+[node name="HpProgressBar" type="ProgressBar" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer2"]
+modulate = Color(0.994388, 0.19763, 0.23181, 1)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.486275, 0.988235, 0, 1)
-text = "111"
+
+[node name="MpProgressBar" type="ProgressBar" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer2"]
+modulate = Color(0.414774, 0.418617, 0.913692, 1)
+layout_mode = 2
 
 [node name="filler" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="filler2" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="filler3" type="Label" parent="FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -447,6 +459,7 @@ stream = ExtResource("11_sbsnl")
 volume_db = -2.0
 
 [node name="model" type="Node3D" parent="."]
+visible = false
 
 [node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00471622, 0.00438046, 0.00196767)

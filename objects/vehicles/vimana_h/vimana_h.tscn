@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://bokx8wuhvb2hd"]
+[gd_scene load_steps=11 format=4 uid="uid://bokx8wuhvb2hd"]
 
 [ext_resource type="Script" uid="uid://dyxvmhny5frid" path="res://objects/vehicles/vimana_h/heli.gd" id="1_2yl4s"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_3gkdx"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="5_fk3hp"]
 [ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/common/radar_target.gd" id="6_4s83o"]
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="10_li03w"]
+[ext_resource type="Script" uid="uid://cgi6mlfnskt76" path="res://objects/common/energy_pool.gd" id="11_energy"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
 _surfaces = [{
@@ -31,6 +32,7 @@ angular_damp = 3.0
 script = ExtResource("1_2yl4s")
 explosion_scene = ExtResource("2_3gkdx")
 flame_trail_scene = ExtResource("3_i0yoh")
+energy_path = NodePath("")
 
 [node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.520594)
@@ -84,6 +86,10 @@ height = 0.914551
 [node name="Health" type="Node" parent="."]
 script = ExtResource("10_li03w")
 metadata/_custom_type_script = "uid://dxfwciqw71xsy"
+
+[node name="Energy" type="Node" parent="."]
+script = ExtResource("11_energy")
+metadata/_custom_type_script = "uid://cgi6mlfnskt76"
 
 [node name="HeatSource" type="Node3D" parent="."]
 script = ExtResource("5_fk3hp")

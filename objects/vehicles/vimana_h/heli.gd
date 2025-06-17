@@ -4,6 +4,7 @@ class_name Heli extends Vimana
 @export var thrust_power = 3000.0
 @export var torque_power = 800.0
 @export var spin_threshold = 1
+@export var throttle_energy_rate: float = 1.0
 
 
 
@@ -19,7 +20,14 @@ func on_enabled_physics_process(delta: float) -> void:
 	throttle_percent = throttle_input * 100.0
 
 
-func apply_throttle(throttle_value: float) -> void:
+func apply_throttle(throttle_value: float, delta: float) -> void:
+	var cost: float = 0.0
+	if throttle_value > 0.0:
+		cost = throttle_value * throttle_energy_rate * delta
+		if energy_pool != null and not energy_pool.consume(cost):
+			return
+	elif throttle_value < 0.0 and energy_pool != null:
+		energy_pool.charge(-throttle_value * throttle_energy_rate * delta)
 	var up_force = transform.basis.y * throttle_value * thrust_power
 	apply_central_force(up_force)
 
@@ -47,7 +55,7 @@ func get_effective_pitch_and_roll() -> Vector2:
 
 
 func apply_controls(delta: float) -> void:
-	apply_throttle(throttle_input)
+	apply_throttle(throttle_input, delta)
 	
 	var effective = get_effective_pitch_and_roll()
 	apply_roll(effective.x)

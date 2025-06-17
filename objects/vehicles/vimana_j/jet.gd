@@ -14,6 +14,7 @@ class_name Jet extends Vimana
 @export var base_pitch_scale: float = 0.6
 @export var glimiter_scale: float = 0.3
 @export var speed_assist: float = 1.4
+@export var throttle_energy_rate: float = 1.0
 
 @onready var trail_l: Trail = $WingL/Trail
 @onready var trail_r: Trail = $WingR/Trail
@@ -23,12 +24,12 @@ class_name Jet extends Vimana
 func on_enabled_physics_process(delta: float) -> void:
 	rig.collect_inputs(delta)
 	compute_control_state(delta)
-	apply_thrust()
+	apply_thrust(delta)
 	apply_jet_torque(delta)
 	apply_lift()
 	apply_air_drag()
 	apply_directional_alignment()
-
+	
 	heat_source.multiplier = throttle_input + 1.0
 	throttle_percent = ((throttle_input + 1.0) / 2.0) * 100.0
 	_update_wing_trails()
@@ -42,8 +43,12 @@ func _update_propulsion_sound() -> void:
 		propulsion_sound.play()
 
 
-func apply_thrust() -> void:
-	apply_central_force(-transform.basis.z * ((throttle_input + 1.0) / 2.0) * max_thrust)
+func apply_thrust(delta: float) -> void:
+	var throttle: float = (throttle_input + 1.0) / 2.0
+	if throttle > 0.0:
+		var cost: float = throttle_energy_rate * throttle * delta
+		if energy_pool == null or energy_pool.consume(cost):
+			apply_central_force(-transform.basis.z * throttle * max_thrust)
 
 
 func apply_jet_torque(delta: float) -> void:

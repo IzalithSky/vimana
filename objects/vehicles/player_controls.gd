@@ -19,10 +19,12 @@ class_name PlayerControls extends Node
 @onready var gf_label: Label = $Display/SubViewport/HBoxContainer/VBoxContainer2/GForceLabel
 @onready var limiter_label: Label = $Display/SubViewport/HBoxContainer/VBoxContainer2/LimiterLabel
 @onready var throttle_progress_bar: ProgressBar = $FPCameraHolder/Camera3D/CanvasLayer2/HBoxContainer/VBoxContainerT/ThrottleProgressBar
+@onready var hp_progress_bar: ProgressBar = $FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer2/HpProgressBar
+@onready var energy_progress_bar: ProgressBar = $FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer2/MpProgressBar
 @onready var vl_progress_bar: ProgressBar = $FPCameraHolder/Camera3D/CanvasLayer2/HBoxContainer/VBoxContainerV/HBoxContainer1/VLProgressBar
 @onready var va_progress_bar: ProgressBar = $FPCameraHolder/Camera3D/CanvasLayer2/HBoxContainer/VBoxContainerV/HBoxContainer1/VAProgressBar
 @onready var health: Health = v.get_node_or_null("Health")
-@onready var hp_label: Label = $FPCameraHolder/Camera3D/CanvasLayer1/HBoxContainer/VBoxContainer2/HpLabel
+@onready var energy_pool: EnergyPool = v.get_node_or_null("Energy")
 @onready var horizon: MeshInstance3D = $Horizon
 @onready var heading_sprite: Sprite3D = $HeadingSprite3D
 @onready var camera: Camera3D = %Camera3D
@@ -37,7 +39,6 @@ const HEADING_BUFFER_SIZE: int = 10
 var _heading_buf: Array[float] = []
 var _prev_heading: Vector3
 
-#var missile_launcher: PlayerMissileLauncher = null
 @onready var missile_launcher: PlayerMissileLauncher = $FPCameraHolder/Camera3D/PlayerMissileLauncher
 
 
@@ -46,20 +47,23 @@ func _ready() -> void:
 		health.damaged.connect(_on_damaged)
 	audio_listener_3d.add_to_group("audio_listener")
 	
-	#for child in v.get_children():
-		#if child is PlayerMissileLauncher:
-			#missile_launcher = child
-			#break
-	#if missile_launcher != null:
-		#missile_launcher.tracker = heat_seeker_target_tracker
+	if energy_pool:
+		energy_pool.energy_changed.connect(_on_energy_changed)
+		_on_energy_changed(energy_pool.current_energy, energy_pool.max_energy)
+	
 		
 	missile_launcher.parent = v
+	missile_launcher.energy_pool = energy_pool
 		
 	#player_gun.holder = v
 
 
 func _on_damaged(amount: float) -> void:
-	damage_color_rect.color.a = damage_flash_alpha
+		damage_color_rect.color.a = damage_flash_alpha
+
+func _on_energy_changed(current: float, max: float) -> void:
+		if energy_progress_bar:
+				energy_progress_bar.value = current / max * 100.0
 
 
 func collect_inputs(delta: float) -> void:
@@ -141,10 +145,8 @@ func _process(delta: float) -> void:
 		if not aoa_limiter_warning.playing:
 			aoa_limiter_warning.play()
 	
-	if health and hp_label:
-		hp_label.text = "HP: %d / %d" % [health.current_hp, health.max_hp]
-	else:
-		hp_label.text = ""
+	if health and hp_progress_bar:
+		hp_progress_bar.value = float(health.current_hp) / health.max_hp * 100.0
 	
 	var parent_yaw: float = horizon.get_parent().global_transform.basis.get_euler().y
 	horizon.global_transform = Transform3D(

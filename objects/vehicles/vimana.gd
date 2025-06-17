@@ -37,14 +37,17 @@ var lift_ok: bool = true
 var is_disabled: bool = false
 var flame_trail_instance: Node3D
 
+var health: Health
+var energy_pool: EnergyPool
 
 func _ready() -> void:
 	rig = get_node(rig_path)
 	self.body_entered.connect(_on_body_entered)
 	throttle_input = 0.0
 	
-	var health: Health = get_node("Health")
+	health = get_node("Health")
 	health.died.connect(_on_disabled)
+	energy_pool = get_node("Energy")
 	on_ready_enabled()
 
 

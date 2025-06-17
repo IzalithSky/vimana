@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://cg1rl1irjyc6q"]
+[gd_scene load_steps=11 format=4 uid="uid://cg1rl1irjyc6q"]
 
 [ext_resource type="Script" uid="uid://bgyhgxmmogsmq" path="res://objects/vehicles/vimana_lvd/vimana_lvd.gd" id="1_3juvv"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_k03oh"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="5_3pkc8"]
 [ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/common/radar_target.gd" id="6_qno0u"]
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="10_hkbin"]
+[ext_resource type="Script" uid="uid://cgi6mlfnskt76" path="res://objects/common/energy_pool.gd" id="11_energy"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_s1d72"]
 _surfaces = [{
@@ -84,6 +85,10 @@ height = 0.914551
 [node name="Health" type="Node" parent="."]
 script = ExtResource("10_hkbin")
 metadata/_custom_type_script = "uid://dxfwciqw71xsy"
+
+[node name="Energy" type="Node" parent="."]
+script = ExtResource("11_energy")
+metadata/_custom_type_script = "uid://cgi6mlfnskt76"
 
 [node name="HeatSource" type="Node3D" parent="."]
 script = ExtResource("5_3pkc8")

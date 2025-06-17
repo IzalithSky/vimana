@@ -4,11 +4,18 @@ class_name FlareLauncher extends Node3D
 @export var flare_scene: PackedScene
 @export var fire_interval: float = 0.2
 @export var flares_per_burst: int = 2
-@export var max_flares: int = 180
 @export var spread_angle_deg: float = 45.0
+@export var energy_cost: float = 1.0
+
+var energy_pool: EnergyPool
 
 var _timer: float = 0.0
-var flares: int = max_flares
+
+
+func _ready() -> void:
+	var p: Node = get_parent()
+	if p != null:
+		energy_pool = p.get_node_or_null("Energy")
 
 
 func _process(delta: float) -> void:
@@ -16,8 +23,6 @@ func _process(delta: float) -> void:
 
 
 func ready_to_fire() -> bool:
-	if max_flares <= 0:
-		return false
 	return _timer >= fire_interval
 
 
@@ -25,14 +30,14 @@ func launch_flares() -> void:
 	if not ready_to_fire():
 		return
 	
+	if energy_pool != null and not energy_pool.consume(energy_cost):
+		return
+	
 	var parent: Node3D = get_parent()
 	var base_dir: Vector3 = -global_transform.basis.y
 	var axis: Vector3 = global_transform.basis.z
 	
 	for i in flares_per_burst:
-		if flares <= 0:
-			break
-		
 		var flare: RigidBody3D = flare_scene.instantiate()
 		get_tree().current_scene.add_child(flare)
 	
@@ -54,7 +59,5 @@ func launch_flares() -> void:
 			flare.add_collision_exception_with(parent)
 	
 		flare.add_to_group("flares")
-		
-		flares -= 1
 	
 	_timer = 0.0
