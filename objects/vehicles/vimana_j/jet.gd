@@ -14,7 +14,7 @@ class_name Jet extends Vimana
 @export var base_pitch_scale: float = 0.6
 @export var glimiter_scale: float = 0.3
 @export var speed_assist: float = 1.4
-@export var throttle_energy_rate: float = 1.0
+@export var throttle_energy_rate: float = 2.0
 
 @onready var trail_l: Trail = $WingL/Trail
 @onready var trail_r: Trail = $WingR/Trail

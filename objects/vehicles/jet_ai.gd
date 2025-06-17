@@ -36,6 +36,7 @@ func _ready() -> void:
 	vehicle = get_parent() as Jet
 	if missile_launcher == null and has_node("MissileLauncher"):
 		missile_launcher = $MissileLauncher
+		missile_launcher.energy_pool = vehicle.energy_pool
 	if tracker == null and vehicle.has_node("HeatSeekerTargetTracker"):
 		tracker = vehicle.get_node("HeatSeekerTargetTracker") as HeatSeekerTargetTracker
 	

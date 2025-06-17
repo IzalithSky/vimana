@@ -11,12 +11,10 @@ func on_ready_enabled() -> void:
 
 func apply_throttle(throttle_value: float, delta: float) -> void:
 	var cost: float = 0.0
-	if throttle_value > 0.0:
+	if abs(throttle_value) > 0.0:
 		cost = throttle_value * throttle_energy_rate * delta
 		if energy_pool != null and not energy_pool.consume(cost):
 			return
-	elif throttle_value < 0.0 and energy_pool != null:
-		energy_pool.charge(-throttle_value * throttle_energy_rate * delta)
 	var forward_force: Vector3
 	if Input.is_action_pressed("pitch_up"):
 		forward_force = camera.global_transform.basis.y * throttle_value * thrust_power
