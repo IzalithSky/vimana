@@ -1,10 +1,12 @@
 class_name TargetMarker extends Node3D
 
 
-@onready var next: Sprite3D = $Next
-@onready var lock: Sprite3D = $Lock
-@onready var target_r: Sprite3D = $TargetR
-@onready var target_h: Sprite3D = $TargetH
+@onready var lock: TextureRect = %Lock
+@onready var target_r: TextureRect = %TargetR
+@onready var target_h: TextureRect = %TargetH
+@onready var description_label: Label = %NameLabel
+@onready var data_label: Label = %DataLabel
+@onready var tag_label: Label = %TagLabel
 
 
 func _ready() -> void:
@@ -12,14 +14,10 @@ func _ready() -> void:
 
 
 func set_next() -> void:
-	next.visible = true
 	lock.visible = false
-
 
 func set_locked() -> void:
 	lock.visible = true
-	next.visible = false
-
 
 func radar() -> void:
 	target_r.visible = true
@@ -30,6 +28,9 @@ func heat() -> void:
 	target_r.visible = false
 	target_h.visible = true
 
+
 func clear() -> void:
 	lock.visible = false
-	next.visible = false
+
+func set_distance(distance: float) -> void:
+	data_label.text = "%.0f m" % distance

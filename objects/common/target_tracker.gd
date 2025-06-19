@@ -117,6 +117,7 @@ func _update_heat_markers(sources: Array[HeatSource]) -> Array[int]:
 		var marker: TargetMarker = _get_or_create_marker(id)
 		if marker != null:
 			marker.global_position = hs.global_position
+			marker.set_distance(global_position.distance_to(hs.global_position))
 			marker.heat()
 			marker.clear()
 	if heat_locked != null and is_instance_valid(heat_locked):
@@ -124,6 +125,7 @@ func _update_heat_markers(sources: Array[HeatSource]) -> Array[int]:
 		var marker: TargetMarker = _get_or_create_marker(id)
 		if marker != null:
 			marker.global_position = heat_locked.global_position
+			marker.set_distance(global_position.distance_to(heat_locked.global_position))
 			marker.heat()
 			marker.set_locked()
 		if id not in live_ids:
@@ -141,6 +143,7 @@ func _update_radar_markers(targets: Array[RadarTarget]) -> Array[int]:
 		var marker: TargetMarker = _get_or_create_marker(id)
 		if marker != null:
 			marker.global_position = rt.global_position
+			marker.set_distance(global_position.distance_to(rt.global_position))
 			marker.radar()
 			marker.clear()
 			marker.add_to_group("radar_echoes")
@@ -149,6 +152,7 @@ func _update_radar_markers(targets: Array[RadarTarget]) -> Array[int]:
 		var marker: TargetMarker = _get_or_create_marker(id)
 		if marker != null:
 			marker.global_position = radar_locked.global_position
+			marker.set_distance(global_position.distance_to(radar_locked.global_position))
 			marker.radar()
 			marker.set_locked()
 			marker.add_to_group("radar_echoes")

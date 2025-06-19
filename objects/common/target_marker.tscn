@@ -1,61 +1,99 @@
-[gd_scene load_steps=7 format=3 uid="uid://bnqlnpxb47hb"]
+[gd_scene load_steps=8 format=3 uid="uid://bnqlnpxb47hb"]
 
 [ext_resource type="Script" uid="uid://tbhaklp2dvwo" path="res://objects/common/target_marker.gd" id="1_ybepw"]
 [ext_resource type="Texture2D" uid="uid://yohk3urt0e0a" path="res://textures/marker_a.png" id="2_auwka"]
-[ext_resource type="Texture2D" uid="uid://dc75xp38jffuu" path="res://textures/next_sprite.png" id="3_17ybv"]
 [ext_resource type="Texture2D" uid="uid://dx33u8vdllssr" path="res://textures/marker_v.png" id="3_ylqi5"]
 [ext_resource type="Texture2D" uid="uid://cff6sjyic4j1s" path="res://textures/lock_sprite.png" id="4_ylqi5"]
-[ext_resource type="Texture2D" uid="uid://dqbybcbqu6jjt" path="res://textures/marker_x.png" id="6_ylqi5"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ylqi5"]
+viewport_path = NodePath("MeshInstance3D/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vh6uo"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_ylqi5")
+texture_filter = 0
+billboard_mode = 1
+fixed_size = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_om7tv"]
+size = Vector2(0.32, 0.32)
 
 [node name="TargetMarker" type="Node3D"]
 script = ExtResource("1_ybepw")
 
-[node name="TargetH" type="Sprite3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.294185, -1.1461)
+material_override = SubResource("StandardMaterial3D_vh6uo")
+mesh = SubResource("QuadMesh_om7tv")
+skeleton = NodePath("../..")
+
+[node name="SubViewport" type="SubViewport" parent="MeshInstance3D"]
+transparent_bg = true
+size = Vector2i(128, 128)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MeshInstance3D/SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NameLabel" type="Label" parent="MeshInstance3D/SubViewport/VBoxContainer"]
+unique_name_in_owner = true
 modulate = Color(0.486275, 0.988235, 0, 1)
-pixel_size = 0.0032
-billboard = 1
-double_sided = false
-no_depth_test = true
-fixed_size = true
-texture_filter = 0
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MeshInstance3D/SubViewport/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TagLabel" type="Label" parent="MeshInstance3D/SubViewport/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+modulate = Color(0.486275, 0.988235, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="MeshInstance3D/SubViewport/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+
+[node name="TargetH" type="TextureRect" parent="MeshInstance3D/SubViewport/VBoxContainer/HBoxContainer/CenterContainer"]
+unique_name_in_owner = true
+modulate = Color(0.486275, 0.988235, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
 texture = ExtResource("2_auwka")
 
-[node name="TargetR" type="Sprite3D" parent="."]
+[node name="TargetR" type="TextureRect" parent="MeshInstance3D/SubViewport/VBoxContainer/HBoxContainer/CenterContainer"]
+unique_name_in_owner = true
 modulate = Color(0.486275, 0.988235, 0, 1)
-pixel_size = 0.0032
-billboard = 1
-double_sided = false
-no_depth_test = true
-fixed_size = true
-texture_filter = 0
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
 texture = ExtResource("3_ylqi5")
 
-[node name="Lock" type="Sprite3D" parent="."]
-modulate = Color(0.919814, 0.059574, 0, 1)
-pixel_size = 0.0032
-billboard = 1
-double_sided = false
-no_depth_test = true
-fixed_size = true
-texture_filter = 0
+[node name="Lock" type="TextureRect" parent="MeshInstance3D/SubViewport/VBoxContainer/HBoxContainer/CenterContainer"]
+unique_name_in_owner = true
+modulate = Color(1, 0.270588, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
 texture = ExtResource("4_ylqi5")
 
-[node name="Next" type="Sprite3D" parent="."]
+[node name="DataLabel" type="Label" parent="MeshInstance3D/SubViewport/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 modulate = Color(0.486275, 0.988235, 0, 1)
-pixel_size = 0.0032
-billboard = 1
-double_sided = false
-no_depth_test = true
-fixed_size = true
-texture_filter = 0
-texture = ExtResource("3_17ybv")
+layout_mode = 2
+size_flags_horizontal = 10
+vertical_alignment = 1
 
-[node name="t" type="Sprite3D" parent="."]
-visible = false
-pixel_size = 0.0032
-billboard = 1
-double_sided = false
-no_depth_test = true
-fixed_size = true
-texture_filter = 0
-texture = ExtResource("6_ylqi5")
+[node name="filler1" type="Label" parent="MeshInstance3D/SubViewport/VBoxContainer"]
+layout_mode = 2
