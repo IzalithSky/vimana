@@ -3,6 +3,7 @@ class_name HeatSeeker extends Node3D
 
 @export var tracking_fov_deg: float = 10.0
 @export var heat_sensitivity: float = 5
+@export var ignored_targets: Array[NodePath] = []
 
 var sens: float
 var _debug_ray: RayCast3D
@@ -27,6 +28,8 @@ func get_best_target() -> HeatSource:
 	for hs in get_tree().get_nodes_in_group("heat_sources"):
 		if not (hs is HeatSource and is_instance_valid(hs)):
 			continue
+		if _is_ignored(hs):
+			continue
 		var dir: Vector3 = (hs.global_position - global_position).normalized()
 		var forward: Vector3 = -global_transform.basis.z
 		if forward.dot(dir) >= cos(deg_to_rad(tracking_fov_deg)):
@@ -42,9 +45,15 @@ func get_visible_sources() -> Array[HeatSource]:
 	for hs in get_tree().get_nodes_in_group("heat_sources"):
 		if not (hs is HeatSource and is_instance_valid(hs)):
 			continue
+		if _is_ignored(hs):
+			continue
 		var dir: Vector3 = (hs.global_position - global_position).normalized()
 		var forward: Vector3 = -global_transform.basis.z
 		if forward.dot(dir) >= cos(deg_to_rad(tracking_fov_deg)):
 			if hs.get_magnitude_at(self) >= sens:
 				result.append(hs)
 	return result
+
+
+func _is_ignored(target: Node) -> bool:
+	return target.get_path() in ignored_targets

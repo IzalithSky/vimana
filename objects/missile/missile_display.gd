@@ -3,9 +3,9 @@ class_name MissileDisplay extends Node3D
 
 @export var orbit_distance: float = 0.5
 @export var update_interval_frames: int = 3
-@export var min_pause: float = 0.1
-@export var max_pause: float = 1.5
-@export var detection_range: float = 5000.0
+@export var min_pause: float = 0.01
+@export var max_pause: float = 0.3
+@export var detection_range: float = 1000.0
 @export var show_markers: bool = true
 
 @onready var marker_scene: PackedScene = preload("res://objects/missile/missile_marker.tscn")
@@ -35,7 +35,7 @@ func _process(delta: float) -> void:
 		var dist: float = to_me.length()
 		var missile_dir: Vector3 = missile.linear_velocity.normalized()
 	
-		if missile_dir.dot(to_me.normalized()) > 0.5:
+		if missile_dir.dot(to_me.normalized()) > 0.7:
 			var id: int = missile.get_instance_id()
 			updated_ids.append(id)
 	

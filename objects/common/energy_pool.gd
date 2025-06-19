@@ -2,7 +2,7 @@ class_name EnergyPool extends Node
 
 
 @export var max_energy: float = 100.0
-@export var recharge_rate: float = 0.5
+@export var recharge_rate: float = 1.5
 var current_energy: float = max_energy
 
 signal energy_changed(current: float, max: float)

@@ -117,7 +117,6 @@ func _update_heat_markers(sources: Array[HeatSource]) -> Array[int]:
 		var marker: TargetMarker = _get_or_create_marker(id)
 		if marker != null:
 			marker.global_position = hs.global_position
-			marker.set_distance(global_position.distance_to(hs.global_position))
 			marker.heat()
 			marker.clear()
 	if heat_locked != null and is_instance_valid(heat_locked):
@@ -125,7 +124,6 @@ func _update_heat_markers(sources: Array[HeatSource]) -> Array[int]:
 		var marker: TargetMarker = _get_or_create_marker(id)
 		if marker != null:
 			marker.global_position = heat_locked.global_position
-			marker.set_distance(global_position.distance_to(heat_locked.global_position))
 			marker.heat()
 			marker.set_locked()
 		if id not in live_ids:

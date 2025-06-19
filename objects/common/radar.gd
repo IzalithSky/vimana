@@ -9,6 +9,7 @@ class_name Radar extends Node3D
 @export var max_detection_range: float = 40_000.0
 @export_flags_3d_physics var terrain_collision_mask: int = 8
 @export var raycast_count: int = 16
+@export var ignored_targets: Array[NodePath] = []
 
 var cone_half_angle_rad: float
 var detection_threshold: float
@@ -49,6 +50,10 @@ func perform_scan() -> void:
 	
 	for node in get_tree().get_nodes_in_group("radar_targets"):
 		var target: RadarTarget = node
+		
+		if _is_ignored(target):
+			continue
+		
 		var offset: Vector3 = target.global_position - global_position
 		var forward_projection: float = offset.dot(forward)
 		if forward_projection <= 0.0:
@@ -107,3 +112,8 @@ func perform_scan() -> void:
 
 func get_targets() -> Array[RadarTarget]:
 	return visible_targets
+
+
+func _is_ignored(target: Node) -> bool:
+	return target.get_path() in ignored_targets
+	

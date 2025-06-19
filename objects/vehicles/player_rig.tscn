@@ -108,6 +108,7 @@ enable_radar_markers = true
 metadata/_custom_type_script = "uid://bk4syu2gcjm2n"
 
 [node name="HeatSeeker" type="Node3D" parent="FPCameraHolder/Camera3D/TargetTracker"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 script = ExtResource("5_pf0s1")
 metadata/_custom_type_script = "uid://cnwxl0c06eycl"
@@ -124,12 +125,14 @@ volume_db = -30.0
 pitch_scale = 0.6
 
 [node name="HeatSeekerBg" type="Node3D" parent="FPCameraHolder/Camera3D/TargetTracker"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 script = ExtResource("5_pf0s1")
 tracking_fov_deg = 180.0
 metadata/_custom_type_script = "uid://cnwxl0c06eycl"
 
 [node name="Radar" type="Node3D" parent="FPCameraHolder/Camera3D/TargetTracker"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 script = ExtResource("14_3o10w")
 metadata/_custom_type_script = "uid://cfr6sfdj27xqg"
