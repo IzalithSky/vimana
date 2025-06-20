@@ -11,7 +11,6 @@ var target: Node3D = null
 var base_thrust: float = 0.0
 var time_since_launch: float = 0.0
 var previous_target_position: Vector3 = Vector3.ZERO
-var is_guidance_active: bool = false
 var time_since_target_lost: float = 0.0
 
 

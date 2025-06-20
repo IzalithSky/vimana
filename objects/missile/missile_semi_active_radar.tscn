@@ -13,6 +13,7 @@ continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_fxxuq")
+gimbal_fov_degrees = 100.0
 echo_seeker = NodePath("EchoSeeker")
 max_fuel = 20.0
 explosion_scene = ExtResource("2_v8707")
