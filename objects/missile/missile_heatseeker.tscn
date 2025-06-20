@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://binjvtutugvoy"]
+[gd_scene load_steps=9 format=3 uid="uid://binjvtutugvoy"]
 
 [ext_resource type="Script" uid="uid://duqd0486fbqtd" path="res://objects/missile/missile_heatseeker.gd" id="1_at0o7"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_stroq"]
 [ext_resource type="PackedScene" uid="uid://bucpax13pgdsw" path="res://objects/missile/missile_trail.tscn" id="3_ecw3g"]
 [ext_resource type="AudioStream" uid="uid://klyoturb21mt" path="res://sounds/underwater_or_space_engine.ogg" id="4_qksr0"]
 [ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/heatseeker/heat_seeker.gd" id="5_at0o7"]
+[ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/heatseeker/heat_source.gd" id="6_stroq"]
+[ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/radar/radar_target.gd" id="7_ecw3g"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
 
@@ -30,3 +32,15 @@ doppler_tracking = 2
 [node name="HeatSeeker" type="Node3D" parent="."]
 script = ExtResource("5_at0o7")
 metadata/_custom_type_script = "uid://cnwxl0c06eycl"
+
+[node name="HeatSource" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+script = ExtResource("6_stroq")
+magnitude = 20.0
+background = 2.0
+metadata/_custom_type_script = "uid://cmb8absq6qrpl"
+
+[node name="RadarTarget" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+script = ExtResource("7_ecw3g")
+metadata/_custom_type_script = "uid://diotgcgm0qcsn"

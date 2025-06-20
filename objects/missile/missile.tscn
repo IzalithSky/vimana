@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cmrbjs74gmqdn"]
+[gd_scene load_steps=7 format=3 uid="uid://cmrbjs74gmqdn"]
 
 [ext_resource type="Script" uid="uid://dqfc8gb66o1wr" path="res://objects/missile/missile.gd" id="1_vcrkf"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_7vy2j"]
 [ext_resource type="PackedScene" uid="uid://bucpax13pgdsw" path="res://objects/missile/missile_trail.tscn" id="3_n0ibm"]
+[ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/heatseeker/heat_source.gd" id="4_gq1kn"]
+[ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/radar/radar_target.gd" id="5_s73cb"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
 
@@ -16,3 +18,15 @@ trail_scene = ExtResource("3_n0ibm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_g63xp")
+
+[node name="HeatSource" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+script = ExtResource("4_gq1kn")
+magnitude = 20.0
+background = 2.0
+metadata/_custom_type_script = "uid://cmb8absq6qrpl"
+
+[node name="RadarTarget" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+script = ExtResource("5_s73cb")
+metadata/_custom_type_script = "uid://diotgcgm0qcsn"
