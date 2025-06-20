@@ -12,6 +12,7 @@ var base_thrust: float = 0.0
 var time_since_launch: float = 0.0
 var previous_target_position: Vector3 = Vector3.ZERO
 var time_since_target_lost: float = 0.0
+var previous_deviation: Vector3 = Vector3.ZERO
 
 
 func _ready() -> void:
@@ -48,42 +49,30 @@ func _update_seeker_orientation(delta: float) -> void:
 
 
 func _apply_guidance(delta: float) -> void:
-	var distance_to_target: float = global_position.distance_to(target.global_position)
-	thrust = base_thrust * clamp(distance_to_target / slowdown_trigger_distance, minimum_thrust_factor, 1.0)
+	var where_it_is: Vector3 = global_position
+	var where_it_isnt: Vector3 = target.global_position
+	var deviation: Vector3 = where_it_isnt - where_it_is
+	var variation: Vector3 = deviation - previous_deviation
+	previous_deviation = deviation
 	
-	if distance_to_target < proximity_radius:
+	var corrective_direction: Vector3 = (deviation + variation).normalized()
+	var current_forward: Vector3 = -global_transform.basis.z
+	var angle: float = current_forward.angle_to(corrective_direction)
+	
+	var distance: float = deviation.length()
+	thrust = base_thrust * clamp(distance / slowdown_trigger_distance, minimum_thrust_factor, 1.0)
+	
+	if distance < proximity_radius:
 		_spawn_explosion()
 		_die()
+		return
 	
-	var target_velocity: Vector3 = (target.global_position - previous_target_position) / delta
-	previous_target_position = target.global_position
-	
-	var direction_to_target: Vector3 = target.global_position - global_position
-	var missile_speed: float = linear_velocity.length()
-	
-	var a: float = target_velocity.length_squared() - missile_speed * missile_speed
-	var b: float = 2.0 * direction_to_target.dot(target_velocity)
-	var c: float = direction_to_target.length_squared()
-	var discriminant: float = b * b - 4.0 * a * c
-	
-	var intercept_time: float = 0.0
-	if discriminant >= 0.0:
-		intercept_time = (-b - sqrt(discriminant)) / (2.0 * a) if a != 0.0 else -c / b
-	
-	var predicted_position: Vector3 = target.global_position
-	if intercept_time > 0.0:
-		predicted_position += target_velocity * intercept_time
-	
-	var desired_direction: Vector3 = (predicted_position - global_position).normalized()
-	var current_direction: Vector3 = -global_transform.basis.z
-	var angle_to_target: float = current_direction.angle_to(desired_direction)
-	
-	if angle_to_target > 1e-3:
-		var turn_axis: Vector3 = current_direction.cross(desired_direction).normalized()
-		var max_turn_angle: float = deg_to_rad(max_ang_vel_deg) * delta
-		var turn_angle: float = min(angle_to_target, max_turn_angle)
-		apply_torque(turn_axis * torque_strength * (turn_angle / delta))
-		fuel -= turn_fuel_burn_rate * (turn_angle / max_turn_angle) * delta
+	if angle > 1e-3:
+		var axis: Vector3 = current_forward.cross(corrective_direction).normalized()
+		var max_turn: float = deg_to_rad(max_ang_vel_deg) * delta
+		var turn_angle: float = min(angle, max_turn)
+		apply_torque(axis * torque_strength * (turn_angle / delta))
+		fuel -= turn_fuel_burn_rate * (turn_angle / max_turn) * delta
 
 
 func lock_target(new_target: Node3D) -> void:
