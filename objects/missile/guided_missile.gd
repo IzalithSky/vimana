@@ -4,7 +4,7 @@ class_name GuidedMissile extends Missile
 @export var turn_fuel_burn_rate: float = 4.0
 @export var proximity_fuse_delay: float = 0.5
 @export var slowdown_trigger_distance: float = 120.0
-@export var minimum_thrust_factor: float = 0.8
+@export var minimum_thrust_factor: float = 1.0
 @export var target_loss_grace_period: float = 1.0
 
 var target: Node3D = null
