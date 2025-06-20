@@ -4,9 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://f4a1kaj0eu8o" path="res://objects/vehicles/wing_trail.tscn" id="2_5aqhi"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_g63xp"]
 [ext_resource type="PackedScene" uid="uid://bfllwwoabp1rs" path="res://objects/common/flame_trail.tscn" id="3_8lg35"]
-[ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/common/heat_source.gd" id="5_j0qix"]
+[ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/heatseeker/heat_source.gd" id="5_j0qix"]
 [ext_resource type="AudioStream" uid="uid://klyoturb21mt" path="res://sounds/underwater_or_space_engine.ogg" id="6_4tmnh"]
-[ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/common/radar_target.gd" id="6_7srhj"]
+[ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/radar/radar_target.gd" id="6_7srhj"]
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="11_y4ep4"]
 [ext_resource type="Script" uid="uid://cgi6mlfnskt76" path="res://objects/common/energy_pool.gd" id="12_energy"]
 

@@ -8,9 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://b3xs5okdiio4j" path="res://objects/missile/flare.tscn" id="7_v0qym"]
 [ext_resource type="PackedScene" uid="uid://binjvtutugvoy" path="res://objects/missile/missile_heatseeker.tscn" id="8_buokp"]
 [ext_resource type="Script" uid="uid://d2nrb6pxnthli" path="res://objects/missile/missile_launcher.gd" id="8_v0qym"]
-[ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/common/heat_seeker.gd" id="9_buokp"]
+[ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/heatseeker/heat_seeker.gd" id="9_buokp"]
 [ext_resource type="PackedScene" uid="uid://bwqjbnwmus3ka" path="res://scenes/pause_menu.tscn" id="9_v0qym"]
-[ext_resource type="Script" uid="uid://g4cuyhv8kiex" path="res://objects/common/heatseeker_target_tracker.gd" id="10_h73pm"]
+[ext_resource type="Script" uid="uid://g4cuyhv8kiex" path="res://objects/heatseeker/heatseeker_target_tracker.gd" id="10_h73pm"]
 [ext_resource type="Texture2D" uid="uid://dx33u8vdllssr" path="res://textures/marker_v.png" id="11_h73pm"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dihnr"]

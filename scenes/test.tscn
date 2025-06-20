@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://ciydki5nbaqxo" path="res://scenes/test.gd" id="1_iyx0m"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="3_at5dv"]
-[ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/common/radar_target.gd" id="4_j5jx5"]
+[ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/radar/radar_target.gd" id="4_j5jx5"]
 [ext_resource type="Shader" uid="uid://b30jy27kjrgma" path="res://objects/vehicles/g_color_rect.gdshader" id="4_jcd4p"]
 [ext_resource type="Script" uid="uid://ct1jhkyov3ta7" path="res://scenes/test_target_1.gd" id="4_lpvoh"]
 [ext_resource type="Texture2D" uid="uid://262c1fhqd110" path="res://textures/kloppenheim_05_puresky_1k.hdr" id="5_j5jx5"]
-[ext_resource type="Script" uid="uid://cfr6sfdj27xqg" path="res://objects/common/radar.gd" id="5_yk7ts"]
+[ext_resource type="Script" uid="uid://cfr6sfdj27xqg" path="res://objects/radar/radar.gd" id="5_yk7ts"]
 [ext_resource type="PackedScene" uid="uid://bnqlnpxb47hb" path="res://objects/common/target_marker.tscn" id="7_uacia"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lpvoh"]

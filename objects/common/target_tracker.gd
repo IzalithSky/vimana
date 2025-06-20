@@ -31,6 +31,7 @@ var _radar_live_ids: Array[int] = []
 
 
 func _process(delta: float) -> void:
+	radar.active = enable_radar_markers if radar != null else false
 	_heat_live_ids = _handle_heat_logic(delta)
 	_radar_live_ids = _handle_radar_logic(delta)
 	var all_live_ids: Array[int] = _heat_live_ids + _radar_live_ids
@@ -69,42 +70,65 @@ func _handle_heat_logic(delta: float) -> Array[int]:
 
 
 func _handle_radar_logic(delta: float) -> Array[int]:
-	if camera == null:
+	if radar == null:
 		return []
-
-	var marker_targets: Array[TargetMarker] = []
-	if enable_radar_markers:
-		for node in get_tree().get_nodes_in_group("radar_echoes"):
-			if node is TargetMarker and is_instance_valid(node):
-				marker_targets.append(node)
-
-	if enable_radar_locking:
-		var best: TargetMarker = null
-		var best_angle: float = INF
-		var cam_dir: Vector3 = -camera.global_transform.basis.z
-		for marker in marker_targets:
-			var to_marker: Vector3 = (marker.global_position - camera.global_position).normalized()
-			var angle: float = acos(cam_dir.dot(to_marker))
-			if angle < best_angle:
-				best_angle = angle
-				best = marker
-		if best == radar_candidate:
-			radar_timer += delta
-			if radar_timer >= lock_time_sec:
-				radar_locked = radar_candidate
-		else:
-			radar_candidate = best
-			radar_timer = 0.0
-			radar_locked = null
-	else:
+	
+	var live_ids := _update_radar_markers_from_echoes(radar.get_echoes())
+	
+	if not enable_radar_locking or camera == null:
 		radar_locked = null
 		radar_candidate = null
 		radar_timer = 0.0
+		return live_ids
+	
+	var cam_dir: Vector3 = -camera.global_transform.basis.z
+	var best: TargetMarker = null
+	var best_angle: float = INF
+	for id in live_ids:
+		var m: TargetMarker = _markers.get(id, null)
+		if m == null:
+			continue
+		var dir: Vector3 = (m.global_position - camera.global_position).normalized()
+		var ang: float = acos(clamp(cam_dir.dot(dir), -1.0, 1.0))
+		if ang < best_angle:
+			best_angle = ang
+			best = m
+	
+	if best == radar_candidate:
+		radar_timer += delta
+		if radar_timer >= lock_time_sec:
+			radar_locked = radar_candidate
+	else:
+		radar_candidate = best
+		radar_timer = 0.0
+		radar_locked = null
+	
+	if radar_locked != null:
+		radar_locked.set_locked()
+	
+	return live_ids
 
-	if enable_radar_markers:
-		var radar_targets: Array[RadarTarget] = radar.get_targets() if radar != null else []
-		return _update_radar_markers(radar_targets)
-	return []
+
+func _update_radar_markers_from_echoes(echoes: Array[Echo]) -> Array[int]:
+	var live_ids: Array[int] = []
+	var index: int = 0
+	for echo in echoes:
+		var id: int = echo.get_instance_id()
+		live_ids.append(id)
+		var marker: TargetMarker = _get_or_create_marker(id)
+		if marker != null:
+			var dir_local: Vector3 = Vector3(
+				sin(echo.azimuth_rad) * cos(echo.elevation_rad),
+				sin(echo.elevation_rad),
+				-cos(echo.azimuth_rad) * cos(echo.elevation_rad))
+			var dir_world: Vector3 = radar.global_transform.basis * dir_local
+			marker.global_position = radar.global_position + dir_world * echo.distance
+			marker.set_distance(echo.distance)
+			marker.radar()
+			marker.clear()
+			marker.add_to_group("radar_echoes")
+		index += 1
+	return live_ids
 
 
 func _update_heat_markers(sources: Array[HeatSource]) -> Array[int]:

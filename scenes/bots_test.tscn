@@ -9,8 +9,8 @@
 [ext_resource type="Script" uid="uid://b351wendvw15f" path="res://objects/missile/flare_launcher.gd" id="7_mxfso"]
 [ext_resource type="PackedScene" uid="uid://b3xs5okdiio4j" path="res://objects/missile/flare.tscn" id="8_tqlv5"]
 [ext_resource type="Texture2D" uid="uid://dx33u8vdllssr" path="res://textures/marker_v.png" id="9_jage0"]
-[ext_resource type="Script" uid="uid://g4cuyhv8kiex" path="res://objects/common/heatseeker_target_tracker.gd" id="10_2m8ov"]
-[ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/common/heat_seeker.gd" id="11_lb4yt"]
+[ext_resource type="Script" uid="uid://g4cuyhv8kiex" path="res://objects/heatseeker/heatseeker_target_tracker.gd" id="10_2m8ov"]
+[ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/heatseeker/heat_seeker.gd" id="11_lb4yt"]
 [ext_resource type="PackedScene" uid="uid://bwqjbnwmus3ka" path="res://scenes/pause_menu.tscn" id="12_66bbm"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="12_c017y"]
 

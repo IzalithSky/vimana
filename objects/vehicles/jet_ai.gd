@@ -214,7 +214,8 @@ func _attack_target() -> void:
 		var new_basis: Basis = Basis().looking_at(to_target, Vector3.UP)
 		var new_transform: Transform3D = Transform3D(new_basis, seeker_pos)
 		tracker.global_transform = new_transform
-		missile_launcher.global_transform = new_transform
+		if missile_launcher != null:
+			missile_launcher.global_transform = new_transform
 		
 	try_fire()
 

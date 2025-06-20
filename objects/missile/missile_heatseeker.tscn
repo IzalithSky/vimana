@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://duqd0486fbqtd" path="res://objects/missile/missile_heatseeker.gd" id="1_at0o7"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_stroq"]
-[ext_resource type="PackedScene" uid="uid://bucpax13pgdsw" path="res://objects/missile_trail.tscn" id="3_ecw3g"]
+[ext_resource type="PackedScene" uid="uid://bucpax13pgdsw" path="res://objects/missile/missile_trail.tscn" id="3_ecw3g"]
 [ext_resource type="AudioStream" uid="uid://klyoturb21mt" path="res://sounds/underwater_or_space_engine.ogg" id="4_qksr0"]
-[ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/common/heat_seeker.gd" id="5_at0o7"]
+[ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/heatseeker/heat_seeker.gd" id="5_at0o7"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
 

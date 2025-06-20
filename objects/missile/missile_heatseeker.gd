@@ -14,6 +14,9 @@ func _update_target(delta: float) -> void:
 	var new_target: HeatSource = heat_seeker.get_best_target()
 	if new_target != null:
 		target = new_target
+	else:
+		target = null
+		_disable_guidance()
 
 
 func _update_seeker_orientation(delta: float) -> void:

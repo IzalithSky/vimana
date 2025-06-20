@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="3_lgipv"]
 [ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="4_fcjbv"]
 [ext_resource type="AudioStream" uid="uid://dv25ginp3metu" path="res://sounds/hit.ogg" id="4_xxp4i"]
-[ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/common/heat_seeker.gd" id="5_pf0s1"]
+[ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/heatseeker/heat_seeker.gd" id="5_pf0s1"]
 [ext_resource type="Script" uid="uid://digjrqq0dauj1" path="res://objects/missile/missile_display.gd" id="5_xxp4i"]
 [ext_resource type="AudioStream" uid="uid://dybskywf11sk0" path="res://sounds/Beam.ogg" id="6_2acr0"]
 [ext_resource type="Texture2D" uid="uid://dx33u8vdllssr" path="res://textures/marker_v.png" id="6_sbsnl"]
@@ -16,8 +16,8 @@
 [ext_resource type="PackedScene" uid="uid://bnqlnpxb47hb" path="res://objects/common/target_marker.tscn" id="10_fcjbv"]
 [ext_resource type="AudioStream" uid="uid://dxs3upvxt0kig" path="res://sounds/alarm.ogg" id="11_sbsnl"]
 [ext_resource type="Script" uid="uid://ca3q1n33gqkgg" path="res://objects/missile/player_missile_launcher.gd" id="12_f157b"]
-[ext_resource type="PackedScene" uid="uid://binjvtutugvoy" path="res://objects/missile/missile_heatseeker.tscn" id="12_qivai"]
-[ext_resource type="Script" uid="uid://cfr6sfdj27xqg" path="res://objects/common/radar.gd" id="14_3o10w"]
+[ext_resource type="PackedScene" uid="uid://86ck740jpn2w" path="res://objects/missile/missile_semi_active_radar.tscn" id="12_qivai"]
+[ext_resource type="Script" uid="uid://cfr6sfdj27xqg" path="res://objects/radar/radar.gd" id="14_3o10w"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_us0ds"]
 shader = ExtResource("9_u6qbw")
@@ -339,6 +339,7 @@ camera = NodePath("..")
 missile_cam = NodePath("../../../MissileCamera")
 tracker = NodePath("../TargetTracker")
 missile_scene = ExtResource("12_qivai")
+missile_type = "radar"
 metadata/_custom_type_script = "uid://ca3q1n33gqkgg"
 
 [node name="Display" type="MeshInstance3D" parent="."]
