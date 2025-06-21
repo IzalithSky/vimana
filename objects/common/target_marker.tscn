@@ -15,6 +15,7 @@ shading_mode = 0
 albedo_texture = SubResource("ViewportTexture_ylqi5")
 texture_filter = 0
 billboard_mode = 1
+billboard_keep_scale = true
 fixed_size = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_om7tv"]

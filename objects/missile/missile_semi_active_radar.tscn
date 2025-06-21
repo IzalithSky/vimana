@@ -16,7 +16,7 @@ continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_fxxuq")
-gimbal_fov_degrees = 100.0
+gimbal_fov_degrees = 0.0
 echo_seeker = NodePath("EchoSeeker")
 max_fuel = 20.0
 explosion_scene = ExtResource("2_v8707")
@@ -34,6 +34,7 @@ doppler_tracking = 2
 
 [node name="EchoSeeker" type="Node3D" parent="."]
 script = ExtResource("5_4n5gx")
+sensor_fov_degrees = 20.0
 metadata/_custom_type_script = "uid://b8tsq83yhtgll"
 
 [node name="HeatSource" type="Node3D" parent="."]

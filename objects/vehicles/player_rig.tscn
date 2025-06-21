@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=4 uid="uid://dii7431l7ulys"]
+[gd_scene load_steps=30 format=4 uid="uid://dii7431l7ulys"]
 
 [ext_resource type="Script" uid="uid://bxfpd6lllbosy" path="res://objects/vehicles/player_controls.gd" id="1_lgipv"]
 [ext_resource type="Script" uid="uid://cu5pn655aha13" path="res://objects/common/fp_camera_holder.gd" id="1_w214r"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://bk4syu2gcjm2n" path="res://objects/common/target_tracker.gd" id="9_lgipv"]
 [ext_resource type="Shader" uid="uid://b30jy27kjrgma" path="res://objects/vehicles/g_color_rect.gdshader" id="9_u6qbw"]
 [ext_resource type="PackedScene" uid="uid://bnqlnpxb47hb" path="res://objects/common/target_marker.tscn" id="10_fcjbv"]
+[ext_resource type="PackedScene" uid="uid://binjvtutugvoy" path="res://objects/missile/missile_heatseeker.tscn" id="11_qivai"]
 [ext_resource type="AudioStream" uid="uid://dxs3upvxt0kig" path="res://sounds/alarm.ogg" id="11_sbsnl"]
 [ext_resource type="Script" uid="uid://ca3q1n33gqkgg" path="res://objects/missile/player_missile_launcher.gd" id="12_f157b"]
 [ext_resource type="PackedScene" uid="uid://86ck740jpn2w" path="res://objects/missile/missile_semi_active_radar.tscn" id="12_qivai"]
@@ -94,10 +95,10 @@ far = 30000.0
 
 [node name="TargetTracker" type="Node3D" parent="FPCameraHolder/Camera3D" node_paths=PackedStringArray("radar", "camera", "seeker", "seeker_bg", "locking_sound", "locked_sound")]
 script = ExtResource("9_lgipv")
-radar = NodePath("Radar")
+radar = NodePath("../../../Radar")
 camera = NodePath("..")
-seeker = NodePath("HeatSeeker")
-seeker_bg = NodePath("HeatSeekerBg")
+seeker = NodePath("../../../HeatSeeker")
+seeker_bg = NodePath("../../../HeatSeekerBg")
 marker_scene = ExtResource("10_fcjbv")
 play_sounds = true
 locking_sound = NodePath("LockingSound")
@@ -106,12 +107,6 @@ enable_radar_locking = true
 enable_heat_markers = true
 enable_radar_markers = true
 metadata/_custom_type_script = "uid://bk4syu2gcjm2n"
-
-[node name="HeatSeeker" type="Node3D" parent="FPCameraHolder/Camera3D/TargetTracker"]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-script = ExtResource("5_pf0s1")
-metadata/_custom_type_script = "uid://cnwxl0c06eycl"
 
 [node name="LockingSound" type="AudioStreamPlayer3D" parent="FPCameraHolder/Camera3D/TargetTracker"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
@@ -123,19 +118,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 stream = ExtResource("7_rw3n3")
 volume_db = -30.0
 pitch_scale = 0.6
-
-[node name="HeatSeekerBg" type="Node3D" parent="FPCameraHolder/Camera3D/TargetTracker"]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-script = ExtResource("5_pf0s1")
-tracking_fov_deg = 180.0
-metadata/_custom_type_script = "uid://cnwxl0c06eycl"
-
-[node name="Radar" type="Node3D" parent="FPCameraHolder/Camera3D/TargetTracker"]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-script = ExtResource("14_3o10w")
-metadata/_custom_type_script = "uid://cfr6sfdj27xqg"
 
 [node name="CanvasLayer1" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
 
@@ -333,7 +315,8 @@ size_flags_horizontal = 3
 [node name="AudioListener3D" type="AudioListener3D" parent="FPCameraHolder/Camera3D"]
 current = true
 
-[node name="PlayerMissileLauncher" type="Node3D" parent="FPCameraHolder/Camera3D" node_paths=PackedStringArray("camera", "missile_cam", "tracker")]
+[node name="PlayerMissileLauncherR" type="Node3D" parent="FPCameraHolder/Camera3D" node_paths=PackedStringArray("camera", "missile_cam", "tracker")]
+unique_name_in_owner = true
 script = ExtResource("12_f157b")
 camera = NodePath("..")
 missile_cam = NodePath("../../../MissileCamera")
@@ -341,6 +324,34 @@ tracker = NodePath("../TargetTracker")
 missile_scene = ExtResource("12_qivai")
 missile_type = "radar"
 metadata/_custom_type_script = "uid://ca3q1n33gqkgg"
+
+[node name="PlayerMissileLauncherH" type="Node3D" parent="FPCameraHolder/Camera3D" node_paths=PackedStringArray("camera", "missile_cam", "tracker")]
+unique_name_in_owner = true
+script = ExtResource("12_f157b")
+camera = NodePath("..")
+missile_cam = NodePath("../../../MissileCamera")
+tracker = NodePath("../TargetTracker")
+missile_scene = ExtResource("11_qivai")
+metadata/_custom_type_script = "uid://ca3q1n33gqkgg"
+
+[node name="HeatSeeker" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.33158)
+script = ExtResource("5_pf0s1")
+metadata/_custom_type_script = "uid://cnwxl0c06eycl"
+
+[node name="HeatSeekerBg" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.33158)
+script = ExtResource("5_pf0s1")
+tracking_fov_deg = 180.0
+metadata/_custom_type_script = "uid://cnwxl0c06eycl"
+
+[node name="Radar" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.33158)
+script = ExtResource("14_3o10w")
+metadata/_custom_type_script = "uid://cfr6sfdj27xqg"
 
 [node name="Display" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.294185, -1.1461)

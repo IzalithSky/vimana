@@ -42,7 +42,8 @@ const HEADING_BUFFER_SIZE: int = 10
 var _heading_buf: Array[float] = []
 var _prev_heading: Vector3
 
-@onready var missile_launcher: PlayerMissileLauncher = $FPCameraHolder/Camera3D/PlayerMissileLauncher
+@onready var player_missile_launcher_r: PlayerMissileLauncher = %PlayerMissileLauncherR
+@onready var player_missile_launcher_h: PlayerMissileLauncher = %PlayerMissileLauncherH
 
 
 func _ready() -> void:
@@ -55,8 +56,10 @@ func _ready() -> void:
 		_on_energy_changed(energy_pool.current_energy, energy_pool.max_energy)
 	
 		
-	missile_launcher.parent = v
-	missile_launcher.energy_pool = energy_pool
+	player_missile_launcher_r.parent = v
+	player_missile_launcher_r.energy_pool = energy_pool
+	player_missile_launcher_h.parent = v
+	player_missile_launcher_h.energy_pool = energy_pool
 		
 	#player_gun.holder = v
 	

@@ -38,6 +38,7 @@ func _process(delta: float) -> void:
 	_mark_unused(all_live_ids)
 	_update_sound_state()
 	_purge_unused_markers()
+	_rotate_seeker_to_best_target()
 
 
 func _handle_heat_logic(delta: float) -> Array[int]:
@@ -111,7 +112,6 @@ func _handle_radar_logic(delta: float) -> Array[int]:
 
 func _update_radar_markers_from_echoes(echoes: Array[Echo]) -> Array[int]:
 	var live_ids: Array[int] = []
-	var index: int = 0
 	for echo in echoes:
 		var id: int = echo.get_instance_id()
 		live_ids.append(id)
@@ -127,7 +127,6 @@ func _update_radar_markers_from_echoes(echoes: Array[Echo]) -> Array[int]:
 			marker.radar()
 			marker.clear()
 			marker.add_to_group("radar_echoes")
-		index += 1
 	return live_ids
 
 
@@ -150,34 +149,6 @@ func _update_heat_markers(sources: Array[HeatSource]) -> Array[int]:
 			marker.global_position = heat_locked.global_position
 			marker.heat()
 			marker.set_locked()
-		if id not in live_ids:
-			live_ids.append(id)
-	return live_ids
-
-
-func _update_radar_markers(targets: Array[RadarTarget]) -> Array[int]:
-	var live_ids: Array[int] = []
-	for rt in targets:
-		if not is_instance_valid(rt):
-			continue
-		var id: int = rt.get_instance_id()
-		live_ids.append(id)
-		var marker: TargetMarker = _get_or_create_marker(id)
-		if marker != null:
-			marker.global_position = rt.global_position
-			marker.set_distance(global_position.distance_to(rt.global_position))
-			marker.radar()
-			marker.clear()
-			marker.add_to_group("radar_echoes")
-	if radar_locked != null and is_instance_valid(radar_locked):
-		var id: int = radar_locked.get_instance_id()
-		var marker: TargetMarker = _get_or_create_marker(id)
-		if marker != null:
-			marker.global_position = radar_locked.global_position
-			marker.set_distance(global_position.distance_to(radar_locked.global_position))
-			marker.radar()
-			marker.set_locked()
-			marker.add_to_group("radar_echoes")
 		if id not in live_ids:
 			live_ids.append(id)
 	return live_ids
@@ -215,23 +186,64 @@ func _clear_all_markers() -> void:
 
 
 func _update_sound_state() -> void:
-	if not play_sounds or seeker == null or not enable_heat_locking:
+	if not play_sounds:
 		if locking_sound: locking_sound.stop()
 		if locked_sound: locked_sound.stop()
 		return
 	
-	var seeker_sources: Array[HeatSource] = seeker.get_visible_sources()
-	if heat_locked != null:
+	var playing_locking := false
+	var playing_locked := false
+	
+	if enable_heat_locking and seeker != null:
+		var seeker_sources: Array[HeatSource] = seeker.get_visible_sources()
+		if heat_locked != null:
+			playing_locked = true
+		elif seeker_sources.size() == 1 and heat_candidate != null:
+			playing_locking = true
+	
+	if enable_radar_locking:
+		if radar_locked != null:
+			playing_locked = true
+		elif radar_candidate != null:
+			playing_locking = true
+	
+	if playing_locked:
 		if locking_sound: locking_sound.stop()
 		if locked_sound and not locked_sound.playing:
 			locked_sound.play()
-	elif seeker_sources.size() == 1:
+	elif playing_locking:
 		if locked_sound: locked_sound.stop()
 		if locking_sound and not locking_sound.playing:
 			locking_sound.play()
 	else:
 		if locking_sound: locking_sound.stop()
 		if locked_sound: locked_sound.stop()
+
+
+func _rotate_seeker_to_best_target() -> void:
+	if camera == null or seeker == null or seeker_bg == null:
+		return
+	
+	var camera_forward: Vector3 = -camera.global_transform.basis.z
+	var camera_position: Vector3 = camera.global_transform.origin
+	var best_dot: float = -1.0
+	var best_target: Node3D = null
+	
+	for target in seeker_bg.get_visible_sources():
+		if not target is Node3D:
+			continue
+		var to_target: Vector3 = (target.global_transform.origin - camera_position).normalized()
+		var dot: float = camera_forward.dot(to_target)
+		if dot > best_dot:
+			best_dot = dot
+			best_target = target
+	
+	if best_target:
+		var seeker_transform: Transform3D = seeker.global_transform
+		seeker_transform.basis = Basis().looking_at(
+			best_target.global_transform.origin - seeker.global_transform.origin,
+			Vector3.UP)
+		seeker.global_transform = seeker_transform
 
 
 func get_heat_target() -> HeatSource:
