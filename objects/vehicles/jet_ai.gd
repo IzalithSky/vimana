@@ -11,12 +11,10 @@ class_name JetAI extends Node
 @export var missile_pitch_input: float = 1.0
 @export var missile_throttle: float = 1.0
 @export var fire_cone_deg: float = 30.0
-@export var fire_range: float = 1000.0
 @export var missile_launcher: MissileLauncher
 @export var target_group: String = "alpha"
 @export var ally_group: String = "bravo"
 @export var anchor_group: String = "anchors"
-@export var is_hostile: bool = true
 @export var is_expert: bool = false
 @export var max_pursuit_time: float = 35.0
 @export var obstacle_prediction_horizon: float = 5.0
@@ -200,23 +198,33 @@ func _attack_target() -> void:
 	if target == null or not is_instance_valid(target) or not _health_alive(target):
 		return
 	
-	var p: Vector3 = target.global_transform.origin
-	var dir: Vector3 = (p - vehicle.global_transform.origin).normalized()
+	var target_pos: Vector3 = target.global_transform.origin
+	var vehicle_pos: Vector3 = vehicle.global_transform.origin
+	var dir: Vector3 = (target_pos - vehicle_pos).normalized()
 	var local: Vector3 = vehicle.global_transform.basis.inverse() * dir
-	vehicle.roll_input = clamp(-local.x * roll_gain, -1.0, 1.0)
-	vehicle.pitch_input = clamp(local.y * pitch_gain, -1.0, 1.0)
-	vehicle.yaw_input = clamp(local.x * yaw_gain, -1.0, 1.0)
+	vehicle.roll_input  = clamp(-local.x * roll_gain, -1.0, 1.0)
+	vehicle.pitch_input = clamp( local.y * pitch_gain, -1.0, 1.0)
+	vehicle.yaw_input   = clamp( local.x * yaw_gain, -1.0, 1.0)
 	vehicle.throttle_input = 0.0
 	
 	if tracker != null:
 		var seeker_pos: Vector3 = tracker.global_position
+		var forward: Vector3 = -vehicle.global_transform.basis.z.normalized()
 		var to_target: Vector3 = (target.global_position - seeker_pos).normalized()
-		var new_basis: Basis = Basis().looking_at(to_target, Vector3.UP)
+	
+		var angle: float = acos(clamp(forward.dot(to_target), -1.0, 1.0))
+		var cone_half: float = deg_to_rad(fire_cone_deg) * 0.5
+		var clamped_dir: Vector3 = to_target
+		if angle > cone_half:
+			var t: float = cone_half / angle
+			clamped_dir = forward.slerp(to_target, t).normalized()
+	
+		var new_basis: Basis = Basis().looking_at(clamped_dir, Vector3.UP)
 		var new_transform: Transform3D = Transform3D(new_basis, seeker_pos)
 		tracker.global_transform = new_transform
 		if missile_launcher != null:
 			missile_launcher.global_transform = new_transform
-		
+	
 	try_fire()
 
 

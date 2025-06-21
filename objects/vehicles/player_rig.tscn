@@ -315,22 +315,24 @@ size_flags_horizontal = 3
 [node name="AudioListener3D" type="AudioListener3D" parent="FPCameraHolder/Camera3D"]
 current = true
 
-[node name="PlayerMissileLauncherR" type="Node3D" parent="FPCameraHolder/Camera3D" node_paths=PackedStringArray("camera", "missile_cam", "tracker")]
+[node name="PlayerMissileLauncherR" type="Node3D" parent="." node_paths=PackedStringArray("camera", "missile_cam", "tracker")]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
 script = ExtResource("12_f157b")
-camera = NodePath("..")
-missile_cam = NodePath("../../../MissileCamera")
-tracker = NodePath("../TargetTracker")
+camera = NodePath("../FPCameraHolder/Camera3D")
+missile_cam = NodePath("../MissileCamera")
+tracker = NodePath("../FPCameraHolder/Camera3D/TargetTracker")
 missile_scene = ExtResource("12_qivai")
 missile_type = "radar"
 metadata/_custom_type_script = "uid://ca3q1n33gqkgg"
 
-[node name="PlayerMissileLauncherH" type="Node3D" parent="FPCameraHolder/Camera3D" node_paths=PackedStringArray("camera", "missile_cam", "tracker")]
+[node name="PlayerMissileLauncherH" type="Node3D" parent="." node_paths=PackedStringArray("camera", "missile_cam", "tracker")]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
 script = ExtResource("12_f157b")
-camera = NodePath("..")
-missile_cam = NodePath("../../../MissileCamera")
-tracker = NodePath("../TargetTracker")
+camera = NodePath("../FPCameraHolder/Camera3D")
+missile_cam = NodePath("../MissileCamera")
+tracker = NodePath("../FPCameraHolder/Camera3D/TargetTracker")
 missile_scene = ExtResource("11_qivai")
 metadata/_custom_type_script = "uid://ca3q1n33gqkgg"
 
