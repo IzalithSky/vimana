@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://86ck740jpn2w"]
+[gd_scene load_steps=10 format=3 uid="uid://86ck740jpn2w"]
 
 [ext_resource type="Script" uid="uid://dpfq3h3552wwx" path="res://objects/missile/missile_semi_active_radar.gd" id="1_fxxuq"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_v8707"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://b8tsq83yhtgll" path="res://objects/radar/echo_seeker.gd" id="5_4n5gx"]
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/heatseeker/heat_source.gd" id="6_p25do"]
 [ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/radar/radar_target.gd" id="7_eteu4"]
+[ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="8_eteu4"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
 
@@ -46,3 +47,8 @@ metadata/_custom_type_script = "uid://cmb8absq6qrpl"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
 script = ExtResource("7_eteu4")
 metadata/_custom_type_script = "uid://diotgcgm0qcsn"
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("8_eteu4")
+max_hp = 5.0
+metadata/_custom_type_script = "uid://dxfwciqw71xsy"

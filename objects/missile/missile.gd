@@ -16,6 +16,8 @@ class_name Missile extends RigidBody3D
 @export var trail_ttl_after_death: float = 4.0
 @export var is_guidance_active = false
 
+@onready var health: Health = $Health
+
 var fuel: float = 0.0
 var trail: Trail
 var host: RigidBody3D
@@ -24,6 +26,7 @@ var host: RigidBody3D
 func _ready() -> void:
 	fuel = max_fuel
 	body_entered.connect(_on_body_entered)
+	health.died.connect(func(_cause): _die())
 	if trail_scene:
 		trail = trail_scene.instantiate() as Trail
 		trail.permanent = false
