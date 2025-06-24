@@ -2,13 +2,13 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://dybskywf11sk0"
-path="res://.godot/imported/Beam.ogg-621333b920e53b3beb8d4f87b9e704ff.oggvorbisstr"
+uid="uid://cw58sg75goohk"
+path="res://.godot/imported/beam.ogg-191abb3d2511d06bab73d625abba109c.oggvorbisstr"
 
 [deps]
 
-source_file="res://sounds/Beam.ogg"
-dest_files=["res://.godot/imported/Beam.ogg-621333b920e53b3beb8d4f87b9e704ff.oggvorbisstr"]
+source_file="res://sounds/beam.ogg"
+dest_files=["res://.godot/imported/beam.ogg-191abb3d2511d06bab73d625abba109c.oggvorbisstr"]
 
 [params]
 

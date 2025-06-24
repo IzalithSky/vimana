@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bpsl2q6dt1eb4"
+path="res://.godot/imported/missile_( F5_Ain 0.0dB_Current -10-9dB ).ogg-7ca1ceaa9e8bbe37b046088dd8e77865.oggvorbisstr"
+
+[deps]
+
+source_file="res://sounds/missile_( F5_Ain 0.0dB_Current -10-9dB ).ogg"
+dest_files=["res://.godot/imported/missile_( F5_Ain 0.0dB_Current -10-9dB ).ogg-7ca1ceaa9e8bbe37b046088dd8e77865.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
