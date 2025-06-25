@@ -1,0 +1,49 @@
+[gd_scene load_steps=8 format=3 uid="uid://cckdeo1ijke44"]
+
+[ext_resource type="Script" uid="uid://doj0wxvf7m13g" path="res://objects/missile/missile_active_radar.gd" id="1_d8gxk"]
+[ext_resource type="Script" uid="uid://cfr6sfdj27xqg" path="res://objects/radar/radar.gd" id="3_dlwmk"]
+[ext_resource type="AudioStream" uid="uid://klyoturb21mt" path="res://sounds/underwater_or_space_engine.ogg" id="4_nrely"]
+[ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/heatseeker/heat_source.gd" id="6_ghc8e"]
+[ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/radar/radar_target.gd" id="7_sfdq5"]
+[ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="8_rcl7s"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
+
+[node name="RigidBody3D" type="RigidBody3D" node_paths=PackedStringArray("radar")]
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_d8gxk")
+radar = NodePath("Radar")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_g63xp")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_nrely")
+unit_size = 100.0
+pitch_scale = 8.0
+autoplay = true
+doppler_tracking = 2
+
+[node name="Radar" type="Node3D" parent="."]
+script = ExtResource("3_dlwmk")
+ignored_targets = Array[NodePath]([NodePath("../RadarTarget")])
+metadata/_custom_type_script = "uid://cfr6sfdj27xqg"
+
+[node name="HeatSource" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+script = ExtResource("6_ghc8e")
+magnitude = 20.0
+background = 2.0
+metadata/_custom_type_script = "uid://cmb8absq6qrpl"
+
+[node name="RadarTarget" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+script = ExtResource("7_sfdq5")
+metadata/_custom_type_script = "uid://diotgcgm0qcsn"
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("8_rcl7s")
+max_hp = 5.0
+metadata/_custom_type_script = "uid://dxfwciqw71xsy"

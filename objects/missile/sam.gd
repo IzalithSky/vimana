@@ -3,6 +3,8 @@ class_name SAM extends MissileLauncher
 
 @onready var health: Health = $Health
 
+var target: Node3D
+
 func _ready() -> void:
 	add_to_group("targets")
 	health.died.connect(die)
