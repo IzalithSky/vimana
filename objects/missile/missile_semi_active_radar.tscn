@@ -31,7 +31,6 @@ unit_size = 100.0
 max_db = -1.0
 pitch_scale = 2.0
 autoplay = true
-stream_paused = true
 doppler_tracking = 2
 
 [node name="EchoSeeker" type="Node3D" parent="."]

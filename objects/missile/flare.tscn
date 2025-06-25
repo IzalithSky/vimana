@@ -7,7 +7,7 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_g63xp"]
 
-[node name="RigidBody3D" type="RigidBody3D"]
+[node name="RigidBody3D2" type="RigidBody3D"]
 collision_layer = 0
 collision_mask = 0
 continuous_cd = true
