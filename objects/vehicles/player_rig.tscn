@@ -5,12 +5,12 @@
 [ext_resource type="Script" uid="uid://db5fo0njlni2v" path="res://objects/vehicles/horizon.gd" id="2_vluwj"]
 [ext_resource type="Texture2D" uid="uid://buyab1s5wwd8b" path="res://textures/nose_sprite.png" id="3_lgipv"]
 [ext_resource type="Texture2D" uid="uid://c8pblqefl4ywh" path="res://textures/heading_sprite.png" id="4_fcjbv"]
-[ext_resource type="AudioStream" uid="uid://dv25ginp3metu" path="res://sounds/hit.ogg" id="4_xxp4i"]
+[ext_resource type="AudioStream" uid="uid://bubylfb1goxrf" path="res://sounds/hit_2_(C5_Ain 0.0dB_Current -18dB ).ogg" id="4_xxp4i"]
 [ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/heatseeker/heat_seeker.gd" id="5_pf0s1"]
+[ext_resource type="AudioStream" uid="uid://cw58sg75goohk" path="res://sounds/Beam.ogg" id="5_qivai"]
 [ext_resource type="Script" uid="uid://digjrqq0dauj1" path="res://objects/missile/missile_display.gd" id="5_xxp4i"]
-[ext_resource type="AudioStream" uid="uid://dybskywf11sk0" path="res://sounds/Beam.ogg" id="6_2acr0"]
+[ext_resource type="AudioStream" uid="uid://g4xqkqbt3156" path="res://sounds/beep_2.ogg" id="6_qivai"]
 [ext_resource type="Texture2D" uid="uid://dx33u8vdllssr" path="res://textures/marker_v.png" id="6_sbsnl"]
-[ext_resource type="AudioStream" uid="uid://domw4yubo2r86" path="res://sounds/beep.ogg" id="7_rw3n3"]
 [ext_resource type="Script" uid="uid://bk4syu2gcjm2n" path="res://objects/common/target_tracker.gd" id="9_lgipv"]
 [ext_resource type="Shader" uid="uid://b30jy27kjrgma" path="res://objects/vehicles/g_color_rect.gdshader" id="9_u6qbw"]
 [ext_resource type="PackedScene" uid="uid://bnqlnpxb47hb" path="res://objects/common/target_marker.tscn" id="10_fcjbv"]
@@ -110,13 +110,14 @@ metadata/_custom_type_script = "uid://bk4syu2gcjm2n"
 
 [node name="LockingSound" type="AudioStreamPlayer3D" parent="FPCameraHolder/Camera3D/TargetTracker"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-stream = ExtResource("6_2acr0")
-volume_db = -30.0
+stream = ExtResource("5_qivai")
+volume_db = -20.0
+max_db = 6.0
 
 [node name="LockedSound" type="AudioStreamPlayer3D" parent="FPCameraHolder/Camera3D/TargetTracker"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-stream = ExtResource("7_rw3n3")
-volume_db = -30.0
+stream = ExtResource("6_qivai")
+volume_db = -25.0
 pitch_scale = 0.6
 
 [node name="CanvasLayer1" type="CanvasLayer" parent="FPCameraHolder/Camera3D"]
@@ -447,6 +448,35 @@ metadata/_custom_type_script = "uid://digjrqq0dauj1"
 [node name="ProximityAlarmSound" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.331581)
 stream = ExtResource("4_xxp4i")
+attenuation_model = 2
+volume_db = 10.0
+unit_size = 7.0
+max_db = 0.0
+pitch_scale = 0.65
+autoplay = true
+max_polyphony = 4
+bus = &"New Bus "
+playback_type = 1
+emission_angle_enabled = true
+emission_angle_filter_attenuation_db = -2.0
+attenuation_filter_cutoff_hz = 100.0
+attenuation_filter_db = -2.0
+doppler_tracking = 2
+
+[node name="ProximityAlarmSound2" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.331581)
+stream = ExtResource("4_xxp4i")
+unit_size = 3.0
+max_db = 2.0
+pitch_scale = 2.0
+max_polyphony = 4
+panning_strength = 0.5
+area_mask = 513
+playback_type = 1
+emission_angle_enabled = true
+emission_angle_filter_attenuation_db = -2.0
+attenuation_filter_db = 0.0
+doppler_tracking = 1
 
 [node name="NoseSprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)

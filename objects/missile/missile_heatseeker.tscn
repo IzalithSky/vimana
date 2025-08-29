@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://duqd0486fbqtd" path="res://objects/missile/missile_heatseeker.gd" id="1_at0o7"]
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_stroq"]
 [ext_resource type="PackedScene" uid="uid://bucpax13pgdsw" path="res://objects/missile/missile_trail.tscn" id="3_ecw3g"]
-[ext_resource type="AudioStream" uid="uid://klyoturb21mt" path="res://sounds/underwater_or_space_engine.ogg" id="4_qksr0"]
+[ext_resource type="AudioStream" uid="uid://bpsl2q6dt1eb4" path="res://sounds/missile_( F5_Ain 0.0dB_Current -10-9dB ).ogg" id="4_qksr0"]
 [ext_resource type="Script" uid="uid://cnwxl0c06eycl" path="res://objects/heatseeker/heat_seeker.gd" id="5_at0o7"]
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/heatseeker/heat_source.gd" id="6_stroq"]
 [ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/radar/radar_target.gd" id="7_ecw3g"]
@@ -25,8 +25,8 @@ shape = SubResource("SphereShape3D_g63xp")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("4_qksr0")
+volume_db = -3.0
 unit_size = 100.0
-pitch_scale = 8.0
 autoplay = true
 doppler_tracking = 2
 

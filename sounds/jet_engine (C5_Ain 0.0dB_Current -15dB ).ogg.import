@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dwvc2g5343r88"
+path="res://.godot/imported/jet_engine (C5_Ain 0.0dB_Current -15dB ).ogg-1615fec197c1b4963c603491785b6497.oggvorbisstr"
+
+[deps]
+
+source_file="res://sounds/jet_engine (C5_Ain 0.0dB_Current -15dB ).ogg"
+dest_files=["res://.godot/imported/jet_engine (C5_Ain 0.0dB_Current -15dB ).ogg-1615fec197c1b4963c603491785b6497.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

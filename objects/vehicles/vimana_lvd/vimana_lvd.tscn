@@ -23,7 +23,7 @@ _surfaces = [{
 [sub_resource type="BoxShape3D" id="BoxShape3D_s1d72"]
 size = Vector3(1, 1, 4)
 
-[node name="RigidBody3D" type="RigidBody3D"]
+[node name="RigidBody3D2" type="RigidBody3D"]
 mass = 100.0
 continuous_cd = true
 contact_monitor = true

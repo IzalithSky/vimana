@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bubylfb1goxrf"
+path="res://.godot/imported/hit_2_(C5_Ain 0.0dB_Current -18dB ).ogg-2e382ff6905eaf6cf977e0d7893ef959.oggvorbisstr"
+
+[deps]
+
+source_file="res://sounds/hit_2_(C5_Ain 0.0dB_Current -18dB ).ogg"
+dest_files=["res://.godot/imported/hit_2_(C5_Ain 0.0dB_Current -18dB ).ogg-2e382ff6905eaf6cf977e0d7893ef959.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

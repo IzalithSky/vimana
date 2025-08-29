@@ -5,8 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://pj624fkwul7" path="res://objects/common/explosion.tscn" id="2_g63xp"]
 [ext_resource type="PackedScene" uid="uid://bfllwwoabp1rs" path="res://objects/common/flame_trail.tscn" id="3_8lg35"]
 [ext_resource type="Script" uid="uid://cmb8absq6qrpl" path="res://objects/heatseeker/heat_source.gd" id="5_j0qix"]
-[ext_resource type="AudioStream" uid="uid://klyoturb21mt" path="res://sounds/underwater_or_space_engine.ogg" id="6_4tmnh"]
 [ext_resource type="Script" uid="uid://diotgcgm0qcsn" path="res://objects/radar/radar_target.gd" id="6_7srhj"]
+[ext_resource type="AudioStream" uid="uid://dwvc2g5343r88" path="res://sounds/jet_engine (C5_Ain 0.0dB_Current -15dB ).ogg" id="9_pcmts"]
 [ext_resource type="Script" uid="uid://dxfwciqw71xsy" path="res://objects/common/health.gd" id="11_y4ep4"]
 [ext_resource type="Script" uid="uid://cgi6mlfnskt76" path="res://objects/common/energy_pool.gd" id="12_energy"]
 
@@ -17,7 +17,7 @@ size = Vector3(2, 2, 4)
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_j0qix"]
 
-[node name="RigidBody3D" type="RigidBody3D"]
+[node name="RigidBody3D2" type="RigidBody3D"]
 mass = 100.0
 continuous_cd = true
 contact_monitor = true
@@ -26,7 +26,6 @@ angular_damp = 3.0
 script = ExtResource("1_0qbkc")
 explosion_scene = ExtResource("2_g63xp")
 flame_trail_scene = ExtResource("3_8lg35")
-energy_path = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.999993, -0.0025535, 0.00268034, 0.00255942, 0.999994, -0.00220558, -0.00267469, 0.00221243, 0.999994, 0, 0, 0)
@@ -66,8 +65,9 @@ rcs = 2.0
 metadata/_custom_type_script = "uid://diotgcgm0qcsn"
 
 [node name="PropulsionSound" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("6_4tmnh")
-volume_db = -55.0
-unit_size = 100.0
+stream = ExtResource("9_pcmts")
+volume_db = -35.0
+unit_size = 50.0
+max_db = -6.0
 autoplay = true
 doppler_tracking = 2
